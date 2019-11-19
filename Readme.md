@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
-* Студент: [Алексей Куликов](https://up.htmlacademy.ru/ecmascript/10/user/927861).
-* Наставник: `Неизвестно`.
+- Студент: [Алексей Куликов](https://up.htmlacademy.ru/ecmascript/10/user/927861).
+- Наставник: [Евгений Фаллер](https://htmlacademy.ru/profile/id505933).
 
 ---
 
