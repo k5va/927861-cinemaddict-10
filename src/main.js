@@ -377,6 +377,5 @@ new Array(MOST_COMMENTED_FILMS_COUNT)
   .fill(``)
   .forEach(() => render(mostCommentedFilmsElement, createFilmCardTemplate()));
 
-const footerElement = document.querySelector(`.footer`);
-// render film details
-render(footerElement, createFilmDetailsTemplate(), `afterend`);
+// render film details popup
+render(mainElement, createFilmDetailsTemplate(), `afterend`);
