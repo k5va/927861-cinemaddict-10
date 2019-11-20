@@ -16,15 +16,6 @@ const createUserProfileTemplate = () => {
 };
 
 /**
- * Creates Search template
- * @return {String} template
- */
-const createSearchTemplate = () => {
-  // TODO: where is search markup?
-  return ``;
-};
-
-/**
  * Creates menu template
  * @return {String} template
  */
@@ -352,8 +343,6 @@ const render = (container, template, place = `beforeend`) => {
 };
 
 const headerElement = document.querySelector(`.header`);
-// render search
-render(headerElement, createSearchTemplate());
 // render user profile
 render(headerElement, createUserProfileTemplate());
 
