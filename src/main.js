@@ -356,7 +356,7 @@ render(mainElement, createFilmsTemplate());
 
 const filmsElement = mainElement.querySelector(`.films`);
 
-const allFilmsElement = filmsElement.querySelector(`.films-list .films-list__container`);
+const allFilmsElement = filmsElement.querySelector(`.films-list > .films-list__container`);
 // render all films
 new Array(FILMS_COUNT)
   .fill(``)
@@ -365,13 +365,13 @@ new Array(FILMS_COUNT)
 // render show more
 render(allFilmsElement, createShowMoreTemplate(), `afterend`);
 
-const topRatedFilmsElement = filmsElement.querySelector(`.films-list--top-rated .films-list__container`);
+const topRatedFilmsElement = filmsElement.querySelector(`.films-list--top-rated > .films-list__container`);
 // render top rated films
 new Array(TOP_RATED_FILMS_COUNT)
   .fill(``)
   .forEach(() => render(topRatedFilmsElement, createFilmCardTemplate()));
 
-const mostCommentedFilmsElement = filmsElement.querySelector(`.films-list--most-commented .films-list__container`);
+const mostCommentedFilmsElement = filmsElement.querySelector(`.films-list--most-commented > .films-list__container`);
 // reder most commented films
 new Array(MOST_COMMENTED_FILMS_COUNT)
   .fill(``)
