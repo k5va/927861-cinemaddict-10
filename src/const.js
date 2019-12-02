@@ -23,4 +23,11 @@ export const MONTH_NAMES = [
   `December`
 ];
 
+export const UserTitle = {
+  NO_TITLE: ``,
+  NOVICE: `novice`,
+  FAN: `fan`,
+  MOVIE_BUFF: `movie buff`
+};
+
 
