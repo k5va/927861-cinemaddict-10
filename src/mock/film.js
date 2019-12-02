@@ -91,7 +91,7 @@ const generateFilm = (index = 0) => {
     title: FILM_NAMES[index],
     originalTitle: `Lorem ipsum dolor sit amet`,
     poster: generatePoster(),
-    rating: `8.1`,
+    rating: 8.1,
     userRating: 5,
     releaseDate: getRandomDate(),
     duration: `1h 36m`,
