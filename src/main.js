@@ -22,11 +22,11 @@ const render = (container, template, place = `beforeend`) => {
 const films = generateFilms(FILMS_COUNT);
 const headerElement = document.querySelector(`.header`);
 // render user profile
-render(headerElement, createUserProfileTemplate());
+render(headerElement, createUserProfileTemplate(films));
 
 const mainElement = document.querySelector(`.main`);
 // render menu
-render(mainElement, createMenuTemplate());
+render(mainElement, createMenuTemplate(films));
 // render sort
 render(mainElement, createSortTemplate());
 // render films
@@ -38,4 +38,4 @@ const allFilmsElement = filmsElement.querySelector(`.films-list > .films-list__c
 render(allFilmsElement, createShowMoreTemplate(), `afterend`);
 
 // render film details popup
-render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
+// render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
