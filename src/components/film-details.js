@@ -1,4 +1,5 @@
 import {formatDate} from "../utils/utils";
+import {USER_RATING_COUNT} from "../const";
 
 /**
  * Generates genres markup
@@ -30,6 +31,19 @@ const generateCommentsMarkup = (comments) => comments
   );
 
 /**
+ * Generates user rating markup
+ * @param {Number} rating - user rating (1 - 9)
+ * @return {String} - user rating markup
+ */
+const generateUserRatingMarkup = (rating) => new Array(USER_RATING_COUNT)
+  .fill(``) // TODO: _ ?
+  .map((_, index) => `<input type="radio" name="score"
+    class="film-details__user-rating-input visually-hidden"
+    value="${index + 1}" id="rating-${index + 1}" ${rating === index + 1 ? `checked` : ``}>
+    <label class="film-details__user-rating-label" for="rating-${index + 1}">${index + 1}</label>`)
+  .join(``);
+
+/**
  * Creates film details template
  * @param {*} film - film data
  * @return {String} template
@@ -40,6 +54,7 @@ export const createFilmDetailsTemplate = (film) => {
 
   const genreMarkup = generateGenreMarkup(genres);
   const commentsMarkup = generateCommentsMarkup(comments);
+  const userRatingMarkup = generateUserRatingMarkup(userRating);
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -129,35 +144,7 @@ export const createFilmDetailsTemplate = (film) => {
 
             <p class="film-details__user-rating-feelings">How you feel it?</p>
 
-            <div class="film-details__user-rating-score">
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="1" id="rating-1">
-              <label class="film-details__user-rating-label" for="rating-1">1</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="2" id="rating-2">
-              <label class="film-details__user-rating-label" for="rating-2">2</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="3" id="rating-3">
-              <label class="film-details__user-rating-label" for="rating-3">3</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="4" id="rating-4">
-              <label class="film-details__user-rating-label" for="rating-4">4</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="5" id="rating-5">
-              <label class="film-details__user-rating-label" for="rating-5">5</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="6" id="rating-6">
-              <label class="film-details__user-rating-label" for="rating-6">6</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="7" id="rating-7">
-              <label class="film-details__user-rating-label" for="rating-7">7</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="8" id="rating-8">
-              <label class="film-details__user-rating-label" for="rating-8">8</label>
-
-              <input type="radio" name="score" class="film-details__user-rating-input visually-hidden" value="9" id="rating-9" checked>
-              <label class="film-details__user-rating-label" for="rating-9">9</label>
-
-            </div>
+            <div class="film-details__user-rating-score">${userRatingMarkup}</div>
           </section>
         </div>
       </section>
