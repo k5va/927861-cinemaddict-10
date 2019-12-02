@@ -101,6 +101,7 @@ const generateFilm = (index = 0) => {
     age: `12+`,
     isFavorite: getRandomBoolean(),
     isWatched: getRandomBoolean(),
+    isWatchlistAdded: getRandomBoolean(),
     director: `John Doe`,
     writers: [`John Doe`, `Vasya Pupkin`],
     actors: [`Chevy Chase`, `Dan Aykroyd`, `John Candy`],
