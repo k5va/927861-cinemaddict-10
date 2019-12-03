@@ -30,4 +30,5 @@ export const UserTitle = {
   MOVIE_BUFF: `movie buff`
 };
 
+export const FILMS_PER_LOAD = 5;
 

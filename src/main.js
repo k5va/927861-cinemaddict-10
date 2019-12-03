@@ -4,9 +4,11 @@ import {createSortTemplate} from "./components/sort";
 import {createFilmsTemplate} from "./components/films";
 import {createShowMoreTemplate} from "./components/show-more";
 import {createFilmDetailsTemplate} from "./components/film-details";
+import {createFilmCardTemplate} from "./components/film-card";
 import {generateFilms} from "./mock/film";
+import {FILMS_PER_LOAD} from "./const";
 
-const FILMS_COUNT = 5;
+const FILMS_COUNT = 14;
 
 /**
  * Renders given HTML template to the DOM by adding it to the parent container
@@ -29,13 +31,32 @@ const mainElement = document.querySelector(`.main`);
 render(mainElement, createMenuTemplate(films));
 // render sort
 render(mainElement, createSortTemplate());
-// render films
+// render films list
 render(mainElement, createFilmsTemplate(films));
 
-const filmsElement = mainElement.querySelector(`.films`);
-const allFilmsElement = filmsElement.querySelector(`.films-list > .films-list__container`);
+const mainFilmsElement = mainElement.querySelector(`.films-list > .films-list__container`);
+// render initial number of film cards
+films
+  .slice(0, FILMS_PER_LOAD)
+  .forEach((film) => render(mainFilmsElement, createFilmCardTemplate(film)));
 // render show more
-render(allFilmsElement, createShowMoreTemplate(), `afterend`);
+render(mainFilmsElement, createShowMoreTemplate(), `afterend`);
+
+let renderedFilmsCount = FILMS_PER_LOAD;
+const showMoreButton = document.querySelector(`.films-list__show-more`);
+showMoreButton.addEventListener(`click`, () => {
+  // render new portion of films
+  films
+    .slice(renderedFilmsCount, renderedFilmsCount + FILMS_PER_LOAD)
+    .forEach((film) => render(mainFilmsElement, createFilmCardTemplate(film)));
+  // update rendered tasks counter and check if there are more tasks to load
+  renderedFilmsCount += FILMS_PER_LOAD;
+  if (renderedFilmsCount >= FILMS_COUNT) {
+    // no more tasks to load
+    showMoreButton.remove();
+  }
+});
 
 // render film details popup
-// render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
+render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
+

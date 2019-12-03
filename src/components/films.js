@@ -36,8 +36,6 @@ const findMostCommentedFilms = (films) => films
  * @return {String} template
  */
 export const createFilmsTemplate = (films) => {
-  const filmsListMarkup = createFilmsListMarkup(films);
-
   const topRatedFilms = findTopRatedFilms(films);
   const topRatedFilmsMarkup = createFilmsListMarkup(topRatedFilms);
 
@@ -48,7 +46,7 @@ export const createFilmsTemplate = (films) => {
   <section class="films-list">
     <h2 class="films-list__title visually-hidden">All movies. Upcoming</h2>
 
-    <div class="films-list__container">${filmsListMarkup}</div>
+    <div class="films-list__container"></div>
 
   </section>
 
