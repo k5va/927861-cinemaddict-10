@@ -5,6 +5,7 @@ import {createFilmsTemplate} from "./components/films";
 import {createShowMoreTemplate} from "./components/show-more";
 import {createFilmDetailsTemplate} from "./components/film-details";
 import {createFilmCardTemplate} from "./components/film-card";
+import {createFooterStatisticsTemplate} from "./components/footer-statistics";
 import {generateFilms} from "./mock/film";
 import {FILMS_PER_LOAD} from "./const";
 
@@ -60,3 +61,6 @@ showMoreButton.addEventListener(`click`, () => {
 // render film details popup
 render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
 
+const footerElement = document.querySelector(`.footer`);
+// render footer statistics
+render(footerElement, createFooterStatisticsTemplate(films));
