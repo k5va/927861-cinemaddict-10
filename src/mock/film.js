@@ -82,6 +82,12 @@ const generateComments = () => FILM_COMMENTS
   }));
 
 /**
+ * Generates random film rating
+ * @return {Number} - generated rating
+ */
+const generateRating = () => getRandomInteger() + 0.1;
+
+/**
  * Generates random film
  * @param {Number} index - array index of new film
  * @return {*} - film object
@@ -91,7 +97,7 @@ const generateFilm = (index = 0) => {
     title: FILM_NAMES[index],
     originalTitle: `Lorem ipsum dolor sit amet`,
     poster: generatePoster(),
-    rating: 8.1,
+    rating: generateRating(),
     userRating: 5,
     releaseDate: getRandomDate(),
     duration: `1h 36m`,
@@ -116,6 +122,6 @@ const generateFilm = (index = 0) => {
  */
 const generateFilms = (count = DEFAULT_FILMS_COUNT) => new Array(count)
   .fill(``)
-  .map((_, index) => generateFilm(index)); // TODO: _ ?
+  .map((_, index) => generateFilm(index));
 
 export {generateFilms};

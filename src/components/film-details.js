@@ -36,7 +36,7 @@ const generateCommentsMarkup = (comments) => comments
  * @return {String} - user rating markup
  */
 const generateUserRatingMarkup = (rating) => new Array(USER_RATING_COUNT)
-  .fill(``) // TODO: _ ?
+  .fill(``)
   .map((_, index) => `<input type="radio" name="score"
     class="film-details__user-rating-input visually-hidden"
     value="${index + 1}" id="rating-${index + 1}" ${rating === index + 1 ? `checked` : ``}>
