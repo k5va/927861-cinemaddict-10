@@ -1,5 +1,6 @@
 import {createFilmCardTemplate} from "./film-card";
 import {TOP_RATED_FILMS_COUNT, MOST_COMMENTED_FILMS_COUNT} from "../const";
+import Component from "./component";
 
 /**
  * Creates films list markup
@@ -63,3 +64,9 @@ export const createFilmsTemplate = (films) => {
 
 </section>`;
 };
+
+export default class Films extends Component {
+  constructor(films) {
+    super(createFilmsTemplate(films));
+  }
+}
