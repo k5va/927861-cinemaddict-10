@@ -1,3 +1,4 @@
+import Component from "./component";
 /**
  * Creates sort template
  * @return {String} template
@@ -9,3 +10,9 @@ export const createSortTemplate = () => {
     <li><a href="#" class="sort__button">Sort by rating</a></li>
   </ul>`;
 };
+
+export default class Sort extends Component {
+  constructor() {
+    super(createSortTemplate());
+  }
+}
