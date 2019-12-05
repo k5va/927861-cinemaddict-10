@@ -1,5 +1,6 @@
 import {formatDate} from "../utils/utils";
 import {USER_RATING_COUNT} from "../const";
+import Component from "./component";
 
 /**
  * Generates genres markup
@@ -192,3 +193,9 @@ export const createFilmDetailsTemplate = (film) => {
   </form>
 </section>`;
 };
+
+export default class FilmDetails extends Component {
+  constructor(film) {
+    super(createFilmDetailsTemplate(film));
+  }
+}
