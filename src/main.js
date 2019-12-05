@@ -1,66 +1,95 @@
-import {createUserProfileTemplate} from "./components/user-profile";
-import {createMenuTemplate} from "./components/menu";
-import {createSortTemplate} from "./components/sort";
-import {createFilmsTemplate} from "./components/films";
-import {createShowMoreTemplate} from "./components/show-more";
-import {createFilmDetailsTemplate} from "./components/film-details";
-import {createFilmCardTemplate} from "./components/film-card";
-import {createFooterStatisticsTemplate} from "./components/footer-statistics";
+import {
+  UserProfileComponent, MenuComponent, SortComponent,
+  FilmsComponent, TopRatedFilmsComponent, MostCommentedFilmsComponent,
+  ShowMoreComponent, FooterStaticticsComponent, FilmComponent
+} from "./components";
 import {generateFilms} from "./mock/film";
-import {FILMS_PER_LOAD} from "./const";
+import {render, RenderPosition} from "./utils/utils";
+import {FILMS_PER_LOAD, TOP_RATED_FILMS_COUNT, MOST_COMMENTED_FILMS_COUNT} from "./const";
 
 const FILMS_COUNT = 14;
 
 /**
- * Renders given HTML template to the DOM by adding it to the parent container
- * at the specified position
- * @param {HTMLElement} container - parent HTML element
- * @param {String} template - template to be added to the container
- * @param {String} place - insert position. Default value = "beforeend"
+* Filters through films array to find top rated
+* @param {Array<*>} films - array of films
+* @return {Array<*>} - array of top rated films
+*/
+const findTopRatedFilms = (films) => films
+  .filter((film) => film.rating > 0)
+  .sort((film1, film2) => film2.rating - film1.rating)
+  .slice(0, TOP_RATED_FILMS_COUNT);
+
+/**
+ * Filters through films array to find most commented
+ * @param {Array<*>} films - array of films
+ * @return {Array<*>} - array of most commented films
  */
-const render = (container, template, place = `beforeend`) => {
-  container.insertAdjacentHTML(place, template);
-};
+const findMostCommentedFilms = (films) => films
+  .filter((film) => film.comments.length > 0)
+  .sort((film1, film2) => film2.comments.length - film1.comments.length)
+  .slice(0, MOST_COMMENTED_FILMS_COUNT);
 
 const films = generateFilms(FILMS_COUNT);
 const headerElement = document.querySelector(`.header`);
 // render user profile
-render(headerElement, createUserProfileTemplate(films));
+render(headerElement, new UserProfileComponent(films));
 
 const mainElement = document.querySelector(`.main`);
-// render menu
-render(mainElement, createMenuTemplate(films));
 // render sort
-render(mainElement, createSortTemplate());
-// render films list
-render(mainElement, createFilmsTemplate(films));
+render(mainElement, new SortComponent(), RenderPosition.AFTER_BEGIN);
+// render menu
+render(mainElement, new MenuComponent(films), RenderPosition.AFTER_BEGIN);
 
-const mainFilmsElement = mainElement.querySelector(`.films-list > .films-list__container`);
+// render films list
+const filmListElement = mainElement.querySelector(`.films`);
+const mainFilmsComponent = new FilmsComponent();
+render(filmListElement, mainFilmsComponent);
+
 // render initial number of film cards
 films
   .slice(0, FILMS_PER_LOAD)
-  .forEach((film) => render(mainFilmsElement, createFilmCardTemplate(film)));
+  .forEach((film) => render(mainFilmsComponent.getListContainer(), new FilmComponent(film)));
+
 // render show more
-render(mainFilmsElement, createShowMoreTemplate(), `afterend`);
+const showMoreComponent = new ShowMoreComponent();
+render(mainFilmsComponent.getElement(), showMoreComponent);
 
 let renderedFilmsCount = FILMS_PER_LOAD;
-const showMoreButton = document.querySelector(`.films-list__show-more`);
-showMoreButton.addEventListener(`click`, () => {
+showMoreComponent.getElement().addEventListener(`click`, () => {
   // render new portion of films
   films
     .slice(renderedFilmsCount, renderedFilmsCount + FILMS_PER_LOAD)
-    .forEach((film) => render(mainFilmsElement, createFilmCardTemplate(film)));
+    .forEach((film) => render(mainFilmsComponent.getListContainer(), new FilmComponent(film)));
   // update rendered tasks counter and check if there are more tasks to load
   renderedFilmsCount += FILMS_PER_LOAD;
   if (renderedFilmsCount >= FILMS_COUNT) {
     // no more tasks to load
-    showMoreButton.remove();
+    showMoreComponent.removeElement();
   }
 });
 
+// render top rated films
+const topRatedFilms = findTopRatedFilms(films);
+const topRatedFilmsComponent = new TopRatedFilmsComponent();
+render(filmListElement, topRatedFilmsComponent);
+topRatedFilms.forEach((film) => render(
+    topRatedFilmsComponent.getListContainer(),
+    new FilmComponent(film))
+);
+
+// render most commented films
+const mostCommentedFilms = findMostCommentedFilms(films);
+const mostCommentedFilmsComponent = new MostCommentedFilmsComponent();
+render(filmListElement, mostCommentedFilmsComponent);
+mostCommentedFilms.forEach((film) => render(
+    mostCommentedFilmsComponent.getListContainer(),
+    new FilmComponent(film))
+);
+
+
 // render film details popup
-render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
+// render(mainElement, createFilmDetailsTemplate(films[0]), `afterend`);
 
 const footerElement = document.querySelector(`.footer`);
 // render footer statistics
-render(footerElement, createFooterStatisticsTemplate(films));
+render(footerElement, new FooterStaticticsComponent(films));
