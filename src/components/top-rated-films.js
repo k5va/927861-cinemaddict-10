@@ -18,6 +18,6 @@ export default class TopRatedFilms extends Component {
   }
 
   getListContainer() {
-    return this._element.querySelector(`.films-list__container`);
+    return this.getElement().querySelector(`.films-list__container`);
   }
 }

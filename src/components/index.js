@@ -1,5 +1,5 @@
 export {default as FilmComponent} from "./film-card";
-export {default as FilmDetails} from "./film-details";
+export {default as FilmDetailsComponent} from "./film-details";
 export {default as FilmsComponent} from "./films";
 export {default as TopRatedFilmsComponent} from "./top-rated-films";
 export {default as MostCommentedFilmsComponent} from "./most-commented-films";
