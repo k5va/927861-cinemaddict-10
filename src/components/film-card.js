@@ -33,7 +33,7 @@ export const createFilmCardTemplate = (film) => {
 </article>`;
 };
 
-export default class LoadMore extends Component {
+export default class Film extends Component {
   constructor(film) {
     super(createFilmCardTemplate(film));
   }
