@@ -4,7 +4,7 @@ import {
   ShowMoreComponent, FooterStaticticsComponent, FilmComponent, FilmDetailsComponent
 } from "./components";
 import {generateFilms} from "./mock/film";
-import {render, RenderPosition} from "./utils/utils";
+import {render, RenderPosition} from "./utils";
 import {FILMS_PER_LOAD, TOP_RATED_FILMS_COUNT, MOST_COMMENTED_FILMS_COUNT} from "./const";
 
 const FILMS_COUNT = 14;

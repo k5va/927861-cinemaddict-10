@@ -1,4 +1,4 @@
-import {formatDate} from "../../utils/utils";
+import {formatDate} from "../../utils";
 
 /**
  * Generates comments markup

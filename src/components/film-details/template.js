@@ -1,4 +1,4 @@
-import {formatDate} from "../../utils/utils";
+import {formatDate} from "../../utils";
 import {generateGenreMarkup} from "./genre-markup";
 import {generateCommentsMarkup} from "./comments-markup";
 import {generateUserRatingMarkup} from "./user-rating-markup";
