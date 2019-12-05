@@ -198,4 +198,8 @@ export default class FilmDetails extends Component {
   constructor(film) {
     super(createFilmDetailsTemplate(film));
   }
+
+  getCloseElement() {
+    return this.getElement().querySelector(`.film-details__close-btn`);
+  }
 }
