@@ -1,4 +1,5 @@
 import {FILM_GENRE_SPLIT, MAX_SHORT_DESCRIPTION_SIZE} from "../const";
+import Component from "./component";
 
 /**
  * Creates film card template
@@ -31,3 +32,9 @@ export const createFilmCardTemplate = (film) => {
   </form>
 </article>`;
 };
+
+export default class LoadMore extends Component {
+  constructor(film) {
+    super(createFilmCardTemplate(film));
+  }
+}
