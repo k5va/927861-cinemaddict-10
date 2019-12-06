@@ -1,4 +1,5 @@
 import {UserTitle} from "../const";
+import Component from "./component";
 
 /**
  * Creates user profile template
@@ -22,3 +23,9 @@ export const createUserProfileTemplate = (films) => {
     <img class="profile__avatar" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
   </section>`;
 };
+
+export default class UserProfile extends Component {
+  constructor(films) {
+    super(createUserProfileTemplate(films));
+  }
+}

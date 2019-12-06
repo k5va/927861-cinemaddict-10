@@ -1,4 +1,5 @@
 import {FILM_GENRE_SPLIT, MAX_SHORT_DESCRIPTION_SIZE} from "../const";
+import Component from "./component";
 
 /**
  * Creates film card template
@@ -31,3 +32,21 @@ export const createFilmCardTemplate = (film) => {
   </form>
 </article>`;
 };
+
+export default class Film extends Component {
+  constructor(film) {
+    super(createFilmCardTemplate(film));
+  }
+
+  getPosterElement() {
+    return this.getElement().querySelector(`.film-card__poster`);
+  }
+
+  getTitleElement() {
+    return this.getElement().querySelector(`.film-card__title`);
+  }
+
+  getCommentsCountElement() {
+    return this.getElement().querySelector(`.film-card__comments`);
+  }
+}

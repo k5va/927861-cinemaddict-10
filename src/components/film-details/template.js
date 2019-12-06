@@ -1,54 +1,14 @@
-import {formatDate} from "../utils/utils";
-import {USER_RATING_COUNT} from "../const";
-
-/**
- * Generates genres markup
- * @param {Set<*>} genres - Set of genres
- * @return {String} - genres markup
- */
-const generateGenreMarkup = (genres) => [...genres]
-  .map((genre) => `<span class="film-details__genre">${genre}</span>`);
-
-/**
- * Generates comments markup
- * @param {Array<*>} comments - array of comments
- * @return {String} - comments markup
- */
-const generateCommentsMarkup = (comments) => comments
-  .map(({text, author, date}) => `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${text}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${formatDate(date)}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`
-  );
-
-/**
- * Generates user rating markup
- * @param {Number} rating - user rating (1 - 9)
- * @return {String} - user rating markup
- */
-const generateUserRatingMarkup = (rating) => new Array(USER_RATING_COUNT)
-  .fill(``)
-  .map((_, index) => `<input type="radio" name="score"
-    class="film-details__user-rating-input visually-hidden"
-    value="${index + 1}" id="rating-${index + 1}" ${rating === index + 1 ? `checked` : ``}>
-    <label class="film-details__user-rating-label" for="rating-${index + 1}">${index + 1}</label>`)
-  .join(``);
+import {formatDate} from "../../utils";
+import {generateGenreMarkup} from "./genre-markup";
+import {generateCommentsMarkup} from "./comments-markup";
+import {generateUserRatingMarkup} from "./user-rating-markup";
 
 /**
  * Creates film details template
  * @param {*} film - film data
  * @return {String} template
  */
-export const createFilmDetailsTemplate = (film) => {
+const template = (film) => {
   const {title, originalTitle, age, rating, userRating, director,
     actors, writers, releaseDate, duration, poster, genres, country, description, comments} = film;
 
@@ -192,3 +152,5 @@ export const createFilmDetailsTemplate = (film) => {
   </form>
 </section>`;
 };
+
+export {template};

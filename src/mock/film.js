@@ -1,4 +1,4 @@
-import {getRandomArrayItem, getRandomInteger, getRandomBoolean, getRandomDate} from "../utils/utils";
+import {getRandomArrayItem, getRandomInteger, getRandomBoolean, getRandomDate} from "../utils";
 
 const MAX_DESCRIPTION_SIZE = 3;
 const DEFAULT_FILMS_COUNT = 15;

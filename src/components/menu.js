@@ -1,3 +1,4 @@
+import Component from "./component";
 /**
  * Creates menu template
  * @param {Array<*>} films - array of all films
@@ -19,3 +20,9 @@ export const createMenuTemplate = (films) => {
     <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
   </nav>`;
 };
+
+export default class Menu extends Component {
+  constructor(films) {
+    super(createMenuTemplate(films));
+  }
+}
