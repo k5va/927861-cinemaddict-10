@@ -1,7 +1,7 @@
-import Component from "../component";
+import AbstractComponent from "../component";
 import {template} from "./template";
 
-export default class Film extends Component {
+export default class Film extends AbstractComponent {
   constructor(film) {
     super(template(film));
   }
