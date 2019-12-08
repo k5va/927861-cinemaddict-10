@@ -8,7 +8,7 @@ import {generateFilms} from "./mock/film";
 import {render, RenderPosition} from "./utils";
 import {FILMS_PER_LOAD, TOP_RATED_FILMS_COUNT, MOST_COMMENTED_FILMS_COUNT} from "./const";
 
-const FILMS_COUNT = 0;
+const FILMS_COUNT = 22;
 
 /**
 * Filters through films array to find top rated
@@ -60,7 +60,7 @@ const renderFilm = (film, filmsComponent) => {
    */
   const showFilmDetails = () => {
     render(filmsComponent.getElement(), filmDetailsComponent);
-    filmDetailsComponent.getCloseElement().addEventListener(`click`, () => {
+    filmDetailsComponent.setCloseHandler(() => {
       // remove film details component from the DOM
       closeFilmDetails();
     });
@@ -68,9 +68,7 @@ const renderFilm = (film, filmsComponent) => {
   };
 
   // register show film details handler
-  filmComponent.getPosterElement().addEventListener(`click`, showFilmDetails);
-  filmComponent.getTitleElement().addEventListener(`click`, showFilmDetails);
-  filmComponent.getCommentsCountElement().addEventListener(`click`, showFilmDetails);
+  filmComponent.setShowDetailsHandler(showFilmDetails);
 
   // render film component
   render(filmsComponent.getListContainer(), filmComponent);

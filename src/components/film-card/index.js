@@ -6,15 +6,13 @@ export default class Film extends AbstractComponent {
     super(template(film));
   }
 
-  getPosterElement() {
-    return this.getElement().querySelector(`.film-card__poster`);
-  }
-
-  getTitleElement() {
-    return this.getElement().querySelector(`.film-card__title`);
-  }
-
-  getCommentsCountElement() {
-    return this.getElement().querySelector(`.film-card__comments`);
+  /**
+   * Sets show film details handler function.
+   * @param {Function} handler - handler
+   */
+  setShowDetailsHandler(handler) {
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
   }
 }
