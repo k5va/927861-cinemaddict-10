@@ -102,7 +102,7 @@ if (films.length > 0) {
   // render show more
   const showMoreComponent = new ShowMoreComponent();
   render(mainFilmsComponent.getElement(), showMoreComponent);
-  showMoreComponent.getElement().addEventListener(`click`, () => {
+  showMoreComponent.setShowMoreHandler(() => {
     // render new portion of films
     films
       .slice(renderedFilmsCount, renderedFilmsCount + FILMS_PER_LOAD)
