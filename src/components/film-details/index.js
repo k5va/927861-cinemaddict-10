@@ -7,10 +7,13 @@ export default class FilmDetails extends AbstractComponent {
   }
 
   /**
-   * Returns components close element
-   * @return {HTMLElement} - close element
+   * Sets film details close handler
+   * @param {Function} handler - close handler
    */
-  getCloseElement() {
-    return this.getElement().querySelector(`.film-details__close-btn`);
+  setCloseHandler(handler) {
+    this
+      .getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }
