@@ -37,15 +37,32 @@ const renderFilm = (film) => {
   const filmComponent = new FilmComponent(film);
   const filmDetailsComponent = new FilmDetailsComponent(film);
 
+  const onEscKeyDown = (evt) => {
+    const isEscKey = evt.key === `Esc` || evt.key === `Escape`;
+
+    if (isEscKey) {
+      closeFilmDetails();
+    }
+  };
+
   /**
-   * Renders film details component
+  * Closes film details info
+  */
+  const closeFilmDetails = () => {
+    filmDetailsComponent.removeElement();
+    document.removeEventListener(`keydown`, onEscKeyDown);
+  };
+
+  /**
+   * Shows film details info
    */
   const showFilmDetails = () => {
     render(mainFilmsComponent.getElement(), filmDetailsComponent);
     filmDetailsComponent.getCloseElement().addEventListener(`click`, () => {
       // remove film details component from the DOM
-      filmDetailsComponent.removeElement();
+      closeFilmDetails();
     });
+    document.addEventListener(`keydown`, onEscKeyDown);
   };
 
   // register show film details handler
