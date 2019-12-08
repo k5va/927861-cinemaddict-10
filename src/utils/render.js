@@ -1,6 +1,8 @@
 const RenderPosition = {
   AFTER_BEGIN: `afterbegin`,
-  BEFORE_END: `beforeend`
+  BEFORE_END: `beforeend`,
+  BEFORE_BEGIN: `beforebegin`,
+  AFTER_END: `afterend`
 };
 
 /**
@@ -11,14 +13,7 @@ const RenderPosition = {
  * @param {String} place - insert position. Default value = "beforeend"
  */
 const render = (container, component, place = RenderPosition.BEFORE_END) => {
-  switch (place) {
-    case RenderPosition.AFTER_BEGIN:
-      container.prepend(component.getElement());
-      break;
-    case RenderPosition.BEFORE_END:
-      container.append(component.getElement());
-      break;
-  }
+  container.insertAdjacentElement(place, component.getElement());
 };
 
 export {render, RenderPosition};
