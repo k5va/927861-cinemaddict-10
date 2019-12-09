@@ -6,7 +6,7 @@ import {generateFilms} from "./mock/film";
 import {render} from "./utils";
 import {FilmsController} from "./controllers";
 
-const FILMS_COUNT = 22;
+const FILMS_COUNT = 14;
 
 const films = generateFilms(FILMS_COUNT);
 
