@@ -18,9 +18,6 @@ render(headerElement, new UserProfileComponent(films));
 const mainElement = document.querySelector(`.main`);
 render(mainElement, new MenuComponent(films));
 
-// render sort
-render(mainElement, new SortComponent());
-
 // render films
 const filmsController = new FilmsController(mainElement);
 filmsController.render(films);

@@ -1,4 +1,4 @@
-import {FilmsComponent, NoFilmsComponent, ShowMoreComponent} from "../../components";
+import {FilmsComponent, NoFilmsComponent, ShowMoreComponent, SortComponent} from "../../components";
 import {renderFilm} from "./render-film";
 import {FILMS_PER_LOAD} from "../../const";
 import {render} from "../../utils";
@@ -14,6 +14,7 @@ export default class FilmsController {
     this._container = container;
     this._filmsComponent = new FilmsComponent();
     this._showMoreComponent = new ShowMoreComponent();
+    this._sortComponent = new SortComponent();
   }
 
   /**
@@ -27,6 +28,9 @@ export default class FilmsController {
       render(this._container, new NoFilmsComponent());
       return;
     }
+
+    // render sort
+    render(this._container, this._sortComponent);
 
     let renderedFilmsCount = FILMS_PER_LOAD;
     // render films list
