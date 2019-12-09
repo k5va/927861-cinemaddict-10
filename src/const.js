@@ -31,3 +31,9 @@ export const UserTitle = {
 };
 
 export const FILMS_PER_LOAD = 5;
+
+export const SortType = {
+  DATE: `date`,
+  RATING: `sort`,
+  DEFAULT: `default`,
+};
