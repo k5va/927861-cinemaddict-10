@@ -5,6 +5,8 @@ import {render, RenderPosition} from "../../utils";
 /**
  * Renders main film list
  * @param {Array<*>} films - array of films
+ * @param {FilmsComponent} filmsComponent - Films component
+ * @param {ShowMoreComponent} showMoreComponent - show more component
  */
 const renderFilms = (films, filmsComponent, showMoreComponent) => {
   let renderedFilmsCount = FILMS_PER_LOAD;
