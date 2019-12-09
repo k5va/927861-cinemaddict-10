@@ -9,4 +9,11 @@ export default class Films extends AbstractComponent {
   getListContainer() {
     return this.getElement().querySelector(`.films-list__container`);
   }
+
+  resetList() {
+    this
+      .getElement()
+      .querySelector(`.films-list__container`)
+      .innerHTML = ``;
+  }
 }
