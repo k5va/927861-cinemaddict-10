@@ -1,9 +1,9 @@
 import {FilmsComponent, NoFilmsComponent, ShowMoreComponent, SortComponent} from "../../components";
-import {renderFilm} from "./render-film";
-import {FILMS_PER_LOAD} from "../../const";
 import {render} from "../../utils";
 import {renderTopRatedFilms} from "./render-top-rated";
 import {renderMostCommentedFilms} from "./render-most-commented";
+import {renderFilms} from "./render-films";
+import {SortType} from "../../const";
 
 export default class FilmsController {
   /**
@@ -22,37 +22,33 @@ export default class FilmsController {
    * @param {Array<*>} films - array of film objects
    */
   render(films) {
-
     if (!films.length) {
       // render No-films
       render(this._container, new NoFilmsComponent());
       return;
     }
-
     // render sort
     render(this._container, this._sortComponent);
+    this._sortComponent.setSortTypeChangeHandler((sortType) => {
+      let sortedFilms = [];
 
-    let renderedFilmsCount = FILMS_PER_LOAD;
+      switch (sortType) {
+        case SortType.DATE:
+          sortedFilms = films.slice().sort((film1, film2) => film1.releaseDate - film2.releaseDate);
+          break;
+        case SortType.RATING:
+          sortedFilms = films.slice().sort((film1, film2) => film2.rating - film1.rating);
+          break;
+        case SortType.DEFAULT:
+          sortedFilms = films;
+          break;
+      }
+      renderFilms(sortedFilms, this._filmsComponent, this._showMoreComponent);
+    });
+
     // render films list
     render(this._container, this._filmsComponent);
-
-    // render initial number of film cards
-    films.slice(0, FILMS_PER_LOAD).forEach((film) => renderFilm(film, this._filmsComponent));
-
-    // render show more
-    render(this._filmsComponent.getElement(), this._showMoreComponent);
-    this._showMoreComponent.setShowMoreHandler(() => {
-      // render new portion of films
-      films
-        .slice(renderedFilmsCount, renderedFilmsCount + FILMS_PER_LOAD)
-        .forEach((film) => renderFilm(film, this._filmsComponent));
-      // update rendered tasks counter and check if there are more tasks to load
-      renderedFilmsCount += FILMS_PER_LOAD;
-      if (renderedFilmsCount >= films.length) {
-        // no more tasks to load
-        this._showMoreComponent.removeElement();
-      }
-    });
+    renderFilms(films, this._filmsComponent, this._showMoreComponent);
 
     // render top rated films
     renderTopRatedFilms(this._filmsComponent.getElement(), films);
