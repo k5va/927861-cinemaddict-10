@@ -11,7 +11,7 @@ const template = () => {
         Sort by default
       </a>
     </li>
-    <li><a href="#" data-sort-type="${SortType.DATE} class="sort__button">Sort by date</a></li>
+    <li><a href="#" data-sort-type="${SortType.DATE}" class="sort__button">Sort by date</a></li>
     <li><a href="#" data-sort-type="${SortType.RATING}" class="sort__button">Sort by rating</a></li>
   </ul>`;
 };
