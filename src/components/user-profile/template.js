@@ -1,12 +1,11 @@
-import {UserTitle} from "../const";
-import Component from "./component";
+import {UserTitle} from "../../const";
 
 /**
  * Creates user profile template
  * @param {Array<*>} films - array of all films
  * @return {String} template
  */
-export const createUserProfileTemplate = (films) => {
+const template = (films) => {
   const watchedFilmsCount = films.filter(({isWatched}) => isWatched).length;
 
   let userTitle = UserTitle.NO_TITLE;
@@ -24,8 +23,4 @@ export const createUserProfileTemplate = (films) => {
   </section>`;
 };
 
-export default class UserProfile extends Component {
-  constructor(films) {
-    super(createUserProfileTemplate(films));
-  }
-}
+export {template};

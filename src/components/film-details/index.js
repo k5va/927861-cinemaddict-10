@@ -1,16 +1,19 @@
-import Component from "../component";
+import AbstractComponent from "../component";
 import {template} from "./template";
 
-export default class FilmDetails extends Component {
+export default class FilmDetails extends AbstractComponent {
   constructor(film) {
     super(template(film));
   }
 
   /**
-   * Returns components close element
-   * @return {HTMLElement} - close element
+   * Sets film details close handler
+   * @param {Function} handler - close handler
    */
-  getCloseElement() {
-    return this.getElement().querySelector(`.film-details__close-btn`);
+  setCloseHandler(handler) {
+    this
+      .getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, handler);
   }
 }
