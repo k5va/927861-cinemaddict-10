@@ -1,7 +1,4 @@
-import {
-  UserProfileComponent, MenuComponent, SortComponent,
-  FooterStaticticsComponent
-} from "./components";
+import {UserProfileComponent, MenuComponent, FooterStaticticsComponent} from "./components";
 import {generateFilms} from "./mock/film";
 import {render} from "./utils";
 import {FilmsController} from "./controllers";
