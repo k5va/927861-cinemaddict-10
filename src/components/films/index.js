@@ -23,9 +23,6 @@ export default class Films extends AbstractComponent {
    * Removes all film list elements
    */
   resetList() {
-    this
-      .getElement()
-      .querySelector(`.films-list__container`)
-      .innerHTML = ``;
+    this.getListContainer().innerHTML = ``;
   }
 }
