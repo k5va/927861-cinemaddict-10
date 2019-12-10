@@ -1,4 +1,4 @@
-import {FILMS_PER_LOAD} from "../../const";
+import {FILMS_PER_LOAD} from "../../consts";
 import {renderFilm} from "./render-film";
 import {render, RenderPosition} from "../../utils";
 

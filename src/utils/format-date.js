@@ -1,4 +1,4 @@
-import {MONTH_NAMES} from "../const";
+import {MONTH_NAMES} from "../consts";
 import {formatNumber} from "./index";
 
 /**

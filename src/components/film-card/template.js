@@ -1,4 +1,4 @@
-import {FILM_GENRE_SPLIT, MAX_SHORT_DESCRIPTION_SIZE} from "../../const";
+import {FILM_GENRE_SPLIT, MAX_SHORT_DESCRIPTION_SIZE} from "../../consts";
 
 /**
  * Creates film card template

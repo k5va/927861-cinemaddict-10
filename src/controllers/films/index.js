@@ -3,7 +3,7 @@ import {render} from "../../utils";
 import {renderTopRatedFilms} from "./render-top-rated";
 import {renderMostCommentedFilms} from "./render-most-commented";
 import {renderFilms} from "./render-films";
-import {SortType} from "../../const";
+import {SortType} from "../../consts";
 
 export default class FilmsController {
   /**
