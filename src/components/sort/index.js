@@ -4,8 +4,17 @@ import {SortType} from "../../consts";
 
 export default class Sort extends AbstractComponent {
   constructor() {
-    super(template());
+    super();
+
     this._currenSortType = SortType.DEFAULT;
+  }
+
+  /**
+   * Returns component's template
+   * @return {String} - template
+   */
+  getTemplate() {
+    return template();
   }
 
   /**
