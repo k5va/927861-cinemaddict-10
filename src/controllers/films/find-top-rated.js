@@ -1,4 +1,4 @@
-import {TOP_RATED_FILMS_COUNT} from "../../const";
+import {TOP_RATED_FILMS_COUNT} from "../../consts";
 
 /**
 * Filters through films array to find top rated
