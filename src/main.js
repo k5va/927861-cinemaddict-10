@@ -1,7 +1,7 @@
 import {UserProfileComponent, MenuComponent, FooterStaticticsComponent} from "./components";
 import {generateFilms} from "./mock/film";
 import {render} from "./utils";
-import {FilmsController} from "./controllers";
+import {PageController} from "./controllers";
 
 const FILMS_COUNT = 14;
 
@@ -16,8 +16,8 @@ const mainElement = document.querySelector(`.main`);
 render(mainElement, new MenuComponent(films));
 
 // render films
-const filmsController = new FilmsController(mainElement);
-filmsController.render(films);
+const pageController = new PageController(mainElement);
+pageController.render(films);
 
 // render footer statistics
 const footerElement = document.querySelector(`.footer`);

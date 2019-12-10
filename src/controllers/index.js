@@ -1,1 +1,1 @@
-export {default as FilmsController} from "./films";
+export {default as PageController} from "./page";

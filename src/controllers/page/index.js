@@ -5,7 +5,7 @@ import {renderMostCommentedFilms} from "./render-most-commented";
 import {renderFilms} from "./render-films";
 import {sortFilms} from "./sort-films";
 
-export default class FilmsController {
+export default class PageController {
   /**
    * Creates an instance of FilmsController.
    * @param {HTMLElement} container - parent HTML Element to render data to
