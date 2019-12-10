@@ -1,12 +1,9 @@
-import {
-  UserProfileComponent, MenuComponent, SortComponent,
-  FooterStaticticsComponent
-} from "./components";
+import {UserProfileComponent, MenuComponent, FooterStaticticsComponent} from "./components";
 import {generateFilms} from "./mock/film";
 import {render} from "./utils";
 import {FilmsController} from "./controllers";
 
-const FILMS_COUNT = 22;
+const FILMS_COUNT = 14;
 
 const films = generateFilms(FILMS_COUNT);
 
@@ -17,9 +14,6 @@ render(headerElement, new UserProfileComponent(films));
 // render menu
 const mainElement = document.querySelector(`.main`);
 render(mainElement, new MenuComponent(films));
-
-// render sort
-render(mainElement, new SortComponent());
 
 // render films
 const filmsController = new FilmsController(mainElement);
