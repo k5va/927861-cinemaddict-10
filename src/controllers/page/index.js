@@ -3,9 +3,9 @@ import {render} from "../../utils";
 import {renderTopRatedFilms} from "./render-top-rated";
 import {renderMostCommentedFilms} from "./render-most-commented";
 import {renderFilms} from "./render-films";
-import {SortType} from "../../const";
+import {sortFilms} from "./sort-films";
 
-export default class FilmsController {
+export default class PageController {
   /**
    * Creates an instance of FilmsController.
    * @param {HTMLElement} container - parent HTML Element to render data to
@@ -29,22 +29,11 @@ export default class FilmsController {
     }
     // render sort
     render(this._container, this._sortComponent);
-    this._sortComponent.setSortTypeChangeHandler((sortType) => {
-      let sortedFilms = [];
-
-      switch (sortType) {
-        case SortType.DATE:
-          sortedFilms = films.slice().sort((film1, film2) => film1.releaseDate - film2.releaseDate);
-          break;
-        case SortType.RATING:
-          sortedFilms = films.slice().sort((film1, film2) => film2.rating - film1.rating);
-          break;
-        case SortType.DEFAULT:
-          sortedFilms = films;
-          break;
-      }
-      renderFilms(sortedFilms, this._filmsComponent, this._showMoreComponent);
-    });
+    this._sortComponent.setSortTypeChangeHandler((sortType) => renderFilms(
+        sortFilms(films, sortType),
+        this._filmsComponent,
+        this._showMoreComponent)
+    );
 
     // render films list
     render(this._container, this._filmsComponent);

@@ -1,4 +1,4 @@
-import {UserTitle} from "../../const";
+import {UserTitle} from "../../consts";
 
 /**
  * Creates user profile template

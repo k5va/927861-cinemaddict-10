@@ -2,7 +2,11 @@ import AbstractComponent from "../component";
 import {template} from "./template";
 
 export default class NoFilms extends AbstractComponent {
-  constructor() {
-    super(template());
+  /**
+   * Returns component's template
+   * @return {String} - template
+   */
+  getTemplate() {
+    return template();
   }
 }

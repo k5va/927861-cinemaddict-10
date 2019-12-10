@@ -1,11 +1,11 @@
 /**
  * Creates footer statistics template
- * @param {Array<*>} films - array of all films
+ * @param {Number} filmsCount - number of all films
  * @return {String} template
  */
-const template = (films) => {
+const template = (filmsCount) => {
   return `<section class="footer__statistics">
-            <p>${films.length} movies inside</p>
+            <p>${filmsCount} movies inside</p>
           </section>`;
 };
 

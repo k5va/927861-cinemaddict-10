@@ -1,4 +1,4 @@
-import {USER_RATING_COUNT} from "../../const";
+import {USER_RATING_COUNT} from "../../consts";
 
 /**
  * Generates user rating markup

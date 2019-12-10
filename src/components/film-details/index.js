@@ -3,7 +3,17 @@ import {template} from "./template";
 
 export default class FilmDetails extends AbstractComponent {
   constructor(film) {
-    super(template(film));
+    super();
+
+    this._film = film;
+  }
+
+  /**
+   * Returns component's template
+   * @return {String} - template
+   */
+  getTemplate() {
+    return template(this._film);
   }
 
   /**

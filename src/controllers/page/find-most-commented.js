@@ -1,4 +1,4 @@
-import {MOST_COMMENTED_FILMS_COUNT} from "../../const";
+import {MOST_COMMENTED_FILMS_COUNT} from "../../consts";
 
 /**
  * Filters through films array to find most commented
