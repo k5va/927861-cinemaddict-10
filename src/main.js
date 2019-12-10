@@ -21,4 +21,4 @@ filmsController.render(films);
 
 // render footer statistics
 const footerElement = document.querySelector(`.footer`);
-render(footerElement, new FooterStaticticsComponent(films));
+render(footerElement, new FooterStaticticsComponent(films.length));
