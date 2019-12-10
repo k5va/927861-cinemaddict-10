@@ -13,6 +13,6 @@ export default class Menu extends AbstractComponent {
    * @return {String} - template
    */
   getTemplate() {
-    return template(this._film);
+    return template(this._films);
   }
 }
