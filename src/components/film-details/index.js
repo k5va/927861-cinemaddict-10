@@ -1,5 +1,6 @@
-import AbstractSmartComponent from "../component";
+import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
+import {CommentEmojiImages} from "../../consts";
 
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
@@ -7,6 +8,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._film = film;
     this._subscribeOnEvents();
+    this._commentEmojiImage = null;
   }
 
   /**
@@ -14,7 +16,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @return {String} - template
    */
   getTemplate() {
-    return template(this._film);
+    return template(this._film, {commentEmojiImage: this._commentEmojiImage});
   }
 
   /**
@@ -67,7 +69,14 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   /**
    * Addes component's interactive controls events handlers
-  */
-  _subscribeOnEvents() {}
-
+   */
+  _subscribeOnEvents() {
+    this
+      .getElement()
+      .querySelector(`.film-details__emoji-list`)
+      .addEventListener(`change`, (evt) => {
+        this._commentEmojiImage = CommentEmojiImages[evt.target.value];
+        this.rerender();
+      });
+  }
 }

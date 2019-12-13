@@ -39,3 +39,9 @@ export const SortType = {
 };
 
 export const DEFAULT_USER_RATING = 0;
+
+export const CommentEmojiImages = {
+  'smiling': `smile.png`,
+  'sleeping': `sleeping.png`,
+  'grinning': `angry.png`
+}
