@@ -44,4 +44,4 @@ export const CommentEmojiImages = {
   'smiling': `smile.png`,
   'sleeping': `sleeping.png`,
   'grinning': `angry.png`
-}
+};
