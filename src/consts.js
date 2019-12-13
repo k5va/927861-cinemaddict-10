@@ -37,3 +37,5 @@ export const SortType = {
   RATING: `sort`,
   DEFAULT: `default`,
 };
+
+export const DEFAULT_USER_RATING = 0;

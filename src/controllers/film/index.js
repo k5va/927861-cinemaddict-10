@@ -1,5 +1,6 @@
 import {FilmComponent, FilmDetailsComponent} from "../../components";
 import {render, replace} from "../../utils";
+import {DEFAULT_USER_RATING} from "../../consts";
 
 const FilmMode = {
   DEFAULT: `default`,
@@ -133,10 +134,13 @@ export default class FilmController {
    * Add film to watched handler
    */
   _addToWatchedHandler() {
-    this._onDataChange(
-        this,
-        this._film,
-        Object.assign({}, this._film, {isWatched: !this._film.isWatched}));
+    const newFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched});
+
+    // reset user rating if film removed from watched list
+    newFilm.userRating = !newFilm.isWatched ? DEFAULT_USER_RATING : newFilm.userRating;
+
+    // call data change handler
+    this._onDataChange(this, this._film, newFilm);
   }
 
   /**
