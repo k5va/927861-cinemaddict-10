@@ -106,8 +106,7 @@ const template = (film) => {
     </div>
 
     <div class="form-details__middle-container">
-      ${isWatched ? (
-      `<section class="film-details__user-rating-wrap">
+      ${isWatched ? `<section class="film-details__user-rating-wrap">
         <div class="film-details__user-rating-controls">
           <button class="film-details__watched-reset" type="button">Undo</button>
         </div>
@@ -125,7 +124,7 @@ const template = (film) => {
             <div class="film-details__user-rating-score">${userRatingMarkup}</div>
           </section>
         </div>
-      </section>`) : ``}
+      </section>` : ``}
     </div>
 
     <div class="form-details__bottom-container">
