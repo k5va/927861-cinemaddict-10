@@ -43,6 +43,7 @@ export default class FilmController {
 
     // register add to watch list handler
     this._filmComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
+    this._filmDetailsComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
 
     // register show film details handler
     this._filmComponent.setShowDetailsHandler(this._showFilmDetails);
