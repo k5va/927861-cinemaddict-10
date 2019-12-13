@@ -38,4 +38,11 @@ export default class AbstractComponent {
     this.getElement().remove();
     this._element = null;
   }
+
+  /**
+   * Clears reference to component's element
+   */
+  resetElement() {
+    this._element = null;
+  }
 }
