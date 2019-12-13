@@ -23,9 +23,21 @@ export default class Film extends AbstractComponent {
   setAddToWatchlistHandler(handler) {
     this
       .getElement()
-      .querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .querySelector(`.film-card__controls-item--mark-as-watched`)
       .addEventListener(`click`, handler);
   }
+
+  /**
+   * Sets add to watched handler function.
+   * @param {Function} handler - handler
+   */
+  setAddToWatchedHandler(handler) {
+    this
+      .getElement()
+      .querySelector(`.film-card__controls-item--mark-as-watched`)
+      .addEventListener(`click`, handler);
+  }
+
 
   /**
    * Sets show film details handler function.
