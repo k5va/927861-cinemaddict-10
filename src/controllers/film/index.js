@@ -17,7 +17,7 @@ export default class FilmController {
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
-
+    this._film = null;
     this._mode = FilmMode.DEFAULT;
 
     this._filmComponent = null;
@@ -25,6 +25,7 @@ export default class FilmController {
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._showFilmDetails = this._showFilmDetails.bind(this);
+    this._addToWatchListHandler = this._addToWatchListHandler.bind(this);
   }
 
   /**
@@ -32,11 +33,16 @@ export default class FilmController {
    * @param {*} film - film object
    */
   render(film) {
+    this._film = film;
+
     const oldFilmComponent = this._filmComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmComponent = new FilmComponent(film);
-    this._filmDetailsComponent = new FilmDetailsComponent(film);
+    this._filmComponent = new FilmComponent(this._film);
+    this._filmDetailsComponent = new FilmDetailsComponent(this._film);
+
+    // register add to watch list handler
+    this._filmComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
 
     // register show film details handler
     this._filmComponent.setShowDetailsHandler(this._showFilmDetails);
@@ -100,5 +106,15 @@ export default class FilmController {
     if (this._mode !== FilmMode.DEFAULT) {
       this._closeFilmDetails();
     }
+  }
+
+  /**
+   * Add film to watch list handler
+   */
+  _addToWatchListHandler() {
+    this._onDataChange(
+        this,
+        this._film,
+        Object.assign({}, this._film, {isWatchlistAdded: !this._film.isWatchlistAdded}));
   }
 }
