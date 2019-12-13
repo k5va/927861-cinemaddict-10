@@ -26,6 +26,7 @@ export default class FilmController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     this._showFilmDetails = this._showFilmDetails.bind(this);
     this._addToWatchListHandler = this._addToWatchListHandler.bind(this);
+    this._addToWatchedHandler = this._addToWatchedHandler.bind(this);
   }
 
   /**
@@ -44,6 +45,9 @@ export default class FilmController {
     // register add to watch list handler
     this._filmComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
     this._filmDetailsComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
+
+    // register add to watched handler
+    this._filmDetailsComponent.setAddToWatchedHandler(this._addToWatchedHandler);
 
     // register show film details handler
     this._filmComponent.setShowDetailsHandler(this._showFilmDetails);
@@ -117,5 +121,15 @@ export default class FilmController {
         this,
         this._film,
         Object.assign({}, this._film, {isWatchlistAdded: !this._film.isWatchlistAdded}));
+  }
+
+  /**
+   * Add film to watched handler
+   */
+  _addToWatchedHandler() {
+    this._onDataChange(
+        this,
+        this._film,
+        Object.assign({}, this._film, {isWatched: !this._film.isWatched}));
   }
 }
