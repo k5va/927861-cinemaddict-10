@@ -66,12 +66,21 @@ export default class FilmController {
    * Shows film details info
    */
   _showFilmDetails() {
+
+    if (this._mode === FilmMode.DETAILS) {
+      return;
+    }
+
+    // fire view change event
+    this._onViewChange();
+
     render(this._container.getElement(), this._filmDetailsComponent);
     this._filmDetailsComponent.setCloseHandler(() => {
       // remove film details component from the DOM
       this._closeFilmDetails();
     });
     document.addEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = FilmMode.DETAILS;
   }
 
 
@@ -81,6 +90,7 @@ export default class FilmController {
   _closeFilmDetails() {
     this._filmDetailsComponent.removeElement();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._mode = FilmMode.DEFAULT;
   }
 
   /**

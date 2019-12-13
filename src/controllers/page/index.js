@@ -142,5 +142,4 @@ export default class PageController {
   _onViewChange() {
     this._showedFilmControllers.forEach((filmController) => filmController.setDefaultView());
   }
-
 }
