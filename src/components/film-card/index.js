@@ -38,6 +38,19 @@ export default class Film extends AbstractComponent {
       .addEventListener(`click`, handler);
   }
 
+  /**
+   * Sets add to Favorites handler function.
+   * @param {Function} handler - handler
+   */
+  setAddToFavoritesHandler(handler) {
+    this
+      .getElement()
+      .querySelector(`.film-card__controls-item--favorite`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        handler();
+      });
+  }
 
   /**
    * Sets show film details handler function.

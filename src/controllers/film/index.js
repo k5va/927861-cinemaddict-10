@@ -27,6 +27,7 @@ export default class FilmController {
     this._showFilmDetails = this._showFilmDetails.bind(this);
     this._addToWatchListHandler = this._addToWatchListHandler.bind(this);
     this._addToWatchedHandler = this._addToWatchedHandler.bind(this);
+    this._addToFavoritesHandler = this._addToFavoritesHandler.bind(this);
   }
 
   /**
@@ -49,6 +50,10 @@ export default class FilmController {
     // register add to watched handler
     this._filmDetailsComponent.setAddToWatchedHandler(this._addToWatchedHandler);
     this._filmComponent.setAddToWatchedHandler(this._addToWatchedHandler);
+
+    // register add to favorites handler
+    this._filmComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
+
 
     // register show film details handler
     this._filmComponent.setShowDetailsHandler(this._showFilmDetails);
@@ -132,5 +137,15 @@ export default class FilmController {
         this,
         this._film,
         Object.assign({}, this._film, {isWatched: !this._film.isWatched}));
+  }
+
+  /**
+  * Add film to favorites handler
+  */
+  _addToFavoritesHandler() {
+    this._onDataChange(
+        this,
+        this._film,
+        Object.assign({}, this._film, {isFavorite: !this._film.isFavorite}));
   }
 }
