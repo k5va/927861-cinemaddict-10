@@ -39,6 +39,16 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`change`, handler);
   }
 
+  /**
+   * Sets add to Favorites handler function.
+   * @param {Function} handler - handler
+   */
+  setAddToFavoritesHandler(handler) {
+    this
+      .getElement()
+      .querySelector(`.film-details__control-input--favorite`)
+      .addEventListener(`change`, handler);
+  }
 
   /**
    * Sets film details close handler

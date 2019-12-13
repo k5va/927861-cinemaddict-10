@@ -53,7 +53,7 @@ export default class FilmController {
 
     // register add to favorites handler
     this._filmComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
-
+    this._filmDetailsComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
 
     // register show film details handler
     this._filmComponent.setShowDetailsHandler(this._showFilmDetails);

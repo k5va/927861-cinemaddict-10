@@ -97,7 +97,7 @@ const template = (film) => {
 
         <input
           type="checkbox"
-          class="film-details__control-input visually-hidden"
+          class="film-details__control-input film-details__control-input--favorite visually-hidden"
           id="favorite"
           name="favorite"
           ${isFavorite ? `checked` : ``}>
