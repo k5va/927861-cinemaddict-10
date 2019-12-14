@@ -7,8 +7,14 @@ export default class FilmDetails extends AbstractSmartComponent {
     super();
 
     this._film = film;
-    this._subscribeOnEvents();
     this._commentEmojiImage = null;
+
+    this._addToWatchListHandler = null;
+    this._addToWatchedHandler = null;
+    this._addToFavoritesHandler = null;
+    this._closeHandler = null;
+
+    this._subscribeOnInternalEvents();
   }
 
   /**
@@ -24,10 +30,15 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setAddToWatchlistHandler(handler) {
+    this._addToWatchListHandler = handler;
+    this._recoverAddtoWatchListHandler();
+  }
+
+  _recoverAddtoWatchListHandler() {
     this
       .getElement()
       .querySelector(`.film-details__control-input--watchlist`)
-      .addEventListener(`change`, handler);
+      .addEventListener(`change`, this._addToWatchListHandler);
   }
 
   /**
@@ -35,10 +46,15 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setAddToWatchedHandler(handler) {
+    this._addToWatchedHandler = handler;
+    this._recoverAddToWatchedHandler();
+  }
+
+  _recoverAddToWatchedHandler() {
     this
       .getElement()
       .querySelector(`.film-details__control-input--watched`)
-      .addEventListener(`change`, handler);
+      .addEventListener(`change`, this._addToWatchedHandler);
   }
 
   /**
@@ -46,10 +62,15 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setAddToFavoritesHandler(handler) {
+    this._addToFavoritesHandler = handler;
+    this._recoverAddToFavoritesHandler();
+  }
+
+  _recoverAddToFavoritesHandler() {
     this
       .getElement()
       .querySelector(`.film-details__control-input--favorite`)
-      .addEventListener(`change`, handler);
+      .addEventListener(`change`, this._addToFavoritesHandler);
   }
 
   /**
@@ -57,20 +78,30 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - close handler
    */
   setCloseHandler(handler) {
+    this._closeHandler = handler;
+    this._recoverCloseHandler();
+  }
+
+  _recoverCloseHandler() {
     this
       .getElement()
       .querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, handler);
+      .addEventListener(`click`, this._closeHandler);
   }
 
-  recoveryListeners() {
-    this._subscribeOnEvents();
+  recoverListeners() {
+    this._subscribeOnInternalEvents();
+
+    this._recoverCloseHandler();
+    this._recoverAddToWatchedHandler();
+    this._recoverAddtoWatchListHandler();
+    this._recoverCloseHandler();
   }
 
   /**
    * Addes component's interactive controls events handlers
    */
-  _subscribeOnEvents() {
+  _subscribeOnInternalEvents() {
     this
       .getElement()
       .querySelector(`.film-details__emoji-list`)
