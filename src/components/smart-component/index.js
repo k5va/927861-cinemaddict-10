@@ -1,11 +1,12 @@
 import AbstractComponent from "../component";
+import {replaceElements} from "../../utils";
 
 export default class AbstractSmartComponent extends AbstractComponent {
   /**
    * Recovers all component's listeners
    */
-  recoveryListeners() {
-    throw new Error(`Abstract method not implemented: recoveryListeners`);
+  recoverListeners() {
+    throw new Error(`Abstract method not implemented: recoverListeners`);
   }
 
   /**
@@ -13,13 +14,12 @@ export default class AbstractSmartComponent extends AbstractComponent {
    */
   rerender() {
     const oldElement = this.getElement();
-    const parent = oldElement.parentElement;
-
+    // create new HTML element
     this.resetElement();
     const newElement = this.getElement();
-
-    parent.replaceChild(newElement, oldElement);
-
-    this.recoveryListeners();
+    // replace elements in the DOM
+    replaceElements(newElement, oldElement);
+    // recover element's listeners
+    this.recoverListeners();
   }
 }
