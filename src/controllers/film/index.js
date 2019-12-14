@@ -29,6 +29,7 @@ export default class FilmController {
     this._addToWatchListHandler = this._addToWatchListHandler.bind(this);
     this._addToWatchedHandler = this._addToWatchedHandler.bind(this);
     this._addToFavoritesHandler = this._addToFavoritesHandler.bind(this);
+    this._closeFilmDetails = this._closeFilmDetails.bind(this);
   }
 
   /**
@@ -41,23 +42,8 @@ export default class FilmController {
     const oldFilmComponent = this._filmComponent;
     const oldFilmDetailsComponent = this._filmDetailsComponent;
 
-    this._filmComponent = new FilmComponent(this._film);
-    this._filmDetailsComponent = new FilmDetailsComponent(this._film);
-
-    // register add to watch list handler
-    this._filmComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
-    this._filmDetailsComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
-
-    // register add to watched handler
-    this._filmDetailsComponent.setAddToWatchedHandler(this._addToWatchedHandler);
-    this._filmComponent.setAddToWatchedHandler(this._addToWatchedHandler);
-
-    // register add to favorites handler
-    this._filmComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
-    this._filmDetailsComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
-
-    // register show film details handler
-    this._filmComponent.setShowDetailsHandler(this._showFilmDetails);
+    this._filmComponent = this._createFilmComponent(this._film);
+    this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
 
     if (oldFilmComponent && oldFilmDetailsComponent) {
       replace(this._filmComponent, oldFilmComponent);
@@ -67,6 +53,45 @@ export default class FilmController {
       render(this._container.getListContainer(), this._filmComponent);
     }
   }
+
+  /**
+   * Creates new film component with listeners
+   * @param {*} film - film object
+   * @return {FilmComponent} - film component
+   */
+  _createFilmComponent(film) {
+    const filmComponent = new FilmComponent(film);
+    // register add to watch list handler
+    filmComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
+    // register add to watched handler
+    filmComponent.setAddToWatchedHandler(this._addToWatchedHandler);
+    // register add to favorites handler
+    filmComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
+    // register show film details handler
+    filmComponent.setShowDetailsHandler(this._showFilmDetails);
+
+    return filmComponent;
+  }
+
+  /**
+   * Creates new film details component with listeners
+   * @param {*} film - film object
+   * @return {FilmDetailsComponent} - film component
+   */
+  _createFilmDetailsComponent(film) {
+    const filmDetailsComponent = new FilmDetailsComponent(film);
+    // register add to watch list handler
+    filmDetailsComponent.setAddToWatchlistHandler(this._addToWatchListHandler);
+    // register add to watched handler
+    filmDetailsComponent.setAddToWatchedHandler(this._addToWatchedHandler);
+    // register add to favorites handler
+    filmDetailsComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
+    // register film details close handler
+    filmDetailsComponent.setCloseHandler(this._closeFilmDetails);
+
+    return filmDetailsComponent;
+  }
+
 
   /**
   * Handler for Esc key down event
@@ -91,12 +116,10 @@ export default class FilmController {
 
     // fire view change event
     this._onViewChange();
-
+    // create new film details component and render it
+    this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
     render(this._container.getElement(), this._filmDetailsComponent);
-    this._filmDetailsComponent.setCloseHandler(() => {
-      // remove film details component from the DOM
-      this._closeFilmDetails();
-    });
+
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
   }
