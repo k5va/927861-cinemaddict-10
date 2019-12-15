@@ -6,7 +6,8 @@ import {FILM_GENRE_SPLIT, MAX_SHORT_DESCRIPTION_SIZE} from "../../consts";
  * @return {String} template
  */
 const template = (film) => {
-  const {title, rating, releaseDate, duration, poster, genres, description, comments} = film;
+  const {title, rating, releaseDate, duration, poster, genres,
+    description, comments, isFavorite, isWatched, isWatchlistAdded} = film;
 
   const genreText = [...genres].join(FILM_GENRE_SPLIT);
   const shortDescription = description.length > MAX_SHORT_DESCRIPTION_SIZE ?
@@ -26,9 +27,21 @@ const template = (film) => {
       <p class="film-card__description">${shortDescription}</p>
       <a class="film-card__comments">${comments.length} comments</a>
       <form class="film-card__controls">
-        <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
-        <button class="film-card__controls-item button film-card__controls-item--mark-as-watched">Mark as watched</button>
-        <button class="film-card__controls-item button film-card__controls-item--favorite">Mark as favorite</button>
+        <button
+          class="film-card__controls-item button film-card__controls-item--add-to-watchlist
+          ${isWatchlistAdded ? `film-card__controls-item--active` : ``}">
+          Add to watchlist
+        </button>
+        <button
+          class="film-card__controls-item button film-card__controls-item--mark-as-watched
+          ${isWatched ? `film-card__controls-item--active` : ``}">
+          Mark as watched
+        </button>
+        <button
+          class="film-card__controls-item button film-card__controls-item--favorite
+          ${isFavorite ? `film-card__controls-item--active` : ``}">
+          Mark as favorite
+        </button>
       </form>
     </article>`);
 };
