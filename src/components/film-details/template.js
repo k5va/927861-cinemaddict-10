@@ -73,7 +73,7 @@ const template = (film, options) => {
               <td class="film-details__cell">${country}</td>
             </tr>
             <tr class="film-details__row">
-              <td class="film-details__term">Genres</td>
+              <td class="film-details__term">${genres.size > 1 ? `Genres` : `Genre`}</td>
               <td class="film-details__cell">${genreMarkup}</tr>
           </table>
 
