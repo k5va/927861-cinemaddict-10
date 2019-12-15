@@ -58,4 +58,18 @@ export default class Film extends AbstractComponent {
     this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, handler);
     this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, handler);
   }
+
+  /**
+   * Enables hover imitation
+   */
+  enableHoverImitation() {
+    this.getElement().classList.add(`hover`);
+  }
+
+  /**
+   * Disables hover imitation
+   */
+  disableHoverImitation() {
+    this.getElement().classList.remove(`hover`);
+  }
 }

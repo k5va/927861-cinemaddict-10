@@ -46,7 +46,10 @@ export default class FilmController {
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
 
     if (oldFilmComponent && oldFilmDetailsComponent) {
+      this._filmComponent.enableHoverImitation();
       replace(this._filmComponent, oldFilmComponent);
+      this._filmComponent.disableHoverImitation();
+
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
     } else {
       // render film component
