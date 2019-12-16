@@ -1,6 +1,6 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
-import {CommentEmojiImages} from "../../consts";
+import {CommentEmojiImages, NO_USER_RATING} from "../../consts";
 
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
@@ -101,6 +101,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
   _recoverUserRatingChangeHadler() {
     if (this._film.isWatched) {
+      // user rating change
       this
         .getElement()
         .querySelector(`.film-details__user-rating-score`)
@@ -111,6 +112,13 @@ export default class FilmDetails extends AbstractSmartComponent {
           }
 
           this._userRatingChangeHandler(evt.target.value);
+        });
+      // user rating reset
+      this
+        .getElement()
+        .querySelector(`.film-details__watched-reset`)
+        .addEventListener(`click`, () => {
+          this._userRatingChangeHandler(NO_USER_RATING);
         });
     }
   }
