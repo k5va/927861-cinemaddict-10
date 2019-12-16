@@ -120,7 +120,7 @@ const template = (film, options) => {
           </div>
 
           <section class="film-details__user-rating-inner">
-            <h3 class="film-details__user-rating-title">The Great Flamarion</h3>
+            <h3 class="film-details__user-rating-title">${title}</h3>
 
             <p class="film-details__user-rating-feelings">How you feel it?</p>
 
