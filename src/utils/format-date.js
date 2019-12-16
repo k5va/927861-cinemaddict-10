@@ -1,11 +1,10 @@
-import {MONTH_NAMES} from "../consts";
-import {formatNumber} from "./index";
+import moment from "moment";
 
 /**
  * Formates date to string
  * @param {Date} date - date object
  * @return {String} - formated date
  */
-const formatDate = (date) => `${formatNumber(date.getDate())} ${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+const formatDate = (date) => moment(date).format(`DD MMMM YYYY`);
 
 export {formatDate};
