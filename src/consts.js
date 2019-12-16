@@ -38,7 +38,7 @@ export const SortType = {
   DEFAULT: `default`,
 };
 
-export const DEFAULT_USER_RATING = 0;
+export const NO_USER_RATING = 0;
 
 export const CommentEmojiImages = {
   'smiling': `smile.png`,
