@@ -13,6 +13,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._addToWatchedHandler = null;
     this._addToFavoritesHandler = null;
     this._closeHandler = null;
+    this._userRatingChangeHandler = null;
 
     this._subscribeOnInternalEvents();
   }
@@ -89,6 +90,31 @@ export default class FilmDetails extends AbstractSmartComponent {
       .addEventListener(`click`, this._closeHandler);
   }
 
+  /**
+   * Sets user rating change handler
+   * @param {Function} handler - handler
+   */
+  setUserRatingChangeHandler(handler) {
+    this._userRatingChangeHandler = handler;
+    this._recoverUserRatingChangeHadler();
+  }
+
+  _recoverUserRatingChangeHadler() {
+    if (this._film.isWatched) {
+      this
+        .getElement()
+        .querySelector(`.film-details__user-rating-score`)
+        .addEventListener(`change`, (evt) => {
+          evt.preventDefault();
+          if (!evt.target.classList.contains(`film-details__user-rating-input`)) {
+            return;
+          }
+
+          this._userRatingChangeHandler(evt.target.value);
+        });
+    }
+  }
+
   recoverListeners() {
     this._subscribeOnInternalEvents();
 
@@ -96,6 +122,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._recoverAddToWatchedHandler();
     this._recoverAddtoWatchListHandler();
     this._recoverCloseHandler();
+    this._recoverUserRatingChangeHadler();
   }
 
   /**

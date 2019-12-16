@@ -19,7 +19,7 @@ const template = (film, options) => {
 
   const genreMarkup = generateGenreMarkup(genres);
   const commentsMarkup = generateCommentsMarkup(comments);
-  const userRatingMarkup = generateUserRatingMarkup(userRating);
+  const userRatingMarkup = isWatched ? generateUserRatingMarkup(userRating) : ``;
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">

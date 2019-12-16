@@ -30,6 +30,7 @@ export default class FilmController {
     this._addToWatchedHandler = this._addToWatchedHandler.bind(this);
     this._addToFavoritesHandler = this._addToFavoritesHandler.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
+    this._userRatingChangeHandler = this._userRatingChangeHandler.bind(this);
   }
 
   /**
@@ -91,6 +92,8 @@ export default class FilmController {
     filmDetailsComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
     // register film details close handler
     filmDetailsComponent.setCloseHandler(this._closeFilmDetails);
+    // register user rating change handler
+    filmDetailsComponent.setUserRatingChangeHandler(this._userRatingChangeHandler);
 
     return filmDetailsComponent;
   }
@@ -177,5 +180,16 @@ export default class FilmController {
         this,
         this._film,
         Object.assign({}, this._film, {isFavorite: !this._film.isFavorite}));
+  }
+
+  /**
+  * Change user rating handler
+  * @param {Number} userRating - new user rating
+  */
+  _userRatingChangeHandler(userRating) {
+    this._onDataChange(
+        this,
+        this._film,
+        Object.assign({}, this._film, {userRating: +userRating}));
   }
 }
