@@ -4,6 +4,7 @@
  * @return {String} - genres markup
  */
 const generateGenreMarkup = (genres) => [...genres]
-  .map((genre) => `<span class="film-details__genre">${genre}</span>`);
+  .map((genre) => `<span class="film-details__genre">${genre}</span>`)
+  .join(``);
 
 export {generateGenreMarkup};

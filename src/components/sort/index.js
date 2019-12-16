@@ -26,7 +26,7 @@ export default class Sort extends AbstractComponent {
       evt.preventDefault();
 
       // check if target is a sort link
-      if (evt.target.tagName !== `A`) {
+      if (!evt.target.classList.contains(`sort__button`)) {
         return;
       }
 
