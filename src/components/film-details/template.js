@@ -2,6 +2,7 @@ import {formatDate} from "../../utils";
 import {generateGenreMarkup} from "./genre-markup";
 import {generateCommentsMarkup} from "./comments-markup";
 import {generateUserRatingMarkup} from "./user-rating-markup";
+import {NO_USER_RATING} from "../../consts";
 
 /**
  * Creates film details template
@@ -43,7 +44,7 @@ const template = (film, options) => {
 
             <div class="film-details__rating">
               <p class="film-details__total-rating">${rating}</p>
-              <p class="film-details__user-rating">Your rate ${userRating}</p>
+              ${userRating !== NO_USER_RATING ? `<p class="film-details__user-rating">Your rate ${userRating}</p>` : ``}
             </div>
           </div>
 
