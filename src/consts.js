@@ -45,3 +45,11 @@ export const CommentEmojiImages = {
   'sleeping': `sleeping.png`,
   'grinning': `angry.png`
 };
+
+export const Filters = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`
+};
+
