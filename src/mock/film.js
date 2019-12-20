@@ -94,6 +94,7 @@ const generateRating = () => getRandomInteger() + 0.1;
  */
 const generateFilm = (index = 0) => {
   return {
+    id: index,
     title: FILM_NAMES[index],
     originalTitle: `Lorem ipsum dolor sit amet`,
     poster: generatePoster(),
