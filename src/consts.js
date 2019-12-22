@@ -8,21 +8,6 @@ export const TOP_RATED_FILMS_COUNT = 2;
 
 export const MOST_COMMENTED_FILMS_COUNT = 2;
 
-export const MONTH_NAMES = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`
-];
-
 export const UserTitle = {
   NO_TITLE: ``,
   NOVICE: `novice`,
@@ -41,15 +26,23 @@ export const SortType = {
 export const NO_USER_RATING = 0;
 
 export const CommentEmojiImages = {
-  'smiling': `smile.png`,
-  'sleeping': `sleeping.png`,
-  'grinning': `angry.png`
+  smiling: `smile.png`,
+  sleeping: `sleeping.png`,
+  grinning: `angry.png`
 };
 
-export const Filters = {
+export const Filter = {
   ALL: `all`,
   WATCHLIST: `watchlist`,
   HISTORY: `history`,
   FAVORITES: `favorites`
+};
+
+export const MenuItem = {
+  ALL: Filter.ALL,
+  WATCHLIST: Filter.WATCHLIST,
+  HISTORY: Filter.HISTORY,
+  FAVORITES: Filter.FAVORITES,
+  STAT: `stat`
 };
 
