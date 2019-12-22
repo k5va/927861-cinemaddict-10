@@ -2,7 +2,7 @@ import {formatDate} from "../../utils";
 import {generateGenreMarkup} from "./genre-markup";
 import {generateCommentsMarkup} from "./comments-markup";
 import {generateUserRatingMarkup} from "./user-rating-markup";
-import { NO_USER_RATING, CommentEmojiImages} from "../../consts";
+import {NO_USER_RATING, CommentEmojiImages} from "../../consts";
 
 /**
  * Creates film details template
