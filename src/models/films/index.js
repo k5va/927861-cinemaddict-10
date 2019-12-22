@@ -56,9 +56,6 @@ export default class Films {
    */
   updateFilm(id, film) {
     const index = this._findfilmById(id);
-    if (index === -1) {
-      throw new Error(`Film with id ${id} is not found`);
-    }
     // create new copy of films array with updated film. Can be used later for undo operations
     this._films = [...this._films.slice(0, index), film, ...this._films.slice(index + 1)];
     // notify data change handlers
@@ -72,12 +69,28 @@ export default class Films {
    */
   addFilmComment(filmId, comment) {
     const index = this._findfilmById(filmId);
-    if (index === -1) {
-      throw new Error(`Film with id ${filmId} is not found`);
+    const film = this._films[index];
+
+    comment.id = this._generateCommentsId(); // TODO: temporary!
+    film.comments = [...film.comments, comment];
+    // notify data change handlers
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
+  /**
+   * Deletes film comment
+   * @param {String} filmId - film's id to delete commment
+   * @param {String} commentId - comment's id
+   */
+  deleteFilmComment(filmId, commentId) {
+    const index = this._findfilmById(filmId);
+    const film = this._films[index];
+    const commentIndex = film.comments.findIndex((comment) => comment.id === commentId);
+    if (commentIndex === -1) {
+      throw new Error(`Comment with id ${commentId} id not found`);
     }
 
-    const film = this._films[index];
-    film.comments = [...film.comments, comment];
+    film.comments = [...film.comments.slice(0, commentIndex), ...film.comments.slice(commentIndex + 1)];
     // notify data change handlers
     this._callHandlers(this._dataChangeHandlers);
   }
@@ -122,7 +135,12 @@ export default class Films {
    * @return {Number} - film'is index or -1
    */
   _findfilmById(id) {
-    return this._films.findIndex((film) => film.id === id);
+    const index = this._films.findIndex((film) => film.id === id);
+    if (index === -1) {
+      throw new Error(`Film with id ${id} is not found`);
+    }
+
+    return index;
   }
 
   /**
@@ -131,5 +149,9 @@ export default class Films {
    */
   _callHandlers(handlers) {
     handlers.forEach((handler) => handler());
+  }
+
+  _generateCommentsId() {
+    return String(new Date() + Math.random());
   }
 }
