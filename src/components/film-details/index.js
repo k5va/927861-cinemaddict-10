@@ -161,10 +161,22 @@ export default class FilmDetails extends AbstractSmartComponent {
    */
   setDeleteCommentHandler(handler) {
     this._deleteCommentHandler = handler;
+    this._recoverDeleteCommentHandler();
   }
 
-  _recoverDeleteCommentHadler() {
+  _recoverDeleteCommentHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__comments-list`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        if (!evt.target.classList.contains(`film-details__comment-delete`)) {
+          return;
+        }
 
+        this._deleteCommentHandler(evt.target.dataset.commentId);
+        this.rerender();
+      });
   }
 
   recoverListeners() {
@@ -176,7 +188,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._recoverCloseHandler();
     this._recoverUserRatingChangeHadler();
     this._recoverAddCommentHandler();
-    this._recoverDeleteCommentHadler();
+    this._recoverDeleteCommentHandler();
   }
 
   /**
