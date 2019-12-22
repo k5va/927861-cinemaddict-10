@@ -25,8 +25,10 @@ export default class PageController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
+    this._filmsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   /**
@@ -131,6 +133,13 @@ export default class PageController {
    */
   _onViewChange() {
     this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
+  }
+
+  /**
+   * Model's filter change handler
+   */
+  _onFilterChange() {
+    this._updateFilmsList();
   }
 
   /**
