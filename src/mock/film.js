@@ -78,7 +78,8 @@ const generateComments = () => FILM_COMMENTS
   .map((text) => ({
     text,
     author: `John Doe`,
-    date: getRandomDate()
+    date: getRandomDate(),
+    emoji: `smiling`
   }));
 
 /**
