@@ -7,7 +7,7 @@ import {CommentEmojiImages} from "../../consts";
  * @return {String} - comments markup
  */
 const generateCommentsMarkup = (comments) => comments
-  .map(({text, author, date, emoji}) => `<li class="film-details__comment">
+  .map(({id, text, author, date, emoji}) => `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
         <img src="./images/emoji/${CommentEmojiImages[emoji]}" width="55" height="55" alt="emoji">
       </span>
@@ -16,7 +16,7 @@ const generateCommentsMarkup = (comments) => comments
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
           <span class="film-details__comment-day">${formatDate(date)}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <button data-comment-id="${id}" class="film-details__comment-delete">Delete</button>
         </p>
       </div>
     </li>`
