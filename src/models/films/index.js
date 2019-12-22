@@ -66,6 +66,23 @@ export default class Films {
   }
 
   /**
+   * Adds new film comment
+   * @param {String} filmId - film's id to add commment to
+   * @param {*} comment - comment
+   */
+  addFilmComment(filmId, comment) {
+    const index = this._findfilmById(filmId);
+    if (index === -1) {
+      throw new Error(`Film with id ${filmId} is not found`);
+    }
+
+    const film = this._films[index];
+    film.comments = [...film.comments, comment];
+    // notify data change handlers
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
+  /**
    * Sets filter to be applied when getfilms is called
    * @param {String} filter - filter
    */
