@@ -1,5 +1,5 @@
-import {Filters, SortType} from "../../consts";
-import {FilterFilms} from "../../utils";
+import {Filter, SortType} from "../../consts";
+import {filterFilms} from "../../utils";
 
 import {sortFilms} from "./sort-films";
 
@@ -9,7 +9,7 @@ export default class Films {
    */
   constructor() {
     this._films = [];
-    this._filter = Filters.ALL;
+    this._filter = Filter.ALL;
     this._sortType = SortType.DEFAULT;
     this._filterChangeHandlers = [];
     this._dataChangeHandlers = [];
@@ -20,7 +20,12 @@ export default class Films {
    * @return {Array} - array of films
    */
   getFilms() {
-    return sortFilms(FilterFilms[this._filter](this._films), this._sortType);
+
+    if (!filterFilms[this._filter]) {
+      throw new Error(`Unsupported filter: ${this._filter}`);
+    }
+
+    return sortFilms(filterFilms[this._filter](this._films), this._sortType);
   }
 
   /**
@@ -48,19 +53,16 @@ export default class Films {
    *
    * @param {String} id - film id
    * @param {*} film - film object
-   * @return {Boolean} - true if model is successfully updated
    */
   updateFilm(id, film) {
     const index = this._findfilmById(id);
     if (index === -1) {
-      return false;
+      throw new Error(`Film with id ${id} is not found`);
     }
     // create new copy of films array with updated film. Can be used later for undo operations
     this._films = [...this._films.slice(0, index), film, ...this._films.slice(index + 1)];
     // notify data change handlers
     this._callHandlers(this._dataChangeHandlers);
-
-    return true;
   }
 
   /**
