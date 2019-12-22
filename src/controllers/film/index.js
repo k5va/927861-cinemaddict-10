@@ -32,6 +32,7 @@ export default class FilmController {
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._userRatingChangeHandler = this._userRatingChangeHandler.bind(this);
     this._addCommentHandler = this._addCommentHandler.bind(this);
+    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
   /**
@@ -97,6 +98,8 @@ export default class FilmController {
     filmDetailsComponent.setUserRatingChangeHandler(this._userRatingChangeHandler);
     // register add comment handler
     filmDetailsComponent.setAddCommentHandler(this._addCommentHandler);
+    // register delete comment handler
+    filmDetailsComponent.setDeleteCommentHandler(this._deleteCommentHandler);
 
     return filmDetailsComponent;
   }
@@ -198,12 +201,23 @@ export default class FilmController {
 
   /**
    * Add new comment handler
-   * @param {*} comment - comment
+   * @param {Object} comment - comment
    */
   _addCommentHandler(comment) {
     this._onDataChange(
         this,
         null,
         Object.assign({}, comment, {filmId: this._film.id}));
+  }
+
+  /**
+   * Delete comment handler
+   * @param {String} commentId - comment id
+   */
+  _deleteCommentHandler(commentId) {
+    this._onDataChange(
+        this,
+        Object.assign({}, this._film, {deletedCommentId: commentId}),
+        null);
   }
 }

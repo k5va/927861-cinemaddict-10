@@ -127,6 +127,7 @@ export default class PageController {
     }
 
     if (newData === null) { // delete comment
+      this._filmsModel.deleteFilmComment(oldData.id, oldData.deletedCommentId);
       return;
     }
 
