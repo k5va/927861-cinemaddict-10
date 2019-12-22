@@ -46,3 +46,5 @@ export const MenuItem = {
   STAT: `stat`
 };
 
+export const COMMENT_DATE_FORMAT = `YYYY/MM/DD HH:MM`;
+
