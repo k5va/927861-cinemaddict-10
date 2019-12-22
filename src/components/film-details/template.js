@@ -2,7 +2,7 @@ import {formatDate} from "../../utils";
 import {generateGenreMarkup} from "./genre-markup";
 import {generateCommentsMarkup} from "./comments-markup";
 import {generateUserRatingMarkup} from "./user-rating-markup";
-import {NO_USER_RATING} from "../../consts";
+import { NO_USER_RATING, CommentEmojiImages} from "../../consts";
 
 /**
  * Creates film details template
@@ -16,7 +16,7 @@ const template = (film, options) => {
     actors, writers, releaseDate, duration, poster, genres,
     country, description, comments, isWatched, isWatchlistAdded, isFavorite} = film;
 
-  const {commentEmojiImage} = options;
+  const commentEmojiImage = options.commentEmoji ? CommentEmojiImages[options.commentEmoji] : null;
 
   const genreMarkup = generateGenreMarkup(genres);
   const commentsMarkup = generateCommentsMarkup(comments);

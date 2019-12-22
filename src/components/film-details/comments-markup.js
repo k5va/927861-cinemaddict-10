@@ -1,4 +1,5 @@
 import {formatDate} from "../../utils";
+import {CommentEmojiImages} from "../../consts";
 
 /**
  * Generates comments markup
@@ -6,9 +7,9 @@ import {formatDate} from "../../utils";
  * @return {String} - comments markup
  */
 const generateCommentsMarkup = (comments) => comments
-  .map(({text, author, date}) => `<li class="film-details__comment">
+  .map(({text, author, date, emoji}) => `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
+        <img src="./images/emoji/${CommentEmojiImages[emoji]}" width="55" height="55" alt="emoji">
       </span>
       <div>
         <p class="film-details__comment-text">${text}</p>
@@ -19,6 +20,6 @@ const generateCommentsMarkup = (comments) => comments
         </p>
       </div>
     </li>`
-  );
+  ).join(``);
 
 export {generateCommentsMarkup};

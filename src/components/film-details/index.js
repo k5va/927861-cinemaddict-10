@@ -1,19 +1,21 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
-import {CommentEmojiImages, NO_USER_RATING} from "../../consts";
+import {NO_USER_RATING} from "../../consts";
 
 export default class FilmDetails extends AbstractSmartComponent {
   constructor(film) {
     super();
 
     this._film = film;
-    this._commentEmojiImage = null;
+    this._commentEmoji = null;
 
     this._addToWatchListHandler = null;
     this._addToWatchedHandler = null;
     this._addToFavoritesHandler = null;
     this._closeHandler = null;
     this._userRatingChangeHandler = null;
+    this._addCommentHandler = null;
+    this._deleteCommentHandler = null;
 
     this._subscribeOnInternalEvents();
   }
@@ -23,7 +25,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @return {String} - template
    */
   getTemplate() {
-    return template(this._film, {commentEmojiImage: this._commentEmojiImage});
+    return template(this._film, {commentEmoji: this._commentEmoji});
   }
 
   /**
@@ -123,6 +125,48 @@ export default class FilmDetails extends AbstractSmartComponent {
     }
   }
 
+  /**
+   * Sets add comment handler
+   * @param {Function} handler - handler
+   */
+  setAddCommentHandler(handler) {
+    this._addCommentHandler = handler;
+    this._recoverAddCommentHandler();
+  }
+
+  _recoverAddCommentHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, (evt) => {
+        const isCtrlEnterKey = evt.key === `Enter` && evt.ctrlKey;
+
+        if (isCtrlEnterKey && this._addCommentHandler !== null) {
+          this._addCommentHandler({
+            text: evt.target.value,
+            author: `John Doe`,
+            date: new Date(),
+            emoji: this._commentEmoji
+          });
+
+          this._commentEmoji = null;
+          this.rerender();
+        }
+      });
+  }
+
+  /**
+   * Sets delete comment handler
+   * @param {Function} handler - handler
+   */
+  setDeleteCommentHandler(handler) {
+    this._deleteCommentHandler = handler;
+  }
+
+  _recoverDeleteCommentHadler() {
+
+  }
+
   recoverListeners() {
     this._subscribeOnInternalEvents();
 
@@ -131,6 +175,8 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._recoverAddtoWatchListHandler();
     this._recoverCloseHandler();
     this._recoverUserRatingChangeHadler();
+    this._recoverAddCommentHandler();
+    this._recoverDeleteCommentHadler();
   }
 
   /**
@@ -141,7 +187,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       .getElement()
       .querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, (evt) => {
-        this._commentEmojiImage = CommentEmojiImages[evt.target.value];
+        this._commentEmoji = evt.target.value;
         this.rerender();
       });
   }
