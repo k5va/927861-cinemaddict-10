@@ -75,7 +75,8 @@ const generatePoster = () => `./images/posters/${getRandomArrayItem(FILM_POSTERS
  */
 const generateComments = () => FILM_COMMENTS
   .slice(getRandomInteger(0, FILM_COMMENTS.length), FILM_COMMENTS.length)
-  .map((text) => ({
+  .map((text, index) => ({
+    id: String(index),
     text,
     author: `John Doe`,
     date: getRandomDate(),
