@@ -8,5 +8,5 @@ export {createElement} from "./create-element";
 export {render, RenderPosition} from "./render";
 export {replace} from "./replace";
 export {replaceElements} from "./replaceElements";
-export {FilterFilms} from "./filter-films";
+export {filterFilms} from "./filter-films";
 
