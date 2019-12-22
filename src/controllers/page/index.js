@@ -117,10 +117,10 @@ export default class PageController {
   /**
    * Film change handler
    * @param {filmController} filmController - film controller, that correspondes to film
-   * @param {*} oldData - old film object
-   * @param {*} newData - new (changed) film object
+   * @param {Object} oldData - old film object
+   * @param {Object} newData - new (changed) film object
    */
-  _onDataChange(filmController, oldData, newData) {
+  _onDataChange(filmController, oldData, newData) { // TODO: think it over
     if (oldData === null) { // add new comment
       this._filmsModel.addFilmComment(newData.filmId, newData);
       return;
