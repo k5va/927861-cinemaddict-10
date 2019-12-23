@@ -1,7 +1,8 @@
 import {Filter, SortType} from "../../consts";
 import {filterFilms} from "../../utils";
-
 import {sortFilms} from "./sort-films";
+import {findMostCommentedFilms} from "./find-most-commented";
+import {findTopRatedFilms} from "./find-top-rated";
 
 export default class Films {
   /**
@@ -34,6 +35,22 @@ export default class Films {
    */
   getFilmsAll() {
     return this._films;
+  }
+
+  /**
+   * Returns top most commented films
+   * @return {Array<*>} - array of top most commented films
+   */
+  getMostCommentedFilms() {
+    return findMostCommentedFilms(this.getFilmsAll());
+  }
+
+  /**
+   * Returns top rated films
+   * @return {Array<*>} - array of top rated films
+   */
+  getTopRatedFilms() {
+    return findTopRatedFilms(this.getFilmsAll());
   }
 
   /**
