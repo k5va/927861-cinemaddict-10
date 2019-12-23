@@ -83,6 +83,7 @@ export default class Films {
    * Adds new film comment
    * @param {String} filmId - film's id to add commment to
    * @param {*} comment - comment
+   * @return {Object} - updated film
    */
   addFilmComment(filmId, comment) {
     const index = this._findfilmById(filmId);
@@ -94,12 +95,15 @@ export default class Films {
     film.comments = [...film.comments, comment];
     // notify data change handlers
     this._callHandlers(this._dataChangeHandlers);
+
+    return film;
   }
 
   /**
    * Deletes film comment
    * @param {String} filmId - film's id to delete commment
    * @param {String} commentId - comment's id
+   * @return {Object} - updated film
    */
   deleteFilmComment(filmId, commentId) {
     const index = this._findfilmById(filmId);
@@ -112,6 +116,8 @@ export default class Films {
     film.comments = [...film.comments.slice(0, commentIndex), ...film.comments.slice(commentIndex + 1)];
     // notify data change handlers
     this._callHandlers(this._dataChangeHandlers);
+
+    return film;
   }
 
   /**
