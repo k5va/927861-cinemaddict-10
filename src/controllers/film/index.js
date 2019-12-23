@@ -130,7 +130,7 @@ export default class FilmController {
     this._onViewChange();
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
-    render(this._container.getElement(), this._filmDetailsComponent);
+    render(null, this._filmDetailsComponent);
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
