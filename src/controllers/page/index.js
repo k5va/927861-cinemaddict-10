@@ -17,6 +17,8 @@ export default class PageController {
 
     this._filmsModel = filmsModel;
     this._showingFilmControllers = [];
+    this._topRatedFilmControllers = [];
+    this._mostCommentedFilmControllers = [];
     this._showingFilmsCount = FILMS_PER_LOAD;
 
     this._filmsComponent = new FilmsComponent();
@@ -94,16 +96,24 @@ export default class PageController {
    * Renders top rated films block
    */
   _renderTopRatedFilms() {
+    this._topRatedFilmsComponent.resetList();
     render(this._filmsComponent.getElement(), this._topRatedFilmsComponent);
-    this._renderFilms(this._topRatedFilmsComponent, this._filmsModel.getTopRatedFilms());
+    this._topRatedFilmControllers = this._renderFilms(
+        this._topRatedFilmsComponent,
+        this._filmsModel.getTopRatedFilms()
+    );
   }
 
   /**
    * Renders most commented films block
    */
   _renderMostCommentedFilms() {
+    this._mostCommentedFilmsComponent.resetList();
     render(this._filmsComponent.getElement(), this._mostCommentedFilmsComponent);
-    this._renderFilms(this._mostCommentedFilmsComponent, this._filmsModel.getMostCommentedFilms());
+    this._mostCommentedFilmControllers = this._renderFilms(
+        this._mostCommentedFilmsComponent,
+        this._filmsModel.getMostCommentedFilms()
+    );
   }
 
 
@@ -139,12 +149,18 @@ export default class PageController {
    */
   _onDataChange(filmController, oldData, newData) { // TODO: think it over
     if (oldData === null) { // add new comment
-      this._filmsModel.addFilmComment(newData.filmId, newData);
+      const film = this._filmsModel.addFilmComment(newData.filmId, newData);
+      filmController.render(film);
+      this._renderTopRatedFilms();
+      this._renderMostCommentedFilms();
       return;
     }
 
     if (newData === null) { // delete comment
-      this._filmsModel.deleteFilmComment(oldData.id, oldData.deletedCommentId);
+      const film = this._filmsModel.deleteFilmComment(oldData.id, oldData.deletedCommentId);
+      filmController.render(film);
+      this._renderTopRatedFilms();
+      this._renderMostCommentedFilms();
       return;
     }
 
@@ -160,6 +176,8 @@ export default class PageController {
    */
   _onViewChange() {
     this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
+    this._topRatedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+    this._mostCommentedFilmControllers.forEach((filmController) => filmController.setDefaultView());
   }
 
   /**
