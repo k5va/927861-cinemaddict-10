@@ -135,16 +135,19 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   _recoverAddCommentHandler() {
+    if (!this._addCommentHandler) {
+      return;
+    }
+
     this
       .getElement()
       .querySelector(`.film-details__comment-input`)
       .addEventListener(`keydown`, (evt) => {
         const isCtrlEnterKey = evt.key === `Enter` && evt.ctrlKey;
 
-        if (isCtrlEnterKey && this._addCommentHandler !== null) {
+        if (isCtrlEnterKey && this._commentEmoji && evt.target.value.length > 0) {
           this._addCommentHandler({
             text: evt.target.value,
-            author: `John Doe`,
             date: new Date(),
             emoji: this._commentEmoji
           });
