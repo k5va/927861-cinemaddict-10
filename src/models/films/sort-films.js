@@ -1,10 +1,10 @@
 import {SortType} from "../../consts";
 
 /**
- * Sorts given films array with respect to sort type
+ * Returns sorted copy of given films array with respect to sort type
  * @param {Array<*>} films - array of films
- * @param {String} sortType - sort type
- * @return {Array<*>} - sorted copy of array of films
+ * @param {*} sortType - sort type
+ * @return {Array<*>} - array of sorted films
  */
 const sortFilms = (films, sortType) => {
   let sortedFilms = [];

@@ -13,6 +13,7 @@ const RenderPosition = {
  * @param {String} place - insert position. Default value = "beforeend"
  */
 const render = (container, component, place = RenderPosition.BEFORE_END) => {
+  container = container || document.querySelector(`.main`);
   container.insertAdjacentElement(place, component.getElement());
 };
 

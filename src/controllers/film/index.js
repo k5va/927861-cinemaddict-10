@@ -31,6 +31,8 @@ export default class FilmController {
     this._addToFavoritesHandler = this._addToFavoritesHandler.bind(this);
     this._closeFilmDetails = this._closeFilmDetails.bind(this);
     this._userRatingChangeHandler = this._userRatingChangeHandler.bind(this);
+    this._addCommentHandler = this._addCommentHandler.bind(this);
+    this._deleteCommentHandler = this._deleteCommentHandler.bind(this);
   }
 
   /**
@@ -94,6 +96,10 @@ export default class FilmController {
     filmDetailsComponent.setCloseHandler(this._closeFilmDetails);
     // register user rating change handler
     filmDetailsComponent.setUserRatingChangeHandler(this._userRatingChangeHandler);
+    // register add comment handler
+    filmDetailsComponent.setAddCommentHandler(this._addCommentHandler);
+    // register delete comment handler
+    filmDetailsComponent.setDeleteCommentHandler(this._deleteCommentHandler);
 
     return filmDetailsComponent;
   }
@@ -124,7 +130,7 @@ export default class FilmController {
     this._onViewChange();
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
-    render(this._container.getElement(), this._filmDetailsComponent);
+    render(null, this._filmDetailsComponent);
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
@@ -191,5 +197,27 @@ export default class FilmController {
         this,
         this._film,
         Object.assign({}, this._film, {userRating: +userRating}));
+  }
+
+  /**
+   * Add new comment handler
+   * @param {Object} comment - comment
+   */
+  _addCommentHandler(comment) {
+    this._onDataChange(
+        this,
+        null,
+        Object.assign({}, comment, {filmId: this._film.id}));
+  }
+
+  /**
+   * Delete comment handler
+   * @param {String} commentId - comment id
+   */
+  _deleteCommentHandler(commentId) {
+    this._onDataChange(
+        this,
+        Object.assign({}, this._film, {deletedCommentId: commentId}),
+        null);
   }
 }

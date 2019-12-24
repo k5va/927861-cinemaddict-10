@@ -75,10 +75,12 @@ const generatePoster = () => `./images/posters/${getRandomArrayItem(FILM_POSTERS
  */
 const generateComments = () => FILM_COMMENTS
   .slice(getRandomInteger(0, FILM_COMMENTS.length), FILM_COMMENTS.length)
-  .map((text) => ({
+  .map((text, index) => ({
+    id: String(index),
     text,
     author: `John Doe`,
-    date: getRandomDate()
+    date: getRandomDate(),
+    emoji: `smiling`
   }));
 
 /**
@@ -94,6 +96,7 @@ const generateRating = () => getRandomInteger() + 0.1;
  */
 const generateFilm = (index = 0) => {
   return {
+    id: index,
     title: FILM_NAMES[index],
     originalTitle: `Lorem ipsum dolor sit amet`,
     poster: generatePoster(),

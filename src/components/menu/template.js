@@ -1,24 +1,22 @@
 /**
  * Creates menu template
- * @param {Array<*>} films - array of all films
+ * @param {Array<*>} menuItems - array of all menu items
+ * @param {String} selectedItem - selected menu item
  * @return {String} template
  */
-const template = (films) => {
-  const watchlistCount = films.filter(({isWatchlistAdded}) => isWatchlistAdded).length;
-  const watchedCount = films.filter(({isWatched}) => isWatched).length;
-  const favoritesCount = films.filter(({isFavorite}) => isFavorite).length;
+const template = (menuItems) => {
+  const menuItemsMarkup = menuItems.map(({name, text, count, isCountHidden, isSelected, isAdditional}) => {
+    return `<a href="#" class="main-navigation__item
+              ${isSelected ? `main-navigation__item--active` : ``}
+              ${isAdditional ? `main-navigation__item--additional` : ``}"
+              data-menu-item="${name}"
+            >
+              ${text}
+              ${!isCountHidden && count ? ` <span class="main-navigation__item-count">${count}</span>` : ``}
+            </a>`;
+  }).join(``);
 
-  return (
-    `<nav class="main-navigation">
-      <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-      <a href="#watchlist" class="main-navigation__item">
-        Watchlist <span class="main-navigation__item-count">${watchlistCount}</span></a>
-      <a href="#history" class="main-navigation__item">
-        History <span class="main-navigation__item-count">${watchedCount}</span></a>
-      <a href="#favorites" class="main-navigation__item">
-        Favorites <span class="main-navigation__item-count">${favoritesCount}</span></a>
-      <a href="#stats" class="main-navigation__item main-navigation__item--additional">Stats</a>
-    </nav>`);
+  return `<nav class="main-navigation">${menuItemsMarkup}</nav>`;
 };
 
 export {template};

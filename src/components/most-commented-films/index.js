@@ -13,4 +13,11 @@ export default class MostCommentedFilms extends AbstractComponent {
   getListContainer() {
     return this.getElement().querySelector(`.films-list__container`);
   }
+
+  /**
+   * Removes all film list elements
+   */
+  resetList() {
+    this.getListContainer().innerHTML = ``;
+  }
 }

@@ -1,4 +1,6 @@
 import {formatDate} from "../../utils";
+import {CommentEmojiImages, COMMENT_DATE_FORMAT} from "../../consts";
+import {encode} from "../../utils";
 
 /**
  * Generates comments markup
@@ -6,19 +8,19 @@ import {formatDate} from "../../utils";
  * @return {String} - comments markup
  */
 const generateCommentsMarkup = (comments) => comments
-  .map(({text, author, date}) => `<li class="film-details__comment">
+  .map(({id, text, author, date, emoji}) => `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji">
+        <img src="./images/emoji/${CommentEmojiImages[emoji]}" width="55" height="55" alt="emoji">
       </span>
       <div>
-        <p class="film-details__comment-text">${text}</p>
+        <p class="film-details__comment-text">${encode(text)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${formatDate(date)}</span>
-          <button class="film-details__comment-delete">Delete</button>
+          <span class="film-details__comment-day">${formatDate(date, COMMENT_DATE_FORMAT)}</span>
+          <button data-comment-id="${id}" class="film-details__comment-delete">Delete</button>
         </p>
       </div>
     </li>`
-  );
+  ).join(``);
 
 export {generateCommentsMarkup};
