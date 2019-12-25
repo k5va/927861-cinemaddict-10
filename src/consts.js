@@ -25,10 +25,16 @@ export const SortType = {
 
 export const NO_USER_RATING = 0;
 
+export const CommentEmoji = {
+  SMILING: `smiling`,
+  SLEEPING: `sleeping`,
+  GRINNING: `grinning`
+};
+
 export const CommentEmojiImages = {
-  smiling: `smile.png`,
-  sleeping: `sleeping.png`,
-  grinning: `angry.png`
+  [CommentEmoji.SMILING]: `smile.png`,
+  [CommentEmoji.SLEEPING]: `sleeping.png`,
+  [CommentEmoji.GRINNING]: `angry.png`
 };
 
 export const Filter = {
