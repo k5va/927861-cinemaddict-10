@@ -7,22 +7,15 @@ import {SortType} from "../../consts";
  * @return {Array<*>} - array of sorted films
  */
 const sortFilms = (films, sortType) => {
-  let sortedFilms = [];
-
   switch (sortType) {
     case SortType.DATE:
-      sortedFilms = films.slice().sort((film1, film2) => film1.releaseDate - film2.releaseDate);
-      break;
+      return films.slice().sort((film1, film2) => film1.releaseDate - film2.releaseDate);
     case SortType.RATING:
-      sortedFilms = films.slice().sort((film1, film2) => film2.rating - film1.rating);
-      break;
+      return films.slice().sort((film1, film2) => film2.rating - film1.rating);
     case SortType.DEFAULT:
     default:
-      sortedFilms = films.slice();
-      break;
+      return films.slice();
   }
-
-  return sortedFilms;
 };
 
 export {sortFilms};
