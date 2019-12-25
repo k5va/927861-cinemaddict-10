@@ -52,5 +52,13 @@ export const MenuItem = {
   STAT: `stat`
 };
 
+export const MenuItemText = {
+  [MenuItem.ALL]: `All movies`,
+  [MenuItem.WATCHLIST]: `Watchlist`,
+  [MenuItem.HISTORY]: `History`,
+  [MenuItem.FAVORITES]: `Favorites`,
+  [MenuItem.STAT]: `Stat`
+};
+
 export const COMMENT_DATE_FORMAT = `YYYY/MM/DD HH:MM`;
 

@@ -1,13 +1,5 @@
-import {MenuItem} from "../../consts";
+import {MenuItem, MenuItemText} from "../../consts";
 import {FilterFilms} from "../../utils";
-
-const menuItemText = {// TODO: think it over
-  all: `All movies`,
-  watchlist: `Watchlist`,
-  history: `History`,
-  favorites: `Favorites`,
-  stat: `Stat`
-};
 
 /**
  * Generates menu
@@ -18,7 +10,7 @@ const menuItemText = {// TODO: think it over
 const generateMenu = (films, selectedMenuItem) => Object.keys(MenuItem)
   .map((key) => ({
     name: MenuItem[key],
-    text: menuItemText[MenuItem[key]],
+    text: MenuItemText[MenuItem[key]],
     count: FilterFilms[MenuItem[key]] ? FilterFilms[MenuItem[key]](films).length : null,
     isCountHidden: MenuItem[key] === MenuItem.ALL,
     isSelected: MenuItem[key] === selectedMenuItem,

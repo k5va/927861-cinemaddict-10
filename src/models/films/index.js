@@ -1,5 +1,5 @@
 import {Filter, SortType} from "../../consts";
-import {filterFilms} from "../../utils";
+import {FilterFilms} from "../../utils";
 import {sortFilms} from "./sort-films";
 import {findMostCommentedFilms} from "./find-most-commented";
 import {findTopRatedFilms} from "./find-top-rated";
@@ -22,11 +22,11 @@ export default class Films {
    */
   getFilms() {
 
-    if (!filterFilms[this._filter]) {
+    if (!FilterFilms[this._filter]) {
       throw new Error(`Unsupported filter: ${this._filter}`);
     }
 
-    return sortFilms(filterFilms[this._filter](this._films), this._sortType);
+    return sortFilms(FilterFilms[this._filter](this._films), this._sortType);
   }
 
   /**
