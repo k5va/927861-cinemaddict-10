@@ -3,7 +3,7 @@ import {
   SortComponent, TopRatedFilmsComponent, MostCommentedFilmsComponent}
   from "../../components";
 import {render, RenderPosition} from "../../utils";
-import FilmController from "../film";
+import FilmController, {FilmAction} from "../film";
 import {FILMS_PER_LOAD} from "../../consts";
 
 export default class PageController {
@@ -143,31 +143,24 @@ export default class PageController {
 
   /**
    * Film change handler
-   * @param {filmController} filmController - film controller, that correspondes to film
-   * @param {*} oldData - old data
-   * @param {*} newData - new (changed) data
    */
-  _onDataChange(filmController, oldData, newData) { // TODO: think it over
-    if (oldData === null) { // add new comment
-      const film = this._filmsModel.addFilmComment(newData.filmId, newData);
-      filmController.render(film);
-      this._renderTopRatedFilms();
-      this._renderMostCommentedFilms();
-      return;
-    }
-
-    if (newData === null) { // delete comment
-      const film = this._filmsModel.deleteFilmComment(oldData.id, oldData.deletedCommentId);
-      filmController.render(film);
-      this._renderTopRatedFilms();
-      this._renderMostCommentedFilms();
-      return;
-    }
-
-    if (oldData && newData) { // update film
-      this._filmsModel.updateFilm(oldData.id, newData);
-      filmController.render(newData);
-      return;
+  _onDataChange({action, id, payload, controller}) {
+    switch (action) {
+      case FilmAction.ADD_COMMENT:
+        controller.render(this._filmsModel.addFilmComment(id, payload));
+        this._renderTopRatedFilms();
+        this._renderMostCommentedFilms();
+        return;
+      case FilmAction.DELETE_COMMENT:
+        controller.render(this._filmsModel.deleteFilmComment(id, payload));
+        this._renderTopRatedFilms();
+        this._renderMostCommentedFilms();
+        return;
+      case FilmAction.UPDATE_FILM:
+        controller.render(this._filmsModel.updateFilm(id, payload));
+        return;
+      default:
+        throw new Error(`Unsupported film action`);
     }
   }
 

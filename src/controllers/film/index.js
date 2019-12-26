@@ -7,6 +7,12 @@ const FilmMode = {
   DETAILS: `details`,
 };
 
+export const FilmAction = {
+  UPDATE_FILM: `update_film`,
+  ADD_COMMENT: `add_comment`,
+  DELETE_COMMENT: `delete_comment`
+};
+
 export default class FilmController {
   /**
   * Creates an instance of TaskController.
@@ -156,13 +162,11 @@ export default class FilmController {
   }
 
   /**
-   * Add film to watch list handler
+   * Add film to watchlist handler
    */
   _addToWatchListHandler() {
-    this._onDataChange(
-        this,
-        this._film,
-        Object.assign({}, this._film, {isWatchlistAdded: !this._film.isWatchlistAdded}));
+    const newFilm = Object.assign({}, this._film, {isWatchlistAdded: !this._film.isWatchlistAdded});
+    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -175,17 +179,15 @@ export default class FilmController {
     newFilm.userRating = !newFilm.isWatched ? NO_USER_RATING : newFilm.userRating;
 
     // call data change handler
-    this._onDataChange(this, this._film, newFilm);
+    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
   * Add film to favorites handler
   */
   _addToFavoritesHandler() {
-    this._onDataChange(
-        this,
-        this._film,
-        Object.assign({}, this._film, {isFavorite: !this._film.isFavorite}));
+    const newFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
+    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -193,10 +195,8 @@ export default class FilmController {
   * @param {Number} userRating - new user rating
   */
   _userRatingChangeHandler(userRating) {
-    this._onDataChange(
-        this,
-        this._film,
-        Object.assign({}, this._film, {userRating: +userRating}));
+    const newFilm = Object.assign({}, this._film, {userRating: +userRating});
+    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -204,10 +204,7 @@ export default class FilmController {
    * @param {Object} comment - comment
    */
   _addCommentHandler(comment) {
-    this._onDataChange(
-        this,
-        null,
-        Object.assign({}, comment, {filmId: this._film.id}));
+    this._onDataChange({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
   }
 
   /**
@@ -215,9 +212,6 @@ export default class FilmController {
    * @param {String} commentId - comment id
    */
   _deleteCommentHandler(commentId) {
-    this._onDataChange(
-        this,
-        Object.assign({}, this._film, {deletedCommentId: commentId}),
-        null);
+    this._onDataChange({action: FilmAction.DELETE_COMMENT, controller: this, id: this._film.id, payload: commentId});
   }
 }
