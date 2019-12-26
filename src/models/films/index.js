@@ -69,7 +69,8 @@ export default class Films {
    * Updates film in model
    *
    * @param {String} id - film id
-   * @param {*} film - film object
+   * @param {Object} film - film object
+   * @return {Object} - updated film
    */
   updateFilm(id, film) {
     const index = this._findfilmById(id);
@@ -77,6 +78,8 @@ export default class Films {
     this._films = [...this._films.slice(0, index), film, ...this._films.slice(index + 1)];
     // notify data change handlers
     this._callHandlers(this._dataChangeHandlers);
+
+    return film;
   }
 
   /**
