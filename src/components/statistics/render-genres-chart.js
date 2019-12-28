@@ -1,14 +1,15 @@
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import {findWatchedFilms} from "./find-watched-films";
 
-const renderGenresChart = (genresCtx, films) => {
+const renderGenresChart = (genresCtx, films, period) => {
   // generate array of unique genres
   const genresLabels = [...new Set(films
     .map((film) => film.genres)
-    .reduce((acc, genres) => acc.concat([...genres]), []))];
+    .reduce((acc, genres) => [...acc, ...genres], []))];
 
   // calculate watched films number by genres
-  const watchedFilms = films.filter((film) => film.isWatched);
+  const watchedFilms = findWatchedFilms(films, period);
   const chartData = genresLabels
     .map((genre) => watchedFilms.reduce((acc, film) => acc + [...film.genres]
       .filter((it) => it === genre).length, 0));
