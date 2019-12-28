@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {renderGenresChart} from "./render-genres-chart";
+import {StatisticsFilter} from "../../consts";
 
 export default class Statistics extends AbstractSmartComponent {
 
@@ -8,6 +9,7 @@ export default class Statistics extends AbstractSmartComponent {
     super();
 
     this._films = films;
+    this._statisticsPeriod = StatisticsFilter.ALL;
 
     this._genresChart = null;
 
@@ -15,31 +17,35 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return template(this._films);
+    return template(this._films, this._statisticsPeriod);
   }
 
   show() {
     super.show();
-
-    this.rerender(this._films);
+    this.rerender();
   }
 
-  rerender(films) {
-    this._films = films;
-
+  rerender() {
     super.rerender();
+    this.getElement().querySelector(`#statistic-${this._statisticsPeriod}`).checked = true;
     this._renderCharts();
   }
 
-  recoverListeners() { }
+  recoverListeners() {
+    this.getElement().querySelector(`.statistic__filters`).addEventListener(`change`, (evt) => {
+      if (!evt.target.classList.contains(`statistic__filters-input`)) {
+        return;
+      }
+
+      this._statisticsPeriod = evt.target.value;
+      this.rerender();
+    });
+  }
 
   _renderCharts() {
-    const element = this.getElement();
-
-    const genresCtx = element.querySelector(`.statistic__chart`);
-
+    const genresCtx = this.getElement().querySelector(`.statistic__chart`);
     this._resetCharts();
-    this._daysChart = renderGenresChart(genresCtx, this._films);
+    this._genresChart = renderGenresChart(genresCtx, this._films, this._statisticsPeriod);
   }
 
   _resetCharts() {

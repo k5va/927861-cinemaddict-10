@@ -1,15 +1,27 @@
+import {findWatchedFilms} from "./find-watched-films";
+import {MINUTES_IN_HOUR} from "../../consts";
+import {calculateTopGenre} from "./calculate-top-genre";
+
 /**
  * Generates statistics component HTML template
  * @param {Array<Object>} films  - array of films
+ * @param {String} period - selected statistics period filter
  * @return {String} - template
  */
-const template = () => {
+const template = (films, period) => {
+  const userRank = `Sci-Fighter`;
+  const watchedFilms = findWatchedFilms(films, period);
+  const totalDuration = watchedFilms.reduce((acc, {duration}) => acc + duration, 0);
+  const totalHours = Math.floor(totalDuration / MINUTES_IN_HOUR);
+  const totalMinutes = totalDuration % MINUTES_IN_HOUR;
+  const topGenre = watchedFilms.length > 0 ? calculateTopGenre(watchedFilms) : `-`;
+
   return (
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">Sci-Fighter</span>
+        <span class="statistic__rank-label">${userRank}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -34,15 +46,15 @@ const template = () => {
       <ul class="statistic__text-list">
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+          <p class="statistic__item-text">${watchedFilms.length} <span class="statistic__item-description">movies</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+          <p class="statistic__item-text">${totalHours} <span class="statistic__item-description">h</span> ${totalMinutes} <span class="statistic__item-description">m</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
-          <p class="statistic__item-text">Sci-Fi</p>
+          <p class="statistic__item-text">${topGenre}</p>
         </li>
       </ul>
 
