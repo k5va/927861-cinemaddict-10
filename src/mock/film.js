@@ -112,7 +112,7 @@ const generateFilm = (index = 0) => {
     age: `12+`,
     isFavorite: getRandomBoolean(),
     isWatched: getRandomBoolean(),
-    watchingDate: getRandomDate(new Date(`1980-01-01`)),
+    watchingDate: getRandomDate(new Date(`2019-11-01`)),
     isWatchlistAdded: getRandomBoolean(),
     director: `John Doe`,
     writers: [`John Doe`, `Vasya Pupkin`],
