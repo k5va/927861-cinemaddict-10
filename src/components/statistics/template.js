@@ -1,16 +1,13 @@
-import {findWatchedFilms} from "./find-watched-films";
 import {MINUTES_IN_HOUR} from "../../consts";
 import {calculateTopGenre} from "./calculate-top-genre";
 
 /**
  * Generates statistics component HTML template
- * @param {Array<Object>} films  - array of films
- * @param {String} period - selected statistics period filter
+ * @param {Array<Object>} watchedFilms  - array of films
  * @return {String} - template
  */
-const template = (films, period) => {
+const template = (watchedFilms) => {
   const userRank = `Sci-Fighter`;
-  const watchedFilms = findWatchedFilms(films, period);
   const totalDuration = watchedFilms.reduce((acc, {duration}) => acc + duration, 0);
   const totalHours = Math.floor(totalDuration / MINUTES_IN_HOUR);
   const totalMinutes = totalDuration % MINUTES_IN_HOUR;
