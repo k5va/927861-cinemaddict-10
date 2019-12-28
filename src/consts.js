@@ -62,3 +62,5 @@ export const MenuItemText = {
 
 export const COMMENT_DATE_FORMAT = `YYYY/MM/DD HH:MM`;
 
+export const HIDDEN_CLASS = `visually-hidden`;
+
