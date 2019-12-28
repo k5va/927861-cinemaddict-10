@@ -4,7 +4,7 @@ import {
   from "../../components";
 import {render, RenderPosition} from "../../utils";
 import FilmController, {FilmAction} from "../film";
-import {FILMS_PER_LOAD} from "../../consts";
+import {FILMS_ON_PAGE} from "../../consts";
 
 export default class PageController {
   /**
@@ -19,7 +19,7 @@ export default class PageController {
     this._showingFilmControllers = [];
     this._topRatedFilmControllers = [];
     this._mostCommentedFilmControllers = [];
-    this._showingFilmsCount = FILMS_PER_LOAD;
+    this._showingFilmsCount = FILMS_ON_PAGE;
 
     this._filmsComponent = new FilmsComponent();
     this._showMoreComponent = new ShowMoreComponent();
@@ -80,11 +80,11 @@ export default class PageController {
       this._showingFilmControllers = this._showingFilmControllers.concat(
           this._renderFilms(this._filmsComponent, films.slice(
               this._showingFilmsCount,
-              this._showingFilmsCount + FILMS_PER_LOAD)
+              this._showingFilmsCount + FILMS_ON_PAGE)
           )
       );
       // update rendered films counter and check if there are more films to load
-      this._showingFilmsCount += FILMS_PER_LOAD;
+      this._showingFilmsCount += FILMS_ON_PAGE;
       if (this._showingFilmsCount >= films.length) {
         // no more tasks to load
         this._showMoreComponent.removeElement();
@@ -186,7 +186,7 @@ export default class PageController {
   _updateFilmsList() {
     this._filmsComponent.resetList();
     this._showMoreComponent.removeElement();
-    this._showingFilmsCount = FILMS_PER_LOAD;
+    this._showingFilmsCount = FILMS_ON_PAGE;
 
     this._showingFilmControllers = this._renderFilms(
         this._filmsComponent,

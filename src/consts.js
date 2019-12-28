@@ -15,7 +15,7 @@ export const UserTitle = {
   MOVIE_BUFF: `movie buff`
 };
 
-export const FILMS_PER_LOAD = 5;
+export const FILMS_ON_PAGE = 5;
 
 export const SortType = {
   DATE: `date`,
