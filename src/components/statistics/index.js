@@ -1,5 +1,6 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
+import {renderGenresChart} from "./render-genres-chart";
 
 export default class Statistics extends AbstractSmartComponent {
 
@@ -7,6 +8,8 @@ export default class Statistics extends AbstractSmartComponent {
     super();
 
     this._films = films;
+
+    this._genresChart = null;
 
     this._renderCharts();
   }
@@ -31,10 +34,18 @@ export default class Statistics extends AbstractSmartComponent {
   recoverListeners() { }
 
   _renderCharts() {
+    const element = this.getElement();
 
+    const genresCtx = element.querySelector(`.statistic__chart`);
+
+    this._resetCharts();
+    this._daysChart = renderGenresChart(genresCtx, this._films);
   }
 
   _resetCharts() {
-
+    if (this._genresChart) {
+      this._genresChart.destroy();
+      this._genresChart = null;
+    }
   }
 }
