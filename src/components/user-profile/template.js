@@ -1,4 +1,4 @@
-import {UserTitle} from "../../consts";
+import {generateUserTitle} from "../../utils";
 
 /**
  * Creates user profile template
@@ -6,16 +6,7 @@ import {UserTitle} from "../../consts";
  * @return {String} template
  */
 const template = (films) => {
-  const watchedFilmsCount = films.filter(({isWatched}) => isWatched).length;
-
-  let userTitle = UserTitle.NO_TITLE;
-  if (watchedFilmsCount >= 1 && watchedFilmsCount < 11) {
-    userTitle = UserTitle.NOVICE;
-  } else if (watchedFilmsCount >= 11 && watchedFilmsCount < 20) {
-    userTitle = UserTitle.FAN;
-  } else if (watchedFilmsCount >= 21) {
-    userTitle = UserTitle.MOVIE_BUFF;
-  }
+  const userTitle = generateUserTitle(films);
 
   return `<section class="header__profile profile">
     <p class="profile__rating">${userTitle}</p>
