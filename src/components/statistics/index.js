@@ -3,6 +3,7 @@ import {template} from "./template";
 import {renderGenresChart} from "./render-genres-chart";
 import {StatisticsFilter} from "../../consts";
 import {findWatchedFilms} from "./find-watched-films";
+import {generateUserTitle} from "../../utils";
 
 export default class Statistics extends AbstractSmartComponent {
 
@@ -11,6 +12,7 @@ export default class Statistics extends AbstractSmartComponent {
 
     this._films = films;
     this._statisticsPeriod = StatisticsFilter.ALL;
+    this._userTitle = generateUserTitle(this._films);
     this._watchedFilms = findWatchedFilms(this._films, this._statisticsPeriod);
 
     this._genresChart = null;
@@ -19,7 +21,7 @@ export default class Statistics extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return template(this._watchedFilms);
+    return template(this._watchedFilms, this._userTitle);
   }
 
   show() {

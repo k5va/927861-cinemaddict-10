@@ -4,10 +4,10 @@ import {calculateTopGenre} from "./calculate-top-genre";
 /**
  * Generates statistics component HTML template
  * @param {Array<Object>} watchedFilms  - array of films
+ * @param {String} userTitle - user title (rank)
  * @return {String} - template
  */
-const template = (watchedFilms) => {
-  const userRank = `Sci-Fighter`;
+const template = (watchedFilms, userTitle) => {
   const totalDuration = watchedFilms.reduce((acc, {duration}) => acc + duration, 0);
   const totalHours = Math.floor(totalDuration / MINUTES_IN_HOUR);
   const totalMinutes = totalDuration % MINUTES_IN_HOUR;
@@ -18,7 +18,7 @@ const template = (watchedFilms) => {
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">${userRank}</span>
+        <span class="statistic__rank-label">${userTitle}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">
@@ -47,7 +47,10 @@ const template = (watchedFilms) => {
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">${totalHours} <span class="statistic__item-description">h</span> ${totalMinutes} <span class="statistic__item-description">m</span></p>
+          <p class="statistic__item-text">${totalHours}
+            <span class="statistic__item-description">h</span> ${totalMinutes}
+            <span class="statistic__item-description">m</span>
+          </p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
