@@ -64,3 +64,13 @@ export const COMMENT_DATE_FORMAT = `YYYY/MM/DD HH:MM`;
 
 export const HIDDEN_CLASS = `visually-hidden`;
 
+export const StatisticsFilter = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+export const MINUTES_IN_HOUR = 60;
+
