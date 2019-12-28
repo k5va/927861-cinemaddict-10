@@ -1,4 +1,4 @@
-import {MenuComponent} from "../../components";
+import {MenuComponent, StatisticsComponent} from "../../components";
 import {render, replace} from "../../utils";
 import {generateMenu} from "./generate-menu";
 import {MenuItem} from "../../consts";
@@ -15,7 +15,8 @@ export default class MenuController {
     this._filmsModel = filmsModel;
     this._menuComponent = null;
     this._selectedMenuItem = MenuItem.ALL;
-    this._pageController = new PageController(this._container, this._filmsModel);
+    this._pageController = null;
+    this._statisticsComponent = null;
 
     this._selectMenuItemHandler = this._selectMenuItemHandler.bind(this);
     this._filmsDataChangeHadler = this._filmsDataChangeHadler.bind(this);
@@ -37,8 +38,12 @@ export default class MenuController {
       render(this._container, this._menuComponent);
     }
 
-    // render films
+    this._pageController = new PageController(this._container, this._filmsModel);
     this._pageController.render();
+
+    this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
+    render(this._container, this._statisticsComponent);
+    this._statisticsComponent.hide();
   }
 
   /**
@@ -46,8 +51,16 @@ export default class MenuController {
    * @param {String} menuItem - selected menu item
    */
   _selectMenuItemHandler(menuItem) {
-    if (menuItem !== MenuItem.STAT) {
-      this._filmsModel.setFilter(menuItem);
+    switch (menuItem) {
+      default:
+        this._filmsModel.setFilter(menuItem);
+        this._pageController.show();
+        this._statisticsComponent.hide();
+        return;
+      case MenuItem.STAT:
+        this._pageController.hide();
+        this._statisticsComponent.show();
+        return;
     }
   }
 
