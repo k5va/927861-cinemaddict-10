@@ -3,6 +3,8 @@ import {getRandomArrayItem, getRandomInteger, getRandomBoolean, getRandomDate} f
 const MAX_DESCRIPTION_SIZE = 3;
 const DEFAULT_FILMS_COUNT = 15;
 
+const GENRES = [`comedy`, `drama`, `action`, `horror`, `thriller`];
+
 const FILM_NAMES = [
   `День сурка`,
   `Один дома`,
@@ -104,7 +106,7 @@ const generateFilm = (index = 0) => {
     userRating: 5,
     releaseDate: getRandomDate(),
     duration: `1h 36m`,
-    genres: new Set([`comedy`, `drama`, `action`]),
+    genres: new Set(GENRES.slice(getRandomInteger(0, GENRES.length - 1))),
     description: generateDescription(),
     country: `USA`,
     age: `12+`,
