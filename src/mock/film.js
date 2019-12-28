@@ -105,7 +105,7 @@ const generateFilm = (index = 0) => {
     rating: generateRating(),
     userRating: 5,
     releaseDate: getRandomDate(),
-    duration: `1h 36m`,
+    duration: getRandomInteger(70, 100),
     genres: new Set(GENRES.slice(getRandomInteger(0, GENRES.length - 1))),
     description: generateDescription(),
     country: `USA`,
