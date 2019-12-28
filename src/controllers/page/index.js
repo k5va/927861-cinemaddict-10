@@ -63,6 +63,22 @@ export default class PageController {
   }
 
   /**
+   * Show films
+   */
+  show() {
+    this._sortComponent.show();
+    this._filmsComponent.show();
+  }
+
+  /**
+   * Hide films
+   */
+  hide() {
+    this._sortComponent.hide();
+    this._filmsComponent.hide();
+  }
+
+  /**
    * Renders show more
    */
   _renderShowMore() {
