@@ -1,13 +1,5 @@
-import {MenuItem} from "../../consts";
-import {filterFilms} from "../../utils";
-
-const menuItemText = {// TODO: think it over
-  all: `All movies`,
-  watchlist: `Watchlist`,
-  history: `History`,
-  favorites: `Favorites`,
-  stat: `Stat`
-};
+import {MenuItem, MenuItemText} from "../../consts";
+import {FilterFilms} from "../../utils";
 
 /**
  * Generates menu
@@ -15,14 +7,14 @@ const menuItemText = {// TODO: think it over
  * @param {String} selectedMenuItem - selected menu item
  * @return {Array<*>} - array of menu items
  */
-const generateMenu = (films, selectedMenuItem) => Object.keys(MenuItem)
-  .map((key) => ({
-    name: MenuItem[key],
-    text: menuItemText[MenuItem[key]],
-    count: filterFilms[MenuItem[key]] ? filterFilms[MenuItem[key]](films).length : null,
-    isCountHidden: MenuItem[key] === MenuItem.ALL,
-    isSelected: MenuItem[key] === selectedMenuItem,
-    isAdditional: MenuItem[key] === MenuItem.STAT
+const generateMenu = (films, selectedMenuItem) => Object.values(MenuItem)
+  .map((menuItem) => ({
+    name: menuItem,
+    text: MenuItemText[menuItem],
+    count: FilterFilms[menuItem] ? FilterFilms[menuItem](films).length : null,
+    isCountHidden: menuItem === MenuItem.ALL,
+    isSelected: menuItem === selectedMenuItem,
+    isAdditional: menuItem === MenuItem.STAT
   }));
 
 export {generateMenu};

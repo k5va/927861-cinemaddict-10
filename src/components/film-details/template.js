@@ -17,6 +17,7 @@ const template = (film, options) => {
     country, description, comments, isWatched, isWatchlistAdded, isFavorite} = film;
 
   const commentEmojiImage = options.commentEmoji ? CommentEmojiImages[options.commentEmoji] : null;
+  const commentText = options.commentText ? options.commentText : ``;
 
   const genreMarkup = generateGenreMarkup(genres);
   const commentsMarkup = generateCommentsMarkup(comments);
@@ -145,7 +146,10 @@ const template = (film, options) => {
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea
+              class="film-details__comment-input"
+              placeholder="Select reaction below and write comment here"
+              name="comment">${commentText}</textarea>
           </label>
 
           <div class="film-details__emoji-list">

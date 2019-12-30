@@ -15,7 +15,7 @@ export const UserTitle = {
   MOVIE_BUFF: `movie buff`
 };
 
-export const FILMS_PER_LOAD = 5;
+export const FILMS_ON_PAGE = 5;
 
 export const SortType = {
   DATE: `date`,
@@ -25,10 +25,16 @@ export const SortType = {
 
 export const NO_USER_RATING = 0;
 
+export const CommentEmoji = {
+  SMILING: `smiling`,
+  SLEEPING: `sleeping`,
+  GRINNING: `grinning`
+};
+
 export const CommentEmojiImages = {
-  smiling: `smile.png`,
-  sleeping: `sleeping.png`,
-  grinning: `angry.png`
+  [CommentEmoji.SMILING]: `smile.png`,
+  [CommentEmoji.SLEEPING]: `sleeping.png`,
+  [CommentEmoji.GRINNING]: `angry.png`
 };
 
 export const Filter = {
@@ -46,5 +52,25 @@ export const MenuItem = {
   STAT: `stat`
 };
 
+export const MenuItemText = {
+  [MenuItem.ALL]: `All movies`,
+  [MenuItem.WATCHLIST]: `Watchlist`,
+  [MenuItem.HISTORY]: `History`,
+  [MenuItem.FAVORITES]: `Favorites`,
+  [MenuItem.STAT]: `Stat`
+};
+
 export const COMMENT_DATE_FORMAT = `YYYY/MM/DD HH:MM`;
+
+export const HIDDEN_CLASS = `visually-hidden`;
+
+export const StatisticsFilter = {
+  ALL: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
+};
+
+export const MINUTES_IN_HOUR = 60;
 

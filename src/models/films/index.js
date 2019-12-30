@@ -1,5 +1,5 @@
 import {Filter, SortType} from "../../consts";
-import {filterFilms} from "../../utils";
+import {FilterFilms} from "../../utils";
 import {sortFilms} from "./sort-films";
 import {findMostCommentedFilms} from "./find-most-commented";
 import {findTopRatedFilms} from "./find-top-rated";
@@ -22,11 +22,11 @@ export default class Films {
    */
   getFilms() {
 
-    if (!filterFilms[this._filter]) {
+    if (!FilterFilms[this._filter]) {
       throw new Error(`Unsupported filter: ${this._filter}`);
     }
 
-    return sortFilms(filterFilms[this._filter](this._films), this._sortType);
+    return sortFilms(FilterFilms[this._filter](this._films), this._sortType);
   }
 
   /**
@@ -69,7 +69,8 @@ export default class Films {
    * Updates film in model
    *
    * @param {String} id - film id
-   * @param {*} film - film object
+   * @param {Object} film - film object
+   * @return {Object} - updated film
    */
   updateFilm(id, film) {
     const index = this._findfilmById(id);
@@ -77,6 +78,8 @@ export default class Films {
     this._films = [...this._films.slice(0, index), film, ...this._films.slice(index + 1)];
     // notify data change handlers
     this._callHandlers(this._dataChangeHandlers);
+
+    return film;
   }
 
   /**

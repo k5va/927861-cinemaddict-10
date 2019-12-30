@@ -3,8 +3,8 @@ import {
   SortComponent, TopRatedFilmsComponent, MostCommentedFilmsComponent}
   from "../../components";
 import {render, RenderPosition} from "../../utils";
-import FilmController from "../film";
-import {FILMS_PER_LOAD} from "../../consts";
+import FilmController, {FilmAction} from "../film";
+import {FILMS_ON_PAGE} from "../../consts";
 
 export default class PageController {
   /**
@@ -19,7 +19,7 @@ export default class PageController {
     this._showingFilmControllers = [];
     this._topRatedFilmControllers = [];
     this._mostCommentedFilmControllers = [];
-    this._showingFilmsCount = FILMS_PER_LOAD;
+    this._showingFilmsCount = FILMS_ON_PAGE;
 
     this._filmsComponent = new FilmsComponent();
     this._showMoreComponent = new ShowMoreComponent();
@@ -63,6 +63,22 @@ export default class PageController {
   }
 
   /**
+   * Show films
+   */
+  show() {
+    this._sortComponent.show();
+    this._filmsComponent.show();
+  }
+
+  /**
+   * Hide films
+   */
+  hide() {
+    this._sortComponent.hide();
+    this._filmsComponent.hide();
+  }
+
+  /**
    * Renders show more
    */
   _renderShowMore() {
@@ -80,11 +96,11 @@ export default class PageController {
       this._showingFilmControllers = this._showingFilmControllers.concat(
           this._renderFilms(this._filmsComponent, films.slice(
               this._showingFilmsCount,
-              this._showingFilmsCount + FILMS_PER_LOAD)
+              this._showingFilmsCount + FILMS_ON_PAGE)
           )
       );
       // update rendered films counter and check if there are more films to load
-      this._showingFilmsCount += FILMS_PER_LOAD;
+      this._showingFilmsCount += FILMS_ON_PAGE;
       if (this._showingFilmsCount >= films.length) {
         // no more tasks to load
         this._showMoreComponent.removeElement();
@@ -143,31 +159,24 @@ export default class PageController {
 
   /**
    * Film change handler
-   * @param {filmController} filmController - film controller, that correspondes to film
-   * @param {*} oldData - old data
-   * @param {*} newData - new (changed) data
    */
-  _onDataChange(filmController, oldData, newData) { // TODO: think it over
-    if (oldData === null) { // add new comment
-      const film = this._filmsModel.addFilmComment(newData.filmId, newData);
-      filmController.render(film);
-      this._renderTopRatedFilms();
-      this._renderMostCommentedFilms();
-      return;
-    }
-
-    if (newData === null) { // delete comment
-      const film = this._filmsModel.deleteFilmComment(oldData.id, oldData.deletedCommentId);
-      filmController.render(film);
-      this._renderTopRatedFilms();
-      this._renderMostCommentedFilms();
-      return;
-    }
-
-    if (oldData && newData) { // update film
-      this._filmsModel.updateFilm(oldData.id, newData);
-      filmController.render(newData);
-      return;
+  _onDataChange({action, id, payload, controller}) {
+    switch (action) {
+      case FilmAction.ADD_COMMENT:
+        controller.render(this._filmsModel.addFilmComment(id, payload));
+        this._renderTopRatedFilms();
+        this._renderMostCommentedFilms();
+        return;
+      case FilmAction.DELETE_COMMENT:
+        controller.render(this._filmsModel.deleteFilmComment(id, payload));
+        this._renderTopRatedFilms();
+        this._renderMostCommentedFilms();
+        return;
+      case FilmAction.UPDATE_FILM:
+        controller.render(this._filmsModel.updateFilm(id, payload));
+        return;
+      default:
+        throw new Error(`Unsupported film action`);
     }
   }
 
@@ -193,7 +202,7 @@ export default class PageController {
   _updateFilmsList() {
     this._filmsComponent.resetList();
     this._showMoreComponent.removeElement();
-    this._showingFilmsCount = FILMS_PER_LOAD;
+    this._showingFilmsCount = FILMS_ON_PAGE;
 
     this._showingFilmControllers = this._renderFilms(
         this._filmsComponent,

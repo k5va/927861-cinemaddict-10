@@ -8,6 +8,7 @@ export default class FilmDetails extends AbstractSmartComponent {
 
     this._film = film;
     this._commentEmoji = null;
+    this._commentText = null;
 
     this._addToWatchListHandler = null;
     this._addToWatchedHandler = null;
@@ -25,7 +26,10 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @return {String} - template
    */
   getTemplate() {
-    return template(this._film, {commentEmoji: this._commentEmoji});
+    return template(this._film, {
+      commentEmoji: this._commentEmoji,
+      commentText: this._commentText
+    });
   }
 
   /**
@@ -144,7 +148,6 @@ export default class FilmDetails extends AbstractSmartComponent {
       .querySelector(`.film-details__comment-input`)
       .addEventListener(`keydown`, (evt) => {
         const isCtrlEnterKey = evt.key === `Enter` && evt.ctrlKey;
-
         if (isCtrlEnterKey && this._commentEmoji && evt.target.value.length > 0) {
           this._addCommentHandler({
             text: evt.target.value,
@@ -203,6 +206,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       .querySelector(`.film-details__emoji-list`)
       .addEventListener(`change`, (evt) => {
         this._commentEmoji = evt.target.value;
+        this._commentText = this.getElement().querySelector(`.film-details__comment-input`).value;
         this.rerender();
       });
   }
