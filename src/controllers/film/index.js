@@ -68,6 +68,10 @@ export default class FilmController {
     }
   }
 
+  getFilm() {
+    return this._film;
+  }
+
   /**
    * Creates new film component with listeners
    * @param {*} film - film object

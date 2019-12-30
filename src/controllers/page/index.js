@@ -160,24 +160,30 @@ export default class PageController {
   /**
    * Film change handler
    */
-  _onDataChange({action, id, payload, controller}) {
+  _onDataChange({action, id, payload}) {
     switch (action) {
       case FilmAction.ADD_COMMENT:
-        controller.render(this._filmsModel.addFilmComment(id, payload));
-        this._renderTopRatedFilms();
-        this._renderMostCommentedFilms();
+        this._renderFilmControllers(this._filmsModel.addFilmComment(id, payload));
         return;
       case FilmAction.DELETE_COMMENT:
-        controller.render(this._filmsModel.deleteFilmComment(id, payload));
-        this._renderTopRatedFilms();
-        this._renderMostCommentedFilms();
+        this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, payload));
         return;
       case FilmAction.UPDATE_FILM:
-        controller.render(this._filmsModel.updateFilm(id, payload));
+        this._renderFilmControllers(this._filmsModel.updateFilm(id, payload));
         return;
       default:
         throw new Error(`Unsupported film action`);
     }
+  }
+
+  /**
+   * Finds all film controllers that corresponds to fiven film and calls render on them
+   * @param {Object} film - film object
+   */
+  _renderFilmControllers(film) {
+    [...this._showingFilmControllers, ...this._topRatedFilmControllers, ...this._mostCommentedFilmControllers]
+      .filter((controller) => controller.getFilm().id === film.id)
+      .forEach((controller) => controller.render(film));
   }
 
   /**
