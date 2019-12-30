@@ -15,8 +15,8 @@ export default class MenuController {
     this._filmsModel = filmsModel;
     this._menuComponent = null;
     this._selectedMenuItem = MenuItem.ALL;
-    this._pageController = null;
-    this._statisticsComponent = null;
+    this._pageController = new PageController(this._container, this._filmsModel);
+    this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
 
     this._selectMenuItemHandler = this._selectMenuItemHandler.bind(this);
     this._filmsDataChangeHadler = this._filmsDataChangeHadler.bind(this);
@@ -36,14 +36,10 @@ export default class MenuController {
       replace(this._menuComponent, oldMenuComponent);
     } else {
       render(this._container, this._menuComponent);
+      this._pageController.render();
+      render(this._container, this._statisticsComponent);
+      this._statisticsComponent.hide();
     }
-
-    this._pageController = new PageController(this._container, this._filmsModel);
-    this._pageController.render();
-
-    this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
-    render(this._container, this._statisticsComponent);
-    this._statisticsComponent.hide();
   }
 
   /**
