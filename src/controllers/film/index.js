@@ -57,7 +57,9 @@ export default class FilmController {
     if (oldFilmComponent && oldFilmDetailsComponent) {
       this._filmComponent.enableHoverImitation();
       replace(this._filmComponent, oldFilmComponent);
-      this._filmComponent.disableHoverImitation();
+      if (this._mode === FilmMode.DEFAULT) {
+        this._filmComponent.disableHoverImitation();
+      }
 
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
     } else {
@@ -137,6 +139,7 @@ export default class FilmController {
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
     render(null, this._filmDetailsComponent);
+    this._filmComponent.enableHoverImitation();
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
@@ -149,6 +152,7 @@ export default class FilmController {
   _closeFilmDetails() {
     this._filmDetailsComponent.removeElement();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._filmComponent.disableHoverImitation();
     this._mode = FilmMode.DEFAULT;
   }
 
