@@ -11,3 +11,4 @@ export {replaceElements} from "./replaceElements";
 export {FilterFilms} from "./filter-films";
 export {encode} from "./encode";
 export {generateUserTitle} from "./generate-user-title";
+export {formatTime} from "./format-time";

@@ -1,4 +1,5 @@
 import {FILM_GENRE_SPLIT, MAX_SHORT_DESCRIPTION_SIZE} from "../../consts";
+import {formatTime} from "../../utils";
 
 /**
  * Creates film card template
@@ -20,7 +21,7 @@ const template = (film) => {
       <p class="film-card__rating">${rating}</p>
       <p class="film-card__info">
         <span class="film-card__year">${releaseDate.getFullYear()}</span>
-        <span class="film-card__duration">${duration}</span>
+        <span class="film-card__duration">${formatTime(duration)}</span>
         <span class="film-card__genre">${genreText}</span>
       </p>
       <img src="${poster}" alt="" class="film-card__poster">

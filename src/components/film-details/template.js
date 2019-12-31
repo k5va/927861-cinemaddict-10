@@ -1,4 +1,4 @@
-import {formatDate} from "../../utils";
+import {formatDate, formatTime} from "../../utils";
 import {generateGenreMarkup} from "./genre-markup";
 import {generateCommentsMarkup} from "./comments-markup";
 import {generateUserRatingMarkup} from "./user-rating-markup";
@@ -68,7 +68,7 @@ const template = (film, options) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${duration}</td>
+              <td class="film-details__cell">${formatTime(duration)}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
