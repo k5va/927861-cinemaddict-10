@@ -102,22 +102,22 @@ export default class FilmDetails extends AbstractSmartComponent {
    */
   setUserRatingChangeHandler(handler) {
     this._userRatingChangeHandler = handler;
-    this._recoverUserRatingChangeHadler();
+    this._recoverUserRatingChangeHandler();
   }
 
-  _recoverUserRatingChangeHadler() {
+  _recoverUserRatingChangeHandler() {
     if (this._film.isWatched) {
       // user rating change
       this
         .getElement()
         .querySelector(`.film-details__user-rating-score`)
-        .addEventListener(`change`, (evt) => {
+        .addEventListener(`click`, (evt) => {
           evt.preventDefault();
-          if (!evt.target.classList.contains(`film-details__user-rating-input`)) {
+          if (!evt.target.classList.contains(`film-details__user-rating-label`)) {
             return;
           }
-
-          this._userRatingChangeHandler(evt.target.value);
+          const userRating = this.getElement().querySelector(`#${evt.target.htmlFor}`).value;
+          this._userRatingChangeHandler(userRating);
         });
       // user rating reset
       this
@@ -192,7 +192,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._recoverAddToWatchedHandler();
     this._recoverAddtoWatchListHandler();
     this._recoverCloseHandler();
-    this._recoverUserRatingChangeHadler();
+    this._recoverUserRatingChangeHandler();
     this._recoverAddCommentHandler();
     this._recoverDeleteCommentHandler();
   }
