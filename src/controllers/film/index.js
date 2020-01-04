@@ -188,6 +188,8 @@ export default class FilmController {
 
     // reset user rating if film removed from watched list
     newFilm.userRating = !newFilm.isWatched ? NO_USER_RATING : newFilm.userRating;
+    // reset watching date if film is not watched
+    newFilm.watchingDate = !newFilm.isWatched ? null : newFilm.watchingDate;
 
     // call data change handler
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
@@ -229,5 +231,16 @@ export default class FilmController {
    */
   _deleteCommentHandler(commentId) {
     this._onDataChange({action: FilmAction.DELETE_COMMENT, controller: this, id: this._film.id, payload: commentId});
+  }
+
+  /**
+   * Shakes film card
+   */
+  shake() {
+    if (this._mode === FilmMode.DETAILS) {
+      this._filmDetailsComponent.shake();
+    } else {
+      this._filmComponent.shake();
+    }
   }
 }

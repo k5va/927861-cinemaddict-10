@@ -1,5 +1,5 @@
 import {createElement} from "../../utils";
-import {HIDDEN_CLASS} from "../../consts";
+import {HIDDEN_CLASS, SHAKE_ANIMATION_TIMEOUT} from "../../consts";
 
 export default class AbstractComponent {
   /**
@@ -63,5 +63,19 @@ export default class AbstractComponent {
     if (this._element) {
       this._element.classList.add(HIDDEN_CLASS);
     }
+  }
+
+  /**
+ * Shakes component
+ * @return {Promise} - promise that resolves when shaking stops
+ */
+  shake() {
+    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        this.getElement().style.animation = ``;
+        resolve();
+      }, SHAKE_ANIMATION_TIMEOUT);
+    });
   }
 }

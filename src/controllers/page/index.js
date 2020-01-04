@@ -162,31 +162,25 @@ export default class PageController {
   /**
    * Film change handler
    */
-  _onDataChange({action, id, payload}) {
+  _onDataChange({action, controller, id, payload}) {
     switch (action) {
       case FilmAction.ADD_COMMENT:
         this._api
           .createComment(id, payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch(() => controller.shake());
         return;
       case FilmAction.DELETE_COMMENT:
         this._api
           .deleteComment(payload)
           .then((commentId) => this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, commentId)))
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch(() => controller.shake());
         return;
       case FilmAction.UPDATE_FILM:
         this._api
           .updateFilm(payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch(() => controller.shake());
         return;
       default:
         throw new Error(`Unsupported film action`);
