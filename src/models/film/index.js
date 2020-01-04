@@ -103,9 +103,9 @@ export default class Film {
    * Creates new Film with raw data
    * @return {Film} - film
    */
-  static parseFilmWithComments({filmData, commentsData}) {
-    const film = Film.parseFilm(filmData);
-    film.setComments(Comment.parseComments(commentsData));
+  static parseFilmWithComments({movie, comments}) {
+    const film = Film.parseFilm(movie);
+    film.setComments(Comment.parseComments(comments));
 
     return film;
   }
