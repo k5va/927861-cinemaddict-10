@@ -44,8 +44,11 @@ export default class FilmDetails extends AbstractSmartComponent {
   _recoverAddtoWatchListHandler() {
     this
       .getElement()
-      .querySelector(`.film-details__control-input--watchlist`)
-      .addEventListener(`change`, this._addToWatchListHandler);
+      .querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._addToWatchListHandler();
+      });
   }
 
   /**
@@ -60,8 +63,11 @@ export default class FilmDetails extends AbstractSmartComponent {
   _recoverAddToWatchedHandler() {
     this
       .getElement()
-      .querySelector(`.film-details__control-input--watched`)
-      .addEventListener(`change`, this._addToWatchedHandler);
+      .querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._addToWatchedHandler();
+      });
   }
 
   /**
@@ -76,8 +82,11 @@ export default class FilmDetails extends AbstractSmartComponent {
   _recoverAddToFavoritesHandler() {
     this
       .getElement()
-      .querySelector(`.film-details__control-input--favorite`)
-      .addEventListener(`change`, this._addToFavoritesHandler);
+      .querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._addToFavoritesHandler();
+      });
   }
 
   /**
