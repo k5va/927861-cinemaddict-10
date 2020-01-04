@@ -1,6 +1,7 @@
 import {FilmComponent, FilmDetailsComponent} from "../../components";
 import {render, replace} from "../../utils";
 import {NO_USER_RATING} from "../../consts";
+import {Film} from "../../models";
 
 const FilmMode = {
   DEFAULT: `default`,
@@ -173,7 +174,8 @@ export default class FilmController {
    * Add film to watchlist handler
    */
   _addToWatchListHandler() {
-    const newFilm = Object.assign({}, this._film, {isWatchlistAdded: !this._film.isWatchlistAdded});
+    const newFilm = Film.clone(this._film);
+    newFilm.isWatchlistAdded = !newFilm.isWatchlistAdded;
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
@@ -181,7 +183,8 @@ export default class FilmController {
    * Add film to watched handler
    */
   _addToWatchedHandler() {
-    const newFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched});
+    const newFilm = Film.clone(this._film);
+    newFilm.isWatched = !newFilm.isWatched;
 
     // reset user rating if film removed from watched list
     newFilm.userRating = !newFilm.isWatched ? NO_USER_RATING : newFilm.userRating;
@@ -194,7 +197,9 @@ export default class FilmController {
   * Add film to favorites handler
   */
   _addToFavoritesHandler() {
-    const newFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
+    const newFilm = Film.clone(this._film);
+    newFilm.isFavorite = !newFilm.isFavorite;
+
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
@@ -203,7 +208,9 @@ export default class FilmController {
   * @param {Number} userRating - new user rating
   */
   _userRatingChangeHandler(userRating) {
-    const newFilm = Object.assign({}, this._film, {userRating: +userRating});
+    const newFilm = Film.clone(this._film);
+    newFilm.userRating = +userRating;
+
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
