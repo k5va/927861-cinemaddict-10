@@ -163,9 +163,6 @@ export default class FilmDetails extends AbstractSmartComponent {
             date: new Date(),
             emoji: this._commentEmoji
           });
-
-          this._commentEmoji = null;
-          this.rerender();
         }
       });
   }
