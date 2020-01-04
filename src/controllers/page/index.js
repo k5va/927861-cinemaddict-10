@@ -11,11 +11,13 @@ export default class PageController {
    * Creates an instance of FilmsController.
    * @param {HTMLElement} container - parent HTML Element to render data to
    * @param {FilmsModel} filmsModel - films model
+   * @param {API} api - api
    */
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
-
     this._filmsModel = filmsModel;
+    this._api = api;
+
     this._showingFilmControllers = [];
     this._topRatedFilmControllers = [];
     this._mostCommentedFilmControllers = [];
@@ -169,7 +171,12 @@ export default class PageController {
         this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, payload));
         return;
       case FilmAction.UPDATE_FILM:
-        this._renderFilmControllers(this._filmsModel.updateFilm(id, payload));
+        this._api
+          .updateFilm(payload)
+          .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
+          .catch((error) => {
+            console.log(error);
+          });
         return;
       default:
         throw new Error(`Unsupported film action`);
