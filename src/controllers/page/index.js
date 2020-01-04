@@ -165,10 +165,20 @@ export default class PageController {
   _onDataChange({action, id, payload}) {
     switch (action) {
       case FilmAction.ADD_COMMENT:
-        this._renderFilmControllers(this._filmsModel.addFilmComment(id, payload));
+        this._api
+          .createComment(id, payload)
+          .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
+          .catch((error) => {
+            console.log(error);
+          });
         return;
       case FilmAction.DELETE_COMMENT:
-        this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, payload));
+        this._api
+          .deleteComment(payload)
+          .then((commentId) => this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, commentId)))
+          .catch((error) => {
+            console.log(error);
+          });
         return;
       case FilmAction.UPDATE_FILM:
         this._api

@@ -1,7 +1,7 @@
 import {FilmComponent, FilmDetailsComponent} from "../../components";
 import {render, replace} from "../../utils";
 import {NO_USER_RATING} from "../../consts";
-import {Film} from "../../models";
+import {Film, Comment} from "../../models";
 
 const FilmMode = {
   DEFAULT: `default`,
@@ -216,9 +216,10 @@ export default class FilmController {
 
   /**
    * Add new comment handler
-   * @param {Object} comment - comment
+   * @param {Object} data - comment data
    */
-  _addCommentHandler(comment) {
+  _addCommentHandler(data) {
+    const comment = new Comment({comment: data.text, date: data.date, emotion: data.emoji});
     this._onDataChange({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
   }
 
