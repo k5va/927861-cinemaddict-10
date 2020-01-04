@@ -78,7 +78,7 @@ export default class API {
    * @return {Promise<String>} - promise that resoves to deleted comment id
    */
   deleteComment(id) {
-    return this._send({url: `tasks/${id}`, method: Method.DELETE})
+    return this._send({url: `comments/${id}`, method: Method.DELETE})
       .then(() => id);
   }
 
