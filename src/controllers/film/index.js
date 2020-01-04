@@ -188,8 +188,6 @@ export default class FilmController {
 
     // reset user rating if film removed from watched list
     newFilm.userRating = !newFilm.isWatched ? NO_USER_RATING : newFilm.userRating;
-    // reset watching date if film is not watched
-    newFilm.watchingDate = !newFilm.isWatched ? null : newFilm.watchingDate;
 
     // call data change handler
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
