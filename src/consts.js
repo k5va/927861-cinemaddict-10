@@ -74,3 +74,6 @@ export const StatisticsFilter = {
 
 export const MINUTES_IN_HOUR = 60;
 
+export const AUTHORIZATION = `Basic dXNqweBwYXNzd29yZAo=`;
+
+export const END_POINT = `https://htmlacademy-es-10.appspot.com/cinemaddict/`;
