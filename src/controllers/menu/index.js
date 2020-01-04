@@ -9,13 +9,14 @@ export default class MenuController {
    * Creates menu controller instance
    * @param {HTMLElement} container - parent container element
    * @param {FilmsModel} filmsModel - films model
+   * @param {API} api - api
    */
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._menuComponent = null;
     this._selectedMenuItem = MenuItem.ALL;
-    this._pageController = new PageController(this._container, this._filmsModel);
+    this._pageController = new PageController(this._container, this._filmsModel, api);
     this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
 
     this._selectMenuItemHandler = this._selectMenuItemHandler.bind(this);
