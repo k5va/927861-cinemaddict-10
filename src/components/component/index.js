@@ -70,10 +70,13 @@ export default class AbstractComponent {
  * @return {Promise} - promise that resolves when shaking stops
  */
   shake() {
-    this.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+    const element = this.getElement();
+    element.style.animationName = `shake`;
+    element.style.animationDuration = `${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
     return new Promise((resolve) => {
       setTimeout(() => {
-        this.getElement().style.animation = ``;
+        element.style.animationName = ``;
+        element.style.animationDuration = `0s`;
         resolve();
       }, SHAKE_ANIMATION_TIMEOUT);
     });
