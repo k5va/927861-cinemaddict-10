@@ -27,8 +27,9 @@ export default class MenuController {
 
   /**
    * Renders menu
+   * @param {Boolean} isDataLoaded - true if data is loaded from server
    */
-  render() {
+  render(isDataLoaded = false) {
     const oldMenuComponent = this._menuComponent;
     this._menuComponent = new MenuComponent(generateMenu(this._filmsModel.getFilmsAll(), this._selectedMenuItem));
     this._menuComponent.setSelectMenuItemHandler(this._selectMenuItemHandler);
@@ -37,10 +38,10 @@ export default class MenuController {
       replace(this._menuComponent, oldMenuComponent);
     } else {
       render(this._container, this._menuComponent);
-      this._pageController.render();
       render(this._container, this._statisticsComponent);
       this._statisticsComponent.hide();
     }
+    this._pageController.render(isDataLoaded);
   }
 
   /**
@@ -65,6 +66,6 @@ export default class MenuController {
    * Films model data change handler
    */
   _filmsDataChangeHadler() {
-    this.render();
+    this.render(true);
   }
 }

@@ -6,6 +6,9 @@ import {render, RenderPosition} from "../../utils";
 import FilmController, {FilmAction} from "../film";
 import {FILMS_ON_PAGE} from "../../consts";
 
+const NO_FILMS_MESSAGE = `There are no movies in our database`;
+const LOADING_MESSAGE = `Loading...`;
+
 export default class PageController {
   /**
    * Creates an instance of FilmsController.
@@ -23,11 +26,12 @@ export default class PageController {
     this._mostCommentedFilmControllers = [];
     this._showingFilmsCount = FILMS_ON_PAGE;
 
-    this._filmsComponent = new FilmsComponent();
+    this._filmsComponent = null;
     this._showMoreComponent = new ShowMoreComponent();
     this._sortComponent = new SortComponent();
     this._topRatedFilmsComponent = new TopRatedFilmsComponent();
     this._mostCommentedFilmsComponent = new MostCommentedFilmsComponent();
+    this._noFilmsComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
@@ -40,28 +44,39 @@ export default class PageController {
 
   /**
    * Renders given films
+   * @param {Boolean} isDataLoaded - true if data is loaded from server
    */
-  render() {
+  render(isDataLoaded = true) {
+    if (this._noFilmsComponent) {
+      this._noFilmsComponent.removeElement();
+      this._noFilmsComponent = null;
+    }
 
     const films = this._filmsModel.getFilms();
-
     if (!films.length) {
+      // render sort
+      render(this._container, this._sortComponent);
       // render No-films
-      render(this._container, new NoFilmsComponent());
+      this._noFilmsComponent = new NoFilmsComponent(isDataLoaded ? NO_FILMS_MESSAGE : LOADING_MESSAGE);
+      render(this._container, this._noFilmsComponent);
       return;
     }
 
-    // render sort
-    render(this._container, this._sortComponent);
-    // render films list
-    render(this._container, this._filmsComponent);
-    this._showingFilmControllers = this._showingFilmControllers.concat(
-        this._renderFilms(this._filmsComponent, films.slice(0, this._showingFilmsCount))
-    );
+    if (!this._filmsComponent) {
+      // render sort
+      render(this._container, this._sortComponent);
+      // render films list
+      this._filmsComponent = new FilmsComponent();
+      render(this._container, this._filmsComponent);
+      this._showingFilmControllers = this._renderFilms(
+          this._filmsComponent,
+          films.slice(0, this._showingFilmsCount)
+      );
 
-    this._renderShowMore();
-    this._renderTopRatedFilms();
-    this._renderMostCommentedFilms();
+      this._renderShowMore();
+      this._renderTopRatedFilms();
+      this._renderMostCommentedFilms();
+    }
   }
 
   /**
