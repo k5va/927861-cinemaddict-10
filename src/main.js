@@ -16,7 +16,7 @@ render(headerElement, userProfileComponent);
 // render menu
 const mainElement = document.querySelector(`.main`);
 const menuController = new MenuController(mainElement, filmsModel, api);
-menuController.render();
+menuController.render(false);
 
 // render footer statistics
 const footerElement = document.querySelector(`.footer`);

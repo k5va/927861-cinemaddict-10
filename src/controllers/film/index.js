@@ -3,7 +3,7 @@ import {render, replace} from "../../utils";
 import {NO_USER_RATING} from "../../consts";
 import {Film, Comment} from "../../models";
 
-const FilmMode = {
+export const FilmMode = {
   DEFAULT: `default`,
   DETAILS: `details`,
 };
@@ -139,8 +139,7 @@ export default class FilmController {
       return;
     }
 
-    // fire view change event
-    this._onViewChange();
+    this._onViewChange(FilmMode.DETAILS);
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
     render(null, this._filmDetailsComponent);
@@ -159,6 +158,7 @@ export default class FilmController {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._filmComponent.disableHoverImitation();
     this._mode = FilmMode.DEFAULT;
+    this._onViewChange(FilmMode.DEFAULT);
   }
 
   /**

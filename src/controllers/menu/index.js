@@ -20,16 +20,16 @@ export default class MenuController {
     this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
 
     this._selectMenuItemHandler = this._selectMenuItemHandler.bind(this);
-    this._filmsDataChangeHadler = this._filmsDataChangeHadler.bind(this);
+    this._filmsDataChangeHandler = this._filmsDataChangeHandler.bind(this);
 
-    this._filmsModel.setDataChangeHandler(this._filmsDataChangeHadler);
+    this._filmsModel.setDataChangeHandler(this._filmsDataChangeHandler);
   }
 
   /**
    * Renders menu
    * @param {Boolean} isDataLoaded - true if data is loaded from server
    */
-  render(isDataLoaded = false) {
+  render(isDataLoaded = true) {
     const oldMenuComponent = this._menuComponent;
     this._menuComponent = new MenuComponent(generateMenu(this._filmsModel.getFilmsAll(), this._selectedMenuItem));
     this._menuComponent.setSelectMenuItemHandler(this._selectMenuItemHandler);
@@ -66,7 +66,7 @@ export default class MenuController {
   /**
    * Films model data change handler
    */
-  _filmsDataChangeHadler() {
-    this.render(true);
+  _filmsDataChangeHandler() {
+    this.render();
   }
 }

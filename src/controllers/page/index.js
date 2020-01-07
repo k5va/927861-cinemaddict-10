@@ -1,13 +1,15 @@
 import {
-  FilmsComponent, NoFilmsComponent, ShowMoreComponent,
-  SortComponent, TopRatedFilmsComponent, MostCommentedFilmsComponent}
+  FilmsComponent, ShowMoreComponent, SortComponent,
+  TopRatedFilmsComponent, MostCommentedFilmsComponent}
   from "../../components";
 import {render, RenderPosition} from "../../utils";
-import FilmController, {FilmAction} from "../film";
+import FilmController, {FilmAction, FilmMode} from "../film";
 import {FILMS_ON_PAGE} from "../../consts";
 
-const NO_FILMS_MESSAGE = `There are no movies in our database`;
-const LOADING_MESSAGE = `Loading...`;
+const FilmsListTitle = {
+  NO_FILMS: `There are no movies in our database`,
+  LOADING: `Loading...`
+};
 
 export default class PageController {
   /**
@@ -25,6 +27,7 @@ export default class PageController {
     this._topRatedFilmControllers = [];
     this._mostCommentedFilmControllers = [];
     this._showingFilmsCount = FILMS_ON_PAGE;
+    this._isDetailsOpen = false;
 
     this._filmsComponent = null;
     this._showMoreComponent = new ShowMoreComponent();
@@ -43,37 +46,30 @@ export default class PageController {
   }
 
   /**
-   * Renders given films
+   * Renders films
    * @param {Boolean} isDataLoaded - true if data is loaded from server
    */
   render(isDataLoaded = true) {
-    if (this._noFilmsComponent) {
-      this._noFilmsComponent.removeElement();
-      this._noFilmsComponent = null;
+
+    if (!this._filmsComponent) {
+      render(this._container, this._sortComponent);
+      this._filmsComponent = new FilmsComponent();
+      render(this._container, this._filmsComponent);
     }
 
-    const films = this._filmsModel.getFilms();
-    if (!films.length) {
-      // render sort
-      render(this._container, this._sortComponent);
-      // render No-films
-      this._noFilmsComponent = new NoFilmsComponent(isDataLoaded ? NO_FILMS_MESSAGE : LOADING_MESSAGE);
-      render(this._container, this._noFilmsComponent);
+    if (!isDataLoaded) {
+      this._filmsComponent.setTitle(FilmsListTitle.LOADING);
       return;
     }
 
-    if (!this._filmsComponent) {
-      // render sort
-      render(this._container, this._sortComponent);
-      // render films list
-      this._filmsComponent = new FilmsComponent();
-      render(this._container, this._filmsComponent);
-      this._showingFilmControllers = this._renderFilms(
-          this._filmsComponent,
-          films.slice(0, this._showingFilmsCount)
-      );
+    if (this._filmsModel.getFilms().length > 0 || this._isDetailsOpen) {
+      this._filmsComponent.resetTitle();
+    } else {
+      this._filmsComponent.setTitle(FilmsListTitle.NO_FILMS);
+    }
 
-      this._renderShowMore();
+    if (!this._isDetailsOpen) {
+      this._updateFilmsList();
       this._renderTopRatedFilms();
       this._renderMostCommentedFilms();
     }
@@ -213,19 +209,30 @@ export default class PageController {
   }
 
   /**
-   * Handles film controller's switch to edit mode
+   * Handles film controller's mode change
+   * @param {String} mode - new film mode
    */
-  _onViewChange() {
-    this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
-    this._topRatedFilmControllers.forEach((filmController) => filmController.setDefaultView());
-    this._mostCommentedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+  _onViewChange(mode) {
+    switch (mode) {
+      case FilmMode.DEFAULT:
+      default:
+        this._isDetailsOpen = false;
+        this.render();
+        return;
+      case FilmMode.DETAILS:
+        this._isDetailsOpen = true;
+        this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        this._topRatedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        this._mostCommentedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        return;
+    }
   }
 
   /**
    * Model's filter change handler
    */
   _onFilterChange() {
-    this._updateFilmsList();
+    this.render();
   }
 
   /**
