@@ -51,6 +51,7 @@ export default class MenuController {
   _selectMenuItemHandler(menuItem) {
     switch (menuItem) {
       default:
+        this._selectedMenuItem = menuItem;
         this._filmsModel.setFilter(menuItem);
         this._pageController.show();
         this._statisticsComponent.hide();
