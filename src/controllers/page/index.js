@@ -1,31 +1,40 @@
 import {
-  FilmsComponent, NoFilmsComponent, ShowMoreComponent,
-  SortComponent, TopRatedFilmsComponent, MostCommentedFilmsComponent}
+  FilmsComponent, ShowMoreComponent, SortComponent,
+  TopRatedFilmsComponent, MostCommentedFilmsComponent}
   from "../../components";
 import {render, RenderPosition} from "../../utils";
-import FilmController, {FilmAction} from "../film";
+import FilmController, {FilmAction, FilmMode} from "../film";
 import {FILMS_ON_PAGE} from "../../consts";
+
+const FilmsListTitle = {
+  NO_FILMS: `There are no movies in our database`,
+  LOADING: `Loading...`
+};
 
 export default class PageController {
   /**
    * Creates an instance of FilmsController.
    * @param {HTMLElement} container - parent HTML Element to render data to
    * @param {FilmsModel} filmsModel - films model
+   * @param {API} api - api
    */
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
-
     this._filmsModel = filmsModel;
+    this._api = api;
+
     this._showingFilmControllers = [];
     this._topRatedFilmControllers = [];
     this._mostCommentedFilmControllers = [];
     this._showingFilmsCount = FILMS_ON_PAGE;
+    this._isDetailsOpen = false;
 
-    this._filmsComponent = new FilmsComponent();
+    this._filmsComponent = null;
     this._showMoreComponent = new ShowMoreComponent();
     this._sortComponent = new SortComponent();
     this._topRatedFilmsComponent = new TopRatedFilmsComponent();
     this._mostCommentedFilmsComponent = new MostCommentedFilmsComponent();
+    this._noFilmsComponent = null;
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
@@ -37,29 +46,33 @@ export default class PageController {
   }
 
   /**
-   * Renders given films
+   * Renders films
+   * @param {Boolean} isDataLoaded - true if data is loaded from server
    */
-  render() {
+  render(isDataLoaded = true) {
 
-    const films = this._filmsModel.getFilms();
+    if (!this._filmsComponent) {
+      render(this._container, this._sortComponent);
+      this._filmsComponent = new FilmsComponent();
+      render(this._container, this._filmsComponent);
+    }
 
-    if (!films.length) {
-      // render No-films
-      render(this._container, new NoFilmsComponent());
+    if (!isDataLoaded) {
+      this._filmsComponent.setTitle(FilmsListTitle.LOADING);
       return;
     }
 
-    // render sort
-    render(this._container, this._sortComponent);
-    // render films list
-    render(this._container, this._filmsComponent);
-    this._showingFilmControllers = this._showingFilmControllers.concat(
-        this._renderFilms(this._filmsComponent, films.slice(0, this._showingFilmsCount))
-    );
+    if (this._filmsModel.getFilms().length > 0 || this._isDetailsOpen) {
+      this._filmsComponent.resetTitle();
+    } else {
+      this._filmsComponent.setTitle(FilmsListTitle.NO_FILMS);
+    }
 
-    this._renderShowMore();
-    this._renderTopRatedFilms();
-    this._renderMostCommentedFilms();
+    if (!this._isDetailsOpen) {
+      this._updateFilmsList();
+      this._renderTopRatedFilms();
+      this._renderMostCommentedFilms();
+    }
   }
 
   /**
@@ -160,20 +173,25 @@ export default class PageController {
   /**
    * Film change handler
    */
-  _onDataChange({action, id, payload, controller}) {
+  _onDataChange({action, controller, id, payload}) {
     switch (action) {
       case FilmAction.ADD_COMMENT:
-        controller.render(this._filmsModel.addFilmComment(id, payload));
-        this._renderTopRatedFilms();
-        this._renderMostCommentedFilms();
+        this._api
+          .createComment(id, payload)
+          .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
+          .catch(() => controller.shake());
         return;
       case FilmAction.DELETE_COMMENT:
-        controller.render(this._filmsModel.deleteFilmComment(id, payload));
-        this._renderTopRatedFilms();
-        this._renderMostCommentedFilms();
+        this._api
+          .deleteComment(payload)
+          .then((commentId) => this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, commentId)))
+          .catch(() => controller.shake());
         return;
       case FilmAction.UPDATE_FILM:
-        controller.render(this._filmsModel.updateFilm(id, payload));
+        this._api
+          .updateFilm(payload)
+          .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
+          .catch(() => controller.shake());
         return;
       default:
         throw new Error(`Unsupported film action`);
@@ -181,19 +199,40 @@ export default class PageController {
   }
 
   /**
-   * Handles film controller's switch to edit mode
+   * Finds all film controllers that corresponds to fiven film and calls render on them
+   * @param {Object} film - film object
    */
-  _onViewChange() {
-    this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
-    this._topRatedFilmControllers.forEach((filmController) => filmController.setDefaultView());
-    this._mostCommentedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+  _renderFilmControllers(film) {
+    [...this._showingFilmControllers, ...this._topRatedFilmControllers, ...this._mostCommentedFilmControllers]
+      .filter((controller) => controller.getFilm().id === film.id)
+      .forEach((controller) => controller.render(film));
+  }
+
+  /**
+   * Handles film controller's mode change
+   * @param {String} mode - new film mode
+   */
+  _onViewChange(mode) {
+    switch (mode) {
+      case FilmMode.DEFAULT:
+      default:
+        this._isDetailsOpen = false;
+        this.render();
+        return;
+      case FilmMode.DETAILS:
+        this._isDetailsOpen = true;
+        this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        this._topRatedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        this._mostCommentedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        return;
+    }
   }
 
   /**
    * Model's filter change handler
    */
   _onFilterChange() {
-    this._updateFilmsList();
+    this.render();
   }
 
   /**

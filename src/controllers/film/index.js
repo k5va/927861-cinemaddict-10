@@ -1,8 +1,9 @@
 import {FilmComponent, FilmDetailsComponent} from "../../components";
 import {render, replace} from "../../utils";
 import {NO_USER_RATING} from "../../consts";
+import {Film, Comment} from "../../models";
 
-const FilmMode = {
+export const FilmMode = {
   DEFAULT: `default`,
   DETAILS: `details`,
 };
@@ -57,13 +58,19 @@ export default class FilmController {
     if (oldFilmComponent && oldFilmDetailsComponent) {
       this._filmComponent.enableHoverImitation();
       replace(this._filmComponent, oldFilmComponent);
-      this._filmComponent.disableHoverImitation();
+      if (this._mode === FilmMode.DEFAULT) {
+        this._filmComponent.disableHoverImitation();
+      }
 
       replace(this._filmDetailsComponent, oldFilmDetailsComponent);
     } else {
       // render film component
       render(this._container.getListContainer(), this._filmComponent);
     }
+  }
+
+  getFilm() {
+    return this._film;
   }
 
   /**
@@ -132,11 +139,11 @@ export default class FilmController {
       return;
     }
 
-    // fire view change event
-    this._onViewChange();
+    this._onViewChange(FilmMode.DETAILS);
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
     render(null, this._filmDetailsComponent);
+    this._filmComponent.enableHoverImitation();
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
@@ -149,7 +156,9 @@ export default class FilmController {
   _closeFilmDetails() {
     this._filmDetailsComponent.removeElement();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+    this._filmComponent.disableHoverImitation();
     this._mode = FilmMode.DEFAULT;
+    this._onViewChange(FilmMode.DEFAULT);
   }
 
   /**
@@ -165,7 +174,8 @@ export default class FilmController {
    * Add film to watchlist handler
    */
   _addToWatchListHandler() {
-    const newFilm = Object.assign({}, this._film, {isWatchlistAdded: !this._film.isWatchlistAdded});
+    const newFilm = Film.clone(this._film);
+    newFilm.isWatchlistAdded = !newFilm.isWatchlistAdded;
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
@@ -173,7 +183,8 @@ export default class FilmController {
    * Add film to watched handler
    */
   _addToWatchedHandler() {
-    const newFilm = Object.assign({}, this._film, {isWatched: !this._film.isWatched});
+    const newFilm = Film.clone(this._film);
+    newFilm.isWatched = !newFilm.isWatched;
 
     // reset user rating if film removed from watched list
     newFilm.userRating = !newFilm.isWatched ? NO_USER_RATING : newFilm.userRating;
@@ -186,7 +197,9 @@ export default class FilmController {
   * Add film to favorites handler
   */
   _addToFavoritesHandler() {
-    const newFilm = Object.assign({}, this._film, {isFavorite: !this._film.isFavorite});
+    const newFilm = Film.clone(this._film);
+    newFilm.isFavorite = !newFilm.isFavorite;
+
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
@@ -195,15 +208,18 @@ export default class FilmController {
   * @param {Number} userRating - new user rating
   */
   _userRatingChangeHandler(userRating) {
-    const newFilm = Object.assign({}, this._film, {userRating: +userRating});
+    const newFilm = Film.clone(this._film);
+    newFilm.userRating = +userRating;
+
     this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
    * Add new comment handler
-   * @param {Object} comment - comment
+   * @param {Object} data - comment data
    */
-  _addCommentHandler(comment) {
+  _addCommentHandler(data) {
+    const comment = new Comment({comment: data.text, date: data.date, emotion: data.emoji});
     this._onDataChange({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
   }
 
@@ -213,5 +229,16 @@ export default class FilmController {
    */
   _deleteCommentHandler(commentId) {
     this._onDataChange({action: FilmAction.DELETE_COMMENT, controller: this, id: this._film.id, payload: commentId});
+  }
+
+  /**
+   * Shakes film card
+   */
+  shake() {
+    if (this._mode === FilmMode.DETAILS) {
+      this._filmDetailsComponent.shake();
+    } else {
+      this._filmComponent.shake();
+    }
   }
 }

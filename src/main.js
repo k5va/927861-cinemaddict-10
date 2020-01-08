@@ -1,22 +1,40 @@
 import {UserProfileComponent, FooterStaticticsComponent} from "./components";
-import {generateFilms} from "./mock/film";
-import {render} from "./utils";
+import {render, replace} from "./utils";
 import {MenuController} from "./controllers";
 import {FilmsModel} from "./models";
+import {END_POINT, AUTHORIZATION} from "./consts";
+import API from "./api";
 
-const FILMS_COUNT = 14;
 const filmsModel = new FilmsModel();
-filmsModel.setFilms(generateFilms(FILMS_COUNT));
+const api = new API(END_POINT, AUTHORIZATION);
 
 // render user profile
 const headerElement = document.querySelector(`.header`);
-render(headerElement, new UserProfileComponent(filmsModel.getFilmsAll()));
+let userProfileComponent = new UserProfileComponent(filmsModel.getFilmsAll());
+render(headerElement, userProfileComponent);
 
 // render menu
 const mainElement = document.querySelector(`.main`);
-const menuController = new MenuController(mainElement, filmsModel);
-menuController.render();
+const menuController = new MenuController(mainElement, filmsModel, api);
+menuController.render(false);
 
 // render footer statistics
 const footerElement = document.querySelector(`.footer`);
-render(footerElement, new FooterStaticticsComponent(filmsModel.getFilmsAll().length));
+let footerStatisticsComponent = new FooterStaticticsComponent(filmsModel.getFilmsAll().length);
+render(footerElement, footerStatisticsComponent);
+
+filmsModel.setDataChangeHandler(() => {
+  const oldUserProfileComponent = userProfileComponent;
+  userProfileComponent = new UserProfileComponent(filmsModel.getFilmsAll());
+  replace(userProfileComponent, oldUserProfileComponent);
+
+  const oldFooterStatisticsComponent = footerStatisticsComponent;
+  footerStatisticsComponent = new FooterStaticticsComponent(filmsModel.getFilmsAll().length);
+  replace(footerStatisticsComponent, oldFooterStatisticsComponent);
+});
+
+api
+  .getFilms()
+  .then((films) => {
+    filmsModel.setFilms(films);
+  });

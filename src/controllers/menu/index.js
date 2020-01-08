@@ -9,25 +9,27 @@ export default class MenuController {
    * Creates menu controller instance
    * @param {HTMLElement} container - parent container element
    * @param {FilmsModel} filmsModel - films model
+   * @param {API} api - api
    */
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, api) {
     this._container = container;
     this._filmsModel = filmsModel;
     this._menuComponent = null;
     this._selectedMenuItem = MenuItem.ALL;
-    this._pageController = null;
-    this._statisticsComponent = null;
+    this._pageController = new PageController(this._container, this._filmsModel, api);
+    this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
 
     this._selectMenuItemHandler = this._selectMenuItemHandler.bind(this);
-    this._filmsDataChangeHadler = this._filmsDataChangeHadler.bind(this);
+    this._filmsDataChangeHandler = this._filmsDataChangeHandler.bind(this);
 
-    this._filmsModel.setDataChangeHandler(this._filmsDataChangeHadler);
+    this._filmsModel.setDataChangeHandler(this._filmsDataChangeHandler);
   }
 
   /**
    * Renders menu
+   * @param {Boolean} isDataLoaded - true if data is loaded from server
    */
-  render() {
+  render(isDataLoaded = true) {
     const oldMenuComponent = this._menuComponent;
     this._menuComponent = new MenuComponent(generateMenu(this._filmsModel.getFilmsAll(), this._selectedMenuItem));
     this._menuComponent.setSelectMenuItemHandler(this._selectMenuItemHandler);
@@ -36,14 +38,10 @@ export default class MenuController {
       replace(this._menuComponent, oldMenuComponent);
     } else {
       render(this._container, this._menuComponent);
+      render(this._container, this._statisticsComponent);
+      this._statisticsComponent.hide();
     }
-
-    this._pageController = new PageController(this._container, this._filmsModel);
-    this._pageController.render();
-
-    this._statisticsComponent = new StatisticsComponent(this._filmsModel.getFilmsAll());
-    render(this._container, this._statisticsComponent);
-    this._statisticsComponent.hide();
+    this._pageController.render(isDataLoaded);
   }
 
   /**
@@ -53,6 +51,7 @@ export default class MenuController {
   _selectMenuItemHandler(menuItem) {
     switch (menuItem) {
       default:
+        this._selectedMenuItem = menuItem;
         this._filmsModel.setFilter(menuItem);
         this._pageController.show();
         this._statisticsComponent.hide();
@@ -67,7 +66,7 @@ export default class MenuController {
   /**
    * Films model data change handler
    */
-  _filmsDataChangeHadler() {
+  _filmsDataChangeHandler() {
     this.render();
   }
 }

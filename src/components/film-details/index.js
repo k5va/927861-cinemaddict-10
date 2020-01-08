@@ -44,8 +44,11 @@ export default class FilmDetails extends AbstractSmartComponent {
   _recoverAddtoWatchListHandler() {
     this
       .getElement()
-      .querySelector(`.film-details__control-input--watchlist`)
-      .addEventListener(`change`, this._addToWatchListHandler);
+      .querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._addToWatchListHandler();
+      });
   }
 
   /**
@@ -60,8 +63,11 @@ export default class FilmDetails extends AbstractSmartComponent {
   _recoverAddToWatchedHandler() {
     this
       .getElement()
-      .querySelector(`.film-details__control-input--watched`)
-      .addEventListener(`change`, this._addToWatchedHandler);
+      .querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._addToWatchedHandler();
+      });
   }
 
   /**
@@ -76,8 +82,11 @@ export default class FilmDetails extends AbstractSmartComponent {
   _recoverAddToFavoritesHandler() {
     this
       .getElement()
-      .querySelector(`.film-details__control-input--favorite`)
-      .addEventListener(`change`, this._addToFavoritesHandler);
+      .querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        this._addToFavoritesHandler();
+      });
   }
 
   /**
@@ -102,22 +111,22 @@ export default class FilmDetails extends AbstractSmartComponent {
    */
   setUserRatingChangeHandler(handler) {
     this._userRatingChangeHandler = handler;
-    this._recoverUserRatingChangeHadler();
+    this._recoverUserRatingChangeHandler();
   }
 
-  _recoverUserRatingChangeHadler() {
+  _recoverUserRatingChangeHandler() {
     if (this._film.isWatched) {
       // user rating change
       this
         .getElement()
         .querySelector(`.film-details__user-rating-score`)
-        .addEventListener(`change`, (evt) => {
+        .addEventListener(`click`, (evt) => {
           evt.preventDefault();
-          if (!evt.target.classList.contains(`film-details__user-rating-input`)) {
+          if (!evt.target.classList.contains(`film-details__user-rating-label`)) {
             return;
           }
-
-          this._userRatingChangeHandler(evt.target.value);
+          const userRating = this.getElement().querySelector(`#${evt.target.htmlFor}`).value;
+          this._userRatingChangeHandler(userRating);
         });
       // user rating reset
       this
@@ -154,9 +163,6 @@ export default class FilmDetails extends AbstractSmartComponent {
             date: new Date(),
             emoji: this._commentEmoji
           });
-
-          this._commentEmoji = null;
-          this.rerender();
         }
       });
   }
@@ -192,7 +198,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._recoverAddToWatchedHandler();
     this._recoverAddtoWatchListHandler();
     this._recoverCloseHandler();
-    this._recoverUserRatingChangeHadler();
+    this._recoverUserRatingChangeHandler();
     this._recoverAddCommentHandler();
     this._recoverDeleteCommentHandler();
   }

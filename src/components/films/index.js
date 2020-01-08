@@ -1,5 +1,8 @@
 import AbstractComponent from "../component";
 import {template} from "./template";
+import {HIDDEN_CLASS} from "../../consts";
+
+const DEFAULT_TITLE = `All movies. Upcoming`;
 
 export default class Films extends AbstractComponent {
 
@@ -24,5 +27,18 @@ export default class Films extends AbstractComponent {
    */
   resetList() {
     this.getListContainer().innerHTML = ``;
+  }
+
+  setTitle(title) {
+    const titleElement = this.getElement().querySelector(`.films-list__title`);
+    titleElement.innerText = title;
+    titleElement.classList.remove(HIDDEN_CLASS);
+  }
+
+  resetTitle() {
+    const titleElement = this.getElement().querySelector(`.films-list__title`);
+    titleElement.innerText = DEFAULT_TITLE;
+    titleElement.classList.add(HIDDEN_CLASS);
+
   }
 }
