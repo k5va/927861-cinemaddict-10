@@ -139,7 +139,6 @@ export default class FilmController {
       return;
     }
 
-    this._onViewChange(FilmMode.DETAILS);
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
     render(null, this._filmDetailsComponent);
@@ -147,18 +146,22 @@ export default class FilmController {
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
+    this._onViewChange(this);
   }
 
 
   /**
   * Closes film details info
+  * @param {Boolean} shouldFireViewChange - true if _onViewChange must be called after closing film details
   */
-  _closeFilmDetails() {
+  _closeFilmDetails(shouldFireViewChange = true) {
     this._filmDetailsComponent.removeElement();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._filmComponent.disableHoverImitation();
     this._mode = FilmMode.DEFAULT;
-    this._onViewChange(FilmMode.DEFAULT);
+    if (shouldFireViewChange) {
+      this._onViewChange(this);
+    }
   }
 
   /**
@@ -166,7 +169,7 @@ export default class FilmController {
    */
   setDefaultView() {
     if (this._mode !== FilmMode.DEFAULT) {
-      this._closeFilmDetails();
+      this._closeFilmDetails(false);
     }
   }
 
@@ -240,5 +243,9 @@ export default class FilmController {
     } else {
       this._filmComponent.shake();
     }
+  }
+
+  getMode() {
+    return this._mode;
   }
 }
