@@ -8,5 +8,4 @@ export {default as MenuComponent} from "./menu";
 export {default as ShowMoreComponent} from "./show-more";
 export {default as SortComponent} from "./sort";
 export {default as UserProfileComponent} from "./user-profile";
-export {default as NoFilmsComponent} from "./no-films";
 export {default as StatisticsComponent} from "./statistics";
