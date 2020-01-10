@@ -254,6 +254,9 @@ export default class FilmController {
             case FilmAction.CHANGE_RATING:
               this._filmDetailsComponent.onChangeRatingError();
               return;
+            case FilmAction.DELETE_COMMENT:
+              this._filmDetailsComponent.onDeleteCommentError();
+              return;
           }
         });
     } else {
