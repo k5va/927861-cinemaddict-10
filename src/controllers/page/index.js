@@ -27,7 +27,7 @@ export default class PageController {
     this._topRatedFilmControllers = [];
     this._mostCommentedFilmControllers = [];
     this._showingFilmsCount = FILMS_ON_PAGE;
-    this._isDetailsOpen = false;
+    this._openedFilmController = null;
 
     this._filmsComponent = null;
     this._showMoreComponent = new ShowMoreComponent();
@@ -62,13 +62,13 @@ export default class PageController {
       return;
     }
 
-    if (this._filmsModel.getFilms().length > 0 || this._isDetailsOpen) {
+    if (this._filmsModel.getFilms().length > 0 || this._openedFilmController) {
       this._filmsComponent.resetTitle();
     } else {
       this._filmsComponent.setTitle(FilmsListTitle.NO_FILMS);
     }
 
-    if (!this._isDetailsOpen) {
+    if (!this._openedFilmController) {
       this._updateFilmsList();
       this._renderTopRatedFilms();
       this._renderMostCommentedFilms();
@@ -145,7 +145,6 @@ export default class PageController {
     );
   }
 
-
   /**
    * Renders films
    * @param {Component} container - parent component with list
@@ -179,19 +178,20 @@ export default class PageController {
         this._api
           .createComment(id, payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch(() => controller.shake());
+          .catch(() => controller.onError(action));
         return;
       case FilmAction.DELETE_COMMENT:
         this._api
           .deleteComment(payload)
           .then((commentId) => this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, commentId)))
-          .catch(() => controller.shake());
+          .catch(() => controller.onError(action));
         return;
       case FilmAction.UPDATE_FILM:
+      case FilmAction.CHANGE_RATING:
         this._api
           .updateFilm(payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch(() => controller.shake());
+          .catch(() => controller.onError(action));
         return;
       default:
         throw new Error(`Unsupported film action`);
@@ -210,20 +210,20 @@ export default class PageController {
 
   /**
    * Handles film controller's mode change
-   * @param {String} mode - new film mode
+   * @param {FilmController} controller - film controller
    */
-  _onViewChange(mode) {
-    switch (mode) {
+  _onViewChange(controller) {
+    switch (controller.getMode()) {
       case FilmMode.DEFAULT:
       default:
-        this._isDetailsOpen = false;
+        this._openedFilmController = null;
         this.render();
         return;
       case FilmMode.DETAILS:
-        this._isDetailsOpen = true;
-        this._showingFilmControllers.forEach((filmController) => filmController.setDefaultView());
-        this._topRatedFilmControllers.forEach((filmController) => filmController.setDefaultView());
-        this._mostCommentedFilmControllers.forEach((filmController) => filmController.setDefaultView());
+        if (this._openedFilmController) {
+          this._openedFilmController.setDefaultView();
+        }
+        this._openedFilmController = controller;
         return;
     }
   }

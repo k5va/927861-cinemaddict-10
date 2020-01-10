@@ -11,7 +11,8 @@ export const FilmMode = {
 export const FilmAction = {
   UPDATE_FILM: `update_film`,
   ADD_COMMENT: `add_comment`,
-  DELETE_COMMENT: `delete_comment`
+  DELETE_COMMENT: `delete_comment`,
+  CHANGE_RATING: `change_rating`
 };
 
 export default class FilmController {
@@ -139,7 +140,6 @@ export default class FilmController {
       return;
     }
 
-    this._onViewChange(FilmMode.DETAILS);
     // create new film details component and render it
     this._filmDetailsComponent = this._createFilmDetailsComponent(this._film);
     render(null, this._filmDetailsComponent);
@@ -147,18 +147,22 @@ export default class FilmController {
 
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._mode = FilmMode.DETAILS;
+    this._onViewChange(this);
   }
 
 
   /**
   * Closes film details info
+  * @param {Boolean} shouldFireViewChange - true if _onViewChange must be called after closing film details
   */
-  _closeFilmDetails() {
+  _closeFilmDetails(shouldFireViewChange = true) {
     this._filmDetailsComponent.removeElement();
     document.removeEventListener(`keydown`, this._onEscKeyDown);
     this._filmComponent.disableHoverImitation();
     this._mode = FilmMode.DEFAULT;
-    this._onViewChange(FilmMode.DEFAULT);
+    if (shouldFireViewChange) {
+      this._onViewChange(this);
+    }
   }
 
   /**
@@ -166,7 +170,7 @@ export default class FilmController {
    */
   setDefaultView() {
     if (this._mode !== FilmMode.DEFAULT) {
-      this._closeFilmDetails();
+      this._closeFilmDetails(false);
     }
   }
 
@@ -208,10 +212,11 @@ export default class FilmController {
   * @param {Number} userRating - new user rating
   */
   _userRatingChangeHandler(userRating) {
+    this._filmDetailsComponent.lock();
     const newFilm = Film.clone(this._film);
     newFilm.userRating = +userRating;
 
-    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
+    this._onDataChange({action: FilmAction.CHANGE_RATING, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -219,6 +224,7 @@ export default class FilmController {
    * @param {Object} data - comment data
    */
   _addCommentHandler(data) {
+    this._filmDetailsComponent.lock();
     const comment = new Comment({comment: data.text, date: data.date, emotion: data.emoji});
     this._onDataChange({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
   }
@@ -232,13 +238,33 @@ export default class FilmController {
   }
 
   /**
-   * Shakes film card
+   * Performes on error manipuldations with film card
+   * @param {String} action - action that caused error
    */
-  shake() {
+  onError(action) {
     if (this._mode === FilmMode.DETAILS) {
-      this._filmDetailsComponent.shake();
+      this._filmDetailsComponent
+        .shake()
+        .then(() => this._filmDetailsComponent.unlock())
+        .then(() => {
+          switch (action) {
+            case FilmAction.ADD_COMMENT:
+              this._filmDetailsComponent.onAddCommentError();
+              return;
+            case FilmAction.CHANGE_RATING:
+              this._filmDetailsComponent.onChangeRatingError();
+              return;
+            case FilmAction.DELETE_COMMENT:
+              this._filmDetailsComponent.onDeleteCommentError();
+              return;
+          }
+        });
     } else {
       this._filmComponent.shake();
     }
+  }
+
+  getMode() {
+    return this._mode;
   }
 }

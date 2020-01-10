@@ -18,9 +18,10 @@ const template = (film, options) => {
 
   const commentEmojiImage = options.commentEmoji ? CommentEmojiImages[options.commentEmoji] : null;
   const commentText = options.commentText ? options.commentText : ``;
+  const deleteCommentText = options.deleteCommentText;
 
   const genreMarkup = generateGenreMarkup(genres);
-  const commentsMarkup = generateCommentsMarkup(comments);
+  const commentsMarkup = generateCommentsMarkup(comments, deleteCommentText);
   const userRatingMarkup = isWatched ? generateUserRatingMarkup(userRating) : ``;
 
   return `<section class="film-details">

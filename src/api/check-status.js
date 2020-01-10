@@ -1,9 +1,12 @@
+const ResponseCodes = {
+  SUCCESS: 200
+};
+
 const checkStatus = (response) => {
-  if (response.status >= 200 && response.status < 300) {
+  if (response.status === ResponseCodes.SUCCESS) {
     return response;
-  } else {
-    throw new Error(`${response.status}: ${response.statusText}`);
   }
+  throw new Error(`${response.status}: ${response.statusText}`);
 };
 
 export {checkStatus};
