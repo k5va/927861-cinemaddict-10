@@ -178,19 +178,20 @@ export default class PageController {
         this._api
           .createComment(id, payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch(() => controller.shake());
+          .catch(() => controller.onError(action));
         return;
       case FilmAction.DELETE_COMMENT:
         this._api
           .deleteComment(payload)
           .then((commentId) => this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, commentId)))
-          .catch(() => controller.shake());
+          .catch(() => controller.onError(action));
         return;
       case FilmAction.UPDATE_FILM:
+      case FilmAction.CHANGE_RATING:
         this._api
           .updateFilm(payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch(() => controller.shake());
+          .catch(() => controller.onError(action));
         return;
       default:
         throw new Error(`Unsupported film action`);

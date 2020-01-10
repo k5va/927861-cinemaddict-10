@@ -11,7 +11,8 @@ export const FilmMode = {
 export const FilmAction = {
   UPDATE_FILM: `update_film`,
   ADD_COMMENT: `add_comment`,
-  DELETE_COMMENT: `delete_comment`
+  DELETE_COMMENT: `delete_comment`,
+  CHANGE_RATING: `change_rating`
 };
 
 export default class FilmController {
@@ -211,10 +212,11 @@ export default class FilmController {
   * @param {Number} userRating - new user rating
   */
   _userRatingChangeHandler(userRating) {
+    this._filmDetailsComponent.lock();
     const newFilm = Film.clone(this._film);
     newFilm.userRating = +userRating;
 
-    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
+    this._onDataChange({action: FilmAction.CHANGE_RATING, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -222,6 +224,7 @@ export default class FilmController {
    * @param {Object} data - comment data
    */
   _addCommentHandler(data) {
+    this._filmDetailsComponent.lock();
     const comment = new Comment({comment: data.text, date: data.date, emotion: data.emoji});
     this._onDataChange({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
   }
@@ -235,11 +238,24 @@ export default class FilmController {
   }
 
   /**
-   * Shakes film card
+   * Performes on error manipuldations with film card
+   * @param {String} action - action that caused error
    */
-  shake() {
+  onError(action) {
     if (this._mode === FilmMode.DETAILS) {
-      this._filmDetailsComponent.shake();
+      this._filmDetailsComponent
+        .shake()
+        .then(() => this._filmDetailsComponent.unlock())
+        .then(() => {
+          switch (action) {
+            case FilmAction.ADD_COMMENT:
+              this._filmDetailsComponent.onAddCommentError();
+              return;
+            case FilmAction.CHANGE_RATING:
+              this._filmDetailsComponent.onChangeRatingError();
+              return;
+          }
+        });
     } else {
       this._filmComponent.shake();
     }
