@@ -91,16 +91,19 @@ export default class Provider {
       return this._api.deleteComment(id)
         .then(() => {
           // delete comment from storage
+          const updatedFilm = this._findFilmByCommentId(id);
+          const comments = updatedFilm.comments;
+          const index = comments.findIndex((comment) => comment.id === id);
+          updatedFilm.comments = [...comments.slice(0, index), ...comments.slice(index + 1)];
+          this._store.setItem(updatedFilm.id, updatedFilm);
+
           return id;
         });
     }
 
     // if offline
     this._isSynchronized = false;
-    const updatedFilm = Object
-      .values(this._store.getAll())
-      .find(({comments}) => comments.some((comment) => comment.id === id));
-
+    const updatedFilm = this._findFilmByCommentId(id);
     const comments = updatedFilm.comments;
     const index = comments.findIndex((comment) => comment.id === id);
     updatedFilm.deletedComments = updatedFilm.deletedComments || [];
@@ -108,10 +111,15 @@ export default class Provider {
       updatedFilm.deletedComments.push(comments[index]);
     }
     updatedFilm.comments = [...comments.slice(0, index), ...comments.slice(index + 1)];
-
     this._store.setItem(updatedFilm.id, Object.assign({}, updatedFilm, {offline: true}));
 
     return Promise.resolve(id);
+  }
+
+  _findFilmByCommentId(commentId) {
+    return Object
+      .values(this._store.getAll())
+      .find(({comments}) => comments.some((comment) => comment.id === commentId));
   }
 
   /**
@@ -126,7 +134,7 @@ export default class Provider {
         .then(() => this._syncFilms(storeFilms))
         .then(() => {
           this._isSynchronized = true;
-          return Promise.resolve();
+          return this.getFilms();
         });
     }
 
