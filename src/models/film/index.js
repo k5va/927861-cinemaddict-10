@@ -24,7 +24,7 @@ export default class Film {
     this.director = data[`film_info`][`director`] || ``;
     this.writers = data[`film_info`][`writers`] || [];
     this.actors = data[`film_info`][`actors`] || [];
-    this.comments = [];
+    this.comments = data[`comments`] ? data[`comments`].map((item) => Comment.parseComment(item)) : [];
   }
 
   /**
