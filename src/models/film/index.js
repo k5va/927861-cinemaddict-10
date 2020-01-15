@@ -24,17 +24,18 @@ export default class Film {
     this.director = data[`film_info`][`director`] || ``;
     this.writers = data[`film_info`][`writers`] || [];
     this.actors = data[`film_info`][`actors`] || [];
-    this.comments = [];
+    this.comments = data[`comments`] ? data[`comments`].map((item) => Comment.parseComment(item)) : [];
   }
 
   /**
    * Converts film object to raw data that conforms to server format
+   * @param {Boolean} isFullComments - true if need to convert full comments objects, false if only comment id
    * @return {Object} - raw object
    */
-  toRAW() {
+  toRAW(isFullComments = true) {
     return {
       'id': this.id,
-      'comments': this.comments.map((comment) => comment.toRAW()),
+      'comments': this.comments.map((comment) => isFullComments ? comment.toRAW() : comment.id),
       'film_info': {
         'title': this.title,
         'alternative_title': this.originalTitle,
