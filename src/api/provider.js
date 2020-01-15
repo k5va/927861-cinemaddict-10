@@ -1,4 +1,7 @@
-import {Film} from "../models";
+import nanoid from "nanoid";
+import {Film, Comment} from "../models";
+
+const DEFAULT_COMMENT_AUTHOR = `John Doe`;
 
 export default class Provider {
   constructor(api, store) {
@@ -35,20 +38,80 @@ export default class Provider {
   */
   updateFilm(film) {
     if (this._isOnLine()) {
-      return this._api.updateFilm(film).then(
-          (updatedFilm) => {
-            this._store.setItem(updatedFilm.id, updatedFilm.toRAW());
-            return updatedFilm;
-          }
-      );
+      return this._api.updateFilm(film)
+        .then((updatedFilm) => {
+          this._store.setItem(updatedFilm.id, updatedFilm.toRAW());
+          return updatedFilm;
+        });
     }
-
     // if offline
     this._isSynchronized = false;
     const updatedFilm = Film.clone(film);
     this._store.setItem(film.id, Object.assign({}, updatedFilm.toRAW(), {offline: true}));
 
     return Promise.resolve(updatedFilm);
+  }
+
+  /**
+   * Creates new comment
+   * @param {String} filmId - film id
+   * @param {Comment} comment - comment
+   * @return {Promise<Film>} - promise that resolves to updated film
+   */
+  createComment(filmId, comment) {
+    if (this._isOnLine()) {
+      return this._api.createComment(filmId, comment)
+        .then((updatedFilm) => {
+          this._store.setItem(updatedFilm.id, updatedFilm.toRAW());
+          return updatedFilm;
+        });
+    }
+
+    // if offline
+    this._isSynchronized = false;
+    const updatedFilm = this._store.getItem(filmId);
+
+    const newComment = Object.assign(
+        {}, comment.toRAW(), {id: nanoid(), filmId, author: DEFAULT_COMMENT_AUTHOR}, {offline: true}
+    );
+
+    updatedFilm.comments.push(newComment);
+    this._store.setItem(filmId, Object.assign({}, updatedFilm, {offline: true}));
+
+    return Promise.resolve(Film.parseFilmWithComments({movie: updatedFilm, comments: updatedFilm.comments}));
+  }
+
+  /**
+   * Deletes comment on server
+   * @param {String} id - comment id
+   * @return {Promise<String>} - promise that resoves to deleted comment id
+   */
+  deleteComment(id) {
+    if (this._isOnLine()) {
+      return this._api.deleteComment(id)
+        .then(() => {
+          // delete comment from storage
+          return id;
+        });
+    }
+
+    // if offline
+    this._isSynchronized = false;
+    const updatedFilm = Object
+      .values(this._store.getAll())
+      .find(({comments}) => comments.some((comment) => comment.id === id));
+
+    const comments = updatedFilm.comments;
+    const index = comments.findIndex((comment) => comment.id === id);
+    updatedFilm.deletedComments = updatedFilm.deletedComments || [];
+    if (!comments[index].offline) {
+      updatedFilm.deletedComments.push(comments[index]);
+    }
+    updatedFilm.comments = [...comments.slice(0, index), ...comments.slice(index + 1)];
+
+    this._store.setItem(updatedFilm.id, Object.assign({}, updatedFilm, {offline: true}));
+
+    return Promise.resolve(id);
   }
 
   /**
@@ -59,25 +122,39 @@ export default class Provider {
     if (this._isOnLine()) {
       const storeFilms = Object.values(this._store.getAll());
 
-      return this._api.sync(storeFilms)
-        .then((response) => {
-          storeFilms.filter((film) => film.offline).forEach((film) => {
-            this._store.removeItem(film.id);
-          });
-
-          const updatedFilms = response.updated;
-
-          updatedFilms.forEach((film) => {
-            this._store.setItem(film.id, film);
-          });
-
+      return this._syncComments(storeFilms)
+        .then(() => this._syncFilms(storeFilms))
+        .then(() => {
           this._isSynchronized = true;
-
           return Promise.resolve();
         });
     }
 
     return Promise.reject(new Error(`Sync data failed`));
+  }
+
+  _syncComments(storeFilms) {
+    return this._createOfflineComments(storeFilms).then(() => this._deleteOfflineComments(storeFilms));
+  }
+
+  _createOfflineComments(storeFilms) {
+    return Promise.all(storeFilms
+      .reduce((acc, film) => [...acc, ...film.comments], []) // get all comments
+      .filter((comment) => comment.offline) // filter comments created offline
+      .map((newComment) => this._api.createComment(newComment.filmId, Comment.parseComment(newComment))));
+  }
+
+  _deleteOfflineComments(storeFilms) {
+    return Promise.all(storeFilms
+      .filter((film) => film.deletedComments)
+      .reduce((acc, film) => [...acc, ...film.deletedComments], [])
+      .map((deletedComment) => this._api.deleteComment(deletedComment.id)));
+  }
+
+  _syncFilms(storeFilms) {
+    return this._api.sync(storeFilms)
+      .then(() => this._api.getFilms())
+      .then((films) => films.forEach((film) => this._store.setItem(film.id, film.toRAW())));
   }
 
   isSynchronized() {
