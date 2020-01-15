@@ -41,14 +41,14 @@ filmsModel.setDataChangeHandler(() => {
 
 apiWithProvider
   .getFilms()
-  .then((films) => {
-    filmsModel.setFilms(films);
-  });
+  .then((films) => filmsModel.setFilms(films));
 
 window.addEventListener(`online`, () => {
   document.title = document.title.replace(` [offline]`, ``);
   if (!apiWithProvider.isSynchronized()) {
-    apiWithProvider.sync();
+    apiWithProvider
+      .sync()
+      .then((films) => filmsModel.setFilms(films));
   }
 });
 
