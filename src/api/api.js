@@ -47,7 +47,7 @@ export default class API {
     return this._send({
       url: `movies/${film.id}`,
       method: Method.PUT,
-      body: JSON.stringify(film.toRAW()),
+      body: JSON.stringify(film.toRAW(false)),
       headers: new Headers({'Content-Type': `application/json`})
     })
       .then((response) => response.json())
