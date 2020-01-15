@@ -18,6 +18,16 @@ export default class Store {
   }
 
   /**
+   * Returns item from storage by id
+   * @param {String} id - item's id
+   * @return {Object} - item
+   */
+  getItem(id) {
+    const store = this.getAll();
+    return store[id];
+  }
+
+  /**
    * Saves item in local storage
    * @param {String} key - item's key
    * @param {Object} value - item
