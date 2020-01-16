@@ -1,5 +1,6 @@
 import AbstractComponent from "../component";
 import {template} from "./template";
+import {debounce} from "../../utils";
 
 export default class Film extends AbstractComponent {
   constructor(film) {
@@ -21,12 +22,13 @@ export default class Film extends AbstractComponent {
    * @param {Function} handler - handler
    */
   setAddToWatchlistHandler(handler) {
+    const addToWatchlistHandler = debounce(handler);
     this
       .getElement()
       .querySelector(`.film-card__controls-item--add-to-watchlist`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        handler();
+        addToWatchlistHandler();
       });
   }
 
@@ -35,12 +37,13 @@ export default class Film extends AbstractComponent {
    * @param {Function} handler - handler
    */
   setAddToWatchedHandler(handler) {
+    const addToWatchedHandler = debounce(handler);
     this
       .getElement()
       .querySelector(`.film-card__controls-item--mark-as-watched`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        handler();
+        addToWatchedHandler();
       });
   }
 
@@ -49,12 +52,13 @@ export default class Film extends AbstractComponent {
    * @param {Function} handler - handler
    */
   setAddToFavoritesHandler(handler) {
+    const addToFavoritesHandler = debounce(handler);
     this
       .getElement()
       .querySelector(`.film-card__controls-item--favorite`)
       .addEventListener(`click`, (evt) => {
         evt.preventDefault();
-        handler();
+        addToFavoritesHandler();
       });
   }
 

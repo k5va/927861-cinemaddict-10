@@ -1,6 +1,7 @@
 import AbstractSmartComponent from "../smart-component";
 import {template} from "./template";
 import {NO_USER_RATING} from "../../consts";
+import {debounce} from "../../utils";
 
 const DELETING_COMMENT_TEXT = `Deleting...`;
 const DELETE_COMMENT_TEXT = `Delete`;
@@ -44,7 +45,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setAddToWatchlistHandler(handler) {
-    this._addToWatchListHandler = handler;
+    this._addToWatchListHandler = debounce(handler);
     this._recoverAddtoWatchListHandler();
   }
 
@@ -67,7 +68,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setAddToWatchedHandler(handler) {
-    this._addToWatchedHandler = handler;
+    this._addToWatchedHandler = debounce(handler);
     this._recoverAddToWatchedHandler();
   }
 
@@ -90,7 +91,7 @@ export default class FilmDetails extends AbstractSmartComponent {
    * @param {Function} handler - handler
    */
   setAddToFavoritesHandler(handler) {
-    this._addToFavoritesHandler = handler;
+    this._addToFavoritesHandler = debounce(handler);
     this._recoverAddToFavoritesHandler();
   }
 
