@@ -1,5 +1,5 @@
-import nanoid from "nanoid";
 import {Film, Comment} from "../models";
+import {guid} from "../utils";
 
 const DEFAULT_COMMENT_AUTHOR = `John Doe`;
 
@@ -72,7 +72,7 @@ export default class Provider {
     const updatedFilm = this._store.getItem(filmId);
 
     const newComment = Object.assign(
-        {}, comment.toRAW(), {id: nanoid(), filmId, author: DEFAULT_COMMENT_AUTHOR}, {offline: true}
+        {}, comment.toRAW(), {id: guid(), filmId, author: DEFAULT_COMMENT_AUTHOR}, {offline: true}
     );
 
     updatedFilm.comments.push(newComment);
