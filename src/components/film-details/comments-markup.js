@@ -1,5 +1,5 @@
-import {formatDate} from "../../utils";
-import {CommentEmojiImages, COMMENT_DATE_FORMAT} from "../../consts";
+import {formatDateFromNow} from "../../utils";
+import {CommentEmojiImages} from "../../consts";
 import {encode} from "../../utils";
 
 /**
@@ -17,7 +17,7 @@ const generateCommentsMarkup = (comments, deleteText) => comments
         <p class="film-details__comment-text">${encode(text)}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${formatDate(date, COMMENT_DATE_FORMAT)}</span>
+          <span class="film-details__comment-day">${formatDateFromNow(date)}</span>
           <button data-comment-id="${id}" class="film-details__comment-delete">${deleteText}</button>
         </p>
       </div>
