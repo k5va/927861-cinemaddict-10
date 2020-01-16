@@ -2,6 +2,10 @@ const CACHE_PREFIX = `cinemaaddict-cache`;
 const CACHE_VER = `v1`;
 const CACHE_NAME = `${CACHE_PREFIX}-${CACHE_VER}`;
 
+const ResponseCodes = {
+  SUCCESS: 200
+};
+
 const installHandler = (evt) => {
   evt.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll([
     `/`,
@@ -37,7 +41,7 @@ const fetchHandler = (evt) => {
     }
 
     return fetch(request).then((response) => {
-      if (!response || response.status !== 200 || response.type !== `basic`) {
+      if (!response || response.status !== ResponseCodes.SUCCESS || response.type !== `basic`) {
         return response;
       }
 
