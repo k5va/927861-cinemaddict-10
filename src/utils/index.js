@@ -12,3 +12,6 @@ export {FilterFilms} from "./filter-films";
 export {encode} from "./encode";
 export {generateUserTitle} from "./generate-user-title";
 export {formatTime} from "./format-time";
+export {debounce} from "./debounce";
+export {formatDateFromNow} from "./formatDateFromNow";
+export {guid} from "./guid";
