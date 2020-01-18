@@ -19,7 +19,7 @@ export default class Film {
     this.isFavorite = Boolean(data[`user_details`][`favorite`]);
     this.isWatched = Boolean(data[`user_details`][`already_watched`]);
     this.watchingDate = data[`user_details`][`watching_date`] ?
-      new Date(data[`user_details`][`watching_date`]) : null;
+      new Date(data[`user_details`][`watching_date`]) : new Date();
     this.isWatchlistAdded = Boolean(data[`user_details`][`watchlist`]);
     this.director = data[`film_info`][`director`] || ``;
     this.writers = data[`film_info`][`writers`] || [];
