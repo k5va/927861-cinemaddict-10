@@ -46,10 +46,13 @@ export default class Provider {
     }
     // if offline
     this._isSynchronized = false;
-    const updatedFilm = Film.clone(film);
-    this._store.setItem(film.id, Object.assign({}, updatedFilm.toRAW(), {offline: true}));
+    const updatedFilm = film.toRAW();
+    const storedFilm = this._store.getItem(film.id);
+    updatedFilm.comments = storedFilm.comments;
+    updatedFilm.deletedComments = storedFilm.deletedComments;
+    this._store.setItem(film.id, Object.assign({}, updatedFilm, {offline: true}));
 
-    return Promise.resolve(updatedFilm);
+    return Promise.resolve(Film.parseFilm(updatedFilm));
   }
 
   /**
