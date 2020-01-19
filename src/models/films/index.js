@@ -30,6 +30,17 @@ export default class Films {
   }
 
   /**
+   * Sets model's films
+   *
+   * @param {Iterable} films - films
+   */
+  setFilms(films) {
+    this._films = [...films];
+    // notify data change handlers
+    this._callHandlers(this._dataChangeHandlers);
+  }
+
+  /**
    * Returns initial array of films
    * @return {Array} - array of films
    */
@@ -52,18 +63,6 @@ export default class Films {
   getTopRatedFilms() {
     return findTopRatedFilms(this.getFilmsAll());
   }
-
-  /**
-   * Sets model's films
-   *
-   * @param {Iterable} films - films
-   */
-  setFilms(films) {
-    this._films = [...films];
-    // notify data change handlers
-    this._callHandlers(this._dataChangeHandlers);
-  }
-
 
   /**
    * Updates film in model

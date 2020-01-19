@@ -74,6 +74,46 @@ export default class FilmController {
     return this._film;
   }
 
+  getMode() {
+    return this._mode;
+  }
+
+  /**
+   * Sets controller to default view
+   */
+  setDefaultView() {
+    if (this._mode !== FilmMode.DEFAULT) {
+      this._closeFilmDetails(false);
+    }
+  }
+
+  /**
+   * Performes on error manipuldations with film card
+   * @param {String} action - action that caused error
+   */
+  onError(action) {
+    if (this._mode === FilmMode.DETAILS) {
+      this._filmDetailsComponent
+        .shake()
+        .then(() => this._filmDetailsComponent.unlock())
+        .then(() => {
+          switch (action) {
+            case FilmAction.ADD_COMMENT:
+              this._filmDetailsComponent.onAddCommentError();
+              return;
+            case FilmAction.CHANGE_RATING:
+              this._filmDetailsComponent.onChangeRatingError();
+              return;
+            case FilmAction.DELETE_COMMENT:
+              this._filmDetailsComponent.onDeleteCommentError();
+              return;
+          }
+        });
+    } else {
+      this._filmComponent.shake();
+    }
+  }
+
   /**
    * Creates new film component with listeners
    * @param {*} film - film object
@@ -166,15 +206,6 @@ export default class FilmController {
   }
 
   /**
-   * Sets controller to default view
-   */
-  setDefaultView() {
-    if (this._mode !== FilmMode.DEFAULT) {
-      this._closeFilmDetails(false);
-    }
-  }
-
-  /**
    * Add film to watchlist handler
    */
   _addToWatchListHandler() {
@@ -235,36 +266,5 @@ export default class FilmController {
    */
   _deleteCommentHandler(commentId) {
     this._onDataChange({action: FilmAction.DELETE_COMMENT, controller: this, id: this._film.id, payload: commentId});
-  }
-
-  /**
-   * Performes on error manipuldations with film card
-   * @param {String} action - action that caused error
-   */
-  onError(action) {
-    if (this._mode === FilmMode.DETAILS) {
-      this._filmDetailsComponent
-        .shake()
-        .then(() => this._filmDetailsComponent.unlock())
-        .then(() => {
-          switch (action) {
-            case FilmAction.ADD_COMMENT:
-              this._filmDetailsComponent.onAddCommentError();
-              return;
-            case FilmAction.CHANGE_RATING:
-              this._filmDetailsComponent.onChangeRatingError();
-              return;
-            case FilmAction.DELETE_COMMENT:
-              this._filmDetailsComponent.onDeleteCommentError();
-              return;
-          }
-        });
-    } else {
-      this._filmComponent.shake();
-    }
-  }
-
-  getMode() {
-    return this._mode;
   }
 }

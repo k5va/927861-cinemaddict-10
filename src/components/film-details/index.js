@@ -40,182 +40,6 @@ export default class FilmDetails extends AbstractSmartComponent {
     });
   }
 
-  /**
-   * Sets add to Watchlist handler function.
-   * @param {Function} handler - handler
-   */
-  setAddToWatchlistHandler(handler) {
-    this._addToWatchListHandler = debounce(handler);
-    this._recoverAddtoWatchListHandler();
-  }
-
-  _recoverAddtoWatchListHandler() {
-    this
-      .getElement()
-      .querySelector(`.film-details__control-label--watchlist`)
-      .addEventListener(`click`, (evt) => {
-        if (this._isLocked) {
-          return;
-        }
-
-        evt.preventDefault();
-        this._addToWatchListHandler();
-      });
-  }
-
-  /**
-   * Sets add to watched handler function.
-   * @param {Function} handler - handler
-   */
-  setAddToWatchedHandler(handler) {
-    this._addToWatchedHandler = debounce(handler);
-    this._recoverAddToWatchedHandler();
-  }
-
-  _recoverAddToWatchedHandler() {
-    this
-      .getElement()
-      .querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, (evt) => {
-        if (this._isLocked) {
-          return;
-        }
-
-        evt.preventDefault();
-        this._addToWatchedHandler();
-      });
-  }
-
-  /**
-   * Sets add to Favorites handler function.
-   * @param {Function} handler - handler
-   */
-  setAddToFavoritesHandler(handler) {
-    this._addToFavoritesHandler = debounce(handler);
-    this._recoverAddToFavoritesHandler();
-  }
-
-  _recoverAddToFavoritesHandler() {
-    this
-      .getElement()
-      .querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, (evt) => {
-        if (this._isLocked) {
-          return;
-        }
-
-        evt.preventDefault();
-        this._addToFavoritesHandler();
-      });
-  }
-
-  /**
-   * Sets film details close handler
-   * @param {Function} handler - close handler
-   */
-  setCloseHandler(handler) {
-    this._closeHandler = handler;
-    this._recoverCloseHandler();
-  }
-
-  _recoverCloseHandler() {
-    this
-      .getElement()
-      .querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, this._closeHandler);
-  }
-
-  /**
-   * Sets user rating change handler
-   * @param {Function} handler - handler
-   */
-  setUserRatingChangeHandler(handler) {
-    this._userRatingChangeHandler = handler;
-    this._recoverUserRatingChangeHandler();
-  }
-
-  _recoverUserRatingChangeHandler() {
-    if (this._film.isWatched) {
-      // user rating change
-      this
-        .getElement()
-        .querySelector(`.film-details__user-rating-score`)
-        .addEventListener(`click`, (evt) => {
-          evt.preventDefault();
-          if (!evt.target.classList.contains(`film-details__user-rating-label`) || this._isLocked) {
-            return;
-          }
-          this._userRating = this.getElement().querySelector(`#${evt.target.htmlFor}`).value;
-          this._userRatingChangeHandler(this._userRating);
-        });
-      // user rating reset
-      this
-        .getElement()
-        .querySelector(`.film-details__watched-reset`)
-        .addEventListener(`click`, () => {
-          if (this._isLocked) {
-            return;
-          }
-
-          this._userRating = NO_USER_RATING;
-          this._userRatingChangeHandler(this._userRating);
-        });
-    }
-  }
-
-  /**
-   * Sets add comment handler
-   * @param {Function} handler - handler
-   */
-  setAddCommentHandler(handler) {
-    this._addCommentHandler = handler;
-    this._recoverAddCommentHandler();
-  }
-
-  _recoverAddCommentHandler() {
-    if (!this._addCommentHandler) {
-      return;
-    }
-
-    this
-      .getElement()
-      .querySelector(`.film-details__comment-input`)
-      .addEventListener(`keydown`, (evt) => {
-        const isCtrlEnterKey = evt.key === `Enter` && evt.ctrlKey;
-        if (isCtrlEnterKey && this._commentEmoji && evt.target.value.length > 0 && !this._isLocked) {
-          this._addCommentHandler({
-            text: evt.target.value,
-            date: new Date(),
-            emoji: this._commentEmoji
-          });
-        }
-      });
-  }
-
-  /**
-   * Sets delete comment handler
-   * @param {Function} handler - handler
-   */
-  setDeleteCommentHandler(handler) {
-    this._deleteCommentHandler = handler;
-    this._recoverDeleteCommentHandler();
-  }
-
-  _recoverDeleteCommentHandler() {
-    this
-      .getElement()
-      .querySelector(`.film-details__comments-list`)
-      .addEventListener(`click`, (evt) => {
-        evt.preventDefault();
-        if (!evt.target.classList.contains(`film-details__comment-delete`) || this._isLocked) {
-          return;
-        }
-        evt.target.innerText = DELETING_COMMENT_TEXT;
-        this._deletingCommentId = evt.target.dataset.commentId;
-        this._deleteCommentHandler(this._deletingCommentId);
-      });
-  }
-
   recoverListeners() {
     this._subscribeOnInternalEvents();
 
@@ -229,21 +53,66 @@ export default class FilmDetails extends AbstractSmartComponent {
   }
 
   /**
-   * Addes component's interactive controls events handlers
+   * Sets add to Watchlist handler function.
+   * @param {Function} handler - handler
    */
-  _subscribeOnInternalEvents() {
-    this
-      .getElement()
-      .querySelector(`.film-details__emoji-list`)
-      .addEventListener(`change`, (evt) => {
-        if (this._isLocked) {
-          return;
-        }
+  setAddToWatchlistHandler(handler) {
+    this._addToWatchListHandler = debounce(handler);
+    this._recoverAddtoWatchListHandler();
+  }
 
-        this._commentEmoji = evt.target.value;
-        this._commentText = this.getElement().querySelector(`.film-details__comment-input`).value;
-        this.rerender();
-      });
+  /**
+   * Sets add to watched handler function.
+   * @param {Function} handler - handler
+   */
+  setAddToWatchedHandler(handler) {
+    this._addToWatchedHandler = debounce(handler);
+    this._recoverAddToWatchedHandler();
+  }
+
+  /**
+   * Sets add to Favorites handler function.
+   * @param {Function} handler - handler
+   */
+  setAddToFavoritesHandler(handler) {
+    this._addToFavoritesHandler = debounce(handler);
+    this._recoverAddToFavoritesHandler();
+  }
+
+  /**
+   * Sets film details close handler
+   * @param {Function} handler - close handler
+   */
+  setCloseHandler(handler) {
+    this._closeHandler = handler;
+    this._recoverCloseHandler();
+  }
+
+  /**
+   * Sets user rating change handler
+   * @param {Function} handler - handler
+   */
+  setUserRatingChangeHandler(handler) {
+    this._userRatingChangeHandler = handler;
+    this._recoverUserRatingChangeHandler();
+  }
+
+  /**
+   * Sets add comment handler
+   * @param {Function} handler - handler
+   */
+  setAddCommentHandler(handler) {
+    this._addCommentHandler = handler;
+    this._recoverAddCommentHandler();
+  }
+
+  /**
+   * Sets delete comment handler
+   * @param {Function} handler - handler
+   */
+  setDeleteCommentHandler(handler) {
+    this._deleteCommentHandler = handler;
+    this._recoverDeleteCommentHandler();
   }
 
   lock() {
@@ -291,4 +160,136 @@ export default class FilmDetails extends AbstractSmartComponent {
       .querySelector(`.film-details__comment-delete[data-comment-id="${this._deletingCommentId}"]`)
       .innerText = DELETE_COMMENT_TEXT;
   }
+
+  _recoverAddtoWatchListHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__control-label--watchlist`)
+      .addEventListener(`click`, (evt) => {
+        if (this._isLocked) {
+          return;
+        }
+
+        evt.preventDefault();
+        this._addToWatchListHandler();
+      });
+  }
+
+  _recoverAddToWatchedHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__control-label--watched`)
+      .addEventListener(`click`, (evt) => {
+        if (this._isLocked) {
+          return;
+        }
+
+        evt.preventDefault();
+        this._addToWatchedHandler();
+      });
+  }
+
+  _recoverAddToFavoritesHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__control-label--favorite`)
+      .addEventListener(`click`, (evt) => {
+        if (this._isLocked) {
+          return;
+        }
+
+        evt.preventDefault();
+        this._addToFavoritesHandler();
+      });
+  }
+
+  _recoverCloseHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, this._closeHandler);
+  }
+
+  _recoverUserRatingChangeHandler() {
+    if (this._film.isWatched) {
+      // user rating change
+      this
+        .getElement()
+        .querySelector(`.film-details__user-rating-score`)
+        .addEventListener(`click`, (evt) => {
+          evt.preventDefault();
+          if (!evt.target.classList.contains(`film-details__user-rating-label`) || this._isLocked) {
+            return;
+          }
+          this._userRating = this.getElement().querySelector(`#${evt.target.htmlFor}`).value;
+          this._userRatingChangeHandler(this._userRating);
+        });
+      // user rating reset
+      this
+        .getElement()
+        .querySelector(`.film-details__watched-reset`)
+        .addEventListener(`click`, () => {
+          if (this._isLocked) {
+            return;
+          }
+
+          this._userRating = NO_USER_RATING;
+          this._userRatingChangeHandler(this._userRating);
+        });
+    }
+  }
+
+  _recoverAddCommentHandler() {
+    if (!this._addCommentHandler) {
+      return;
+    }
+
+    this
+      .getElement()
+      .querySelector(`.film-details__comment-input`)
+      .addEventListener(`keydown`, (evt) => {
+        const isCtrlEnterKey = evt.key === `Enter` && evt.ctrlKey;
+        if (isCtrlEnterKey && this._commentEmoji && evt.target.value.length > 0 && !this._isLocked) {
+          this._addCommentHandler({
+            text: evt.target.value,
+            date: new Date(),
+            emoji: this._commentEmoji
+          });
+        }
+      });
+  }
+
+  _recoverDeleteCommentHandler() {
+    this
+      .getElement()
+      .querySelector(`.film-details__comments-list`)
+      .addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        if (!evt.target.classList.contains(`film-details__comment-delete`) || this._isLocked) {
+          return;
+        }
+        evt.target.innerText = DELETING_COMMENT_TEXT;
+        this._deletingCommentId = evt.target.dataset.commentId;
+        this._deleteCommentHandler(this._deletingCommentId);
+      });
+  }
+
+  /**
+   * Addes component's interactive controls events handlers
+   */
+  _subscribeOnInternalEvents() {
+    this
+      .getElement()
+      .querySelector(`.film-details__emoji-list`)
+      .addEventListener(`change`, (evt) => {
+        if (this._isLocked) {
+          return;
+        }
+
+        this._commentEmoji = evt.target.value;
+        this._commentText = this.getElement().querySelector(`.film-details__comment-input`).value;
+        this.rerender();
+      });
+  }
+
 }

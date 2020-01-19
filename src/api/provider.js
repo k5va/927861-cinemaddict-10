@@ -116,12 +116,6 @@ export default class Provider {
     return Promise.resolve(id);
   }
 
-  _findFilmByCommentId(commentId) {
-    return Object
-      .values(this._store.getAll())
-      .find(({comments}) => comments.some((comment) => comment.id === commentId));
-  }
-
   /**
    * Sync local data with server
    * @return {Promise} - returns promise resolved if sync is done without errors
@@ -139,6 +133,16 @@ export default class Provider {
     }
 
     return Promise.reject(new Error(`Sync data failed`));
+  }
+
+  isSynchronized() {
+    return this._isSynchronized;
+  }
+
+  _findFilmByCommentId(commentId) {
+    return Object
+      .values(this._store.getAll())
+      .find(({comments}) => comments.some((comment) => comment.id === commentId));
   }
 
   _syncComments(storeFilms) {
@@ -163,10 +167,6 @@ export default class Provider {
     return this._api.sync(storeFilms)
       .then(() => this._api.getFilms())
       .then((films) => films.forEach((film) => this._store.setItem(film.id, film.toRAW())));
-  }
-
-  isSynchronized() {
-    return this._isSynchronized;
   }
 
   _isOnLine() {

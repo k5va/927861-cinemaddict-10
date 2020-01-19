@@ -27,18 +27,6 @@ export default class API {
   }
 
   /**
-   * Loads comments in given film from server
-   * @param {Film} film - film
-   * @return {Promise<Film>} - promise that resolves to gilm with loaded comments
-   */
-  _loadComments(film) {
-    return this._send({url: `comments/${film.id}`})
-      .then((response) => response.json())
-      .then(Comment.parseComments)
-      .then((comments) => film.setComments(comments));
-  }
-
-  /**
    * Updates film on server
    * @param {Film} film - film
    * @return {Promise<Film>} - promise that resolves to updated film
@@ -105,4 +93,17 @@ export default class API {
         throw err;
       });
   }
+
+  /**
+   * Loads comments in given film from server
+   * @param {Film} film - film
+   * @return {Promise<Film>} - promise that resolves to gilm with loaded comments
+   */
+  _loadComments(film) {
+    return this._send({url: `comments/${film.id}`})
+      .then((response) => response.json())
+      .then(Comment.parseComments)
+      .then((comments) => film.setComments(comments));
+  }
+
 }

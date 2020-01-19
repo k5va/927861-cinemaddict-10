@@ -39,6 +39,5 @@ export default class Films extends AbstractComponent {
     const titleElement = this.getElement().querySelector(`.films-list__title`);
     titleElement.innerText = DEFAULT_TITLE;
     titleElement.classList.add(HIDDEN_CLASS);
-
   }
 }
