@@ -19,20 +19,20 @@ export default class FilmController {
   /**
   * Creates an instance of TaskController.
   * @param {FilmListComponent} container - container component to add films to
-  * @param {Function} onDataChange - data change handler
-  * @param {Function} onViewChange - view change handler
+  * @param {Function} dataChangeHandler - data change handler
+  * @param {Function} viewChangeHandler - view change handler
   */
-  constructor(container, onDataChange, onViewChange) {
+  constructor(container, dataChangeHandler, viewChangeHandler) {
     this._container = container;
-    this._onDataChange = onDataChange;
-    this._onViewChange = onViewChange;
+    this._dataChangeHandler = dataChangeHandler;
+    this._viewChangeHandler = viewChangeHandler;
     this._film = null;
     this._mode = FilmMode.DEFAULT;
 
     this._filmComponent = null;
     this._filmDetailsComponent = null;
 
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._documentKeydownHandler = this._documentKeydownHandler.bind(this);
     this._showFilmDetails = this._showFilmDetails.bind(this);
     this._addToWatchListHandler = this._addToWatchListHandler.bind(this);
     this._addToWatchedHandler = this._addToWatchedHandler.bind(this);
@@ -91,7 +91,7 @@ export default class FilmController {
    * Performes on error manipuldations with film card
    * @param {String} action - action that caused error
    */
-  onError(action) {
+  handleError(action) {
     if (this._mode === FilmMode.DETAILS) {
       this._filmDetailsComponent
         .shake()
@@ -99,13 +99,13 @@ export default class FilmController {
         .then(() => {
           switch (action) {
             case FilmAction.ADD_COMMENT:
-              this._filmDetailsComponent.onAddCommentError();
+              this._filmDetailsComponent.handleAddCommentError();
               return;
             case FilmAction.CHANGE_RATING:
-              this._filmDetailsComponent.onChangeRatingError();
+              this._filmDetailsComponent.handleChangeRatingError();
               return;
             case FilmAction.DELETE_COMMENT:
-              this._filmDetailsComponent.onDeleteCommentError();
+              this._filmDetailsComponent.handleDeleteCommentError();
               return;
           }
         });
@@ -147,7 +147,7 @@ export default class FilmController {
     // register add to favorites handler
     filmDetailsComponent.setAddToFavoritesHandler(this._addToFavoritesHandler);
     // register film details close handler
-    filmDetailsComponent.setCloseHandler(this._closeFilmDetails);
+    filmDetailsComponent.setPopupCloseHandler(this._closeFilmDetails);
     // register user rating change handler
     filmDetailsComponent.setUserRatingChangeHandler(this._userRatingChangeHandler);
     // register add comment handler
@@ -163,7 +163,7 @@ export default class FilmController {
   * Handler for Esc key down event
   * @param {KeyboardEvent} evt - event object
   */
-  _onEscKeyDown(evt) {
+  _documentKeydownHandler(evt) {
     const isEscKey = evt.key === `Esc` || evt.key === `Escape`;
 
     if (isEscKey) {
@@ -185,9 +185,9 @@ export default class FilmController {
     render(null, this._filmDetailsComponent);
     this._filmComponent.enableHoverImitation();
 
-    document.addEventListener(`keydown`, this._onEscKeyDown);
+    document.addEventListener(`keydown`, this._documentKeydownHandler);
     this._mode = FilmMode.DETAILS;
-    this._onViewChange(this);
+    this._viewChangeHandler(this);
   }
 
 
@@ -197,11 +197,11 @@ export default class FilmController {
   */
   _closeFilmDetails(shouldFireViewChange = true) {
     this._filmDetailsComponent.removeElement();
-    document.removeEventListener(`keydown`, this._onEscKeyDown);
+    document.removeEventListener(`keydown`, this._documentKeydownHandler);
     this._filmComponent.disableHoverImitation();
     this._mode = FilmMode.DEFAULT;
     if (shouldFireViewChange) {
-      this._onViewChange(this);
+      this._viewChangeHandler(this);
     }
   }
 
@@ -211,7 +211,7 @@ export default class FilmController {
   _addToWatchListHandler() {
     const newFilm = Film.clone(this._film);
     newFilm.isWatchlistAdded = !newFilm.isWatchlistAdded;
-    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
+    this._dataChangeHandler({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -225,7 +225,7 @@ export default class FilmController {
     newFilm.userRating = !newFilm.isWatched ? NO_USER_RATING : newFilm.userRating;
 
     // call data change handler
-    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
+    this._dataChangeHandler({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -235,7 +235,7 @@ export default class FilmController {
     const newFilm = Film.clone(this._film);
     newFilm.isFavorite = !newFilm.isFavorite;
 
-    this._onDataChange({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
+    this._dataChangeHandler({action: FilmAction.UPDATE_FILM, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -247,7 +247,7 @@ export default class FilmController {
     const newFilm = Film.clone(this._film);
     newFilm.userRating = +userRating;
 
-    this._onDataChange({action: FilmAction.CHANGE_RATING, controller: this, id: this._film.id, payload: newFilm});
+    this._dataChangeHandler({action: FilmAction.CHANGE_RATING, controller: this, id: this._film.id, payload: newFilm});
   }
 
   /**
@@ -257,7 +257,7 @@ export default class FilmController {
   _addCommentHandler(data) {
     this._filmDetailsComponent.lock();
     const comment = new Comment({comment: data.text, date: data.date, emotion: data.emoji});
-    this._onDataChange({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
+    this._dataChangeHandler({action: FilmAction.ADD_COMMENT, controller: this, id: this._film.id, payload: comment});
   }
 
   /**
@@ -265,6 +265,6 @@ export default class FilmController {
    * @param {String} commentId - comment id
    */
   _deleteCommentHandler(commentId) {
-    this._onDataChange({action: FilmAction.DELETE_COMMENT, controller: this, id: this._film.id, payload: commentId});
+    this._dataChangeHandler({action: FilmAction.DELETE_COMMENT, controller: this, id: this._film.id, payload: commentId});
   }
 }

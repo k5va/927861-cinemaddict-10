@@ -20,7 +20,7 @@ export default class FilmDetails extends AbstractSmartComponent {
     this._addToWatchListHandler = null;
     this._addToWatchedHandler = null;
     this._addToFavoritesHandler = null;
-    this._closeHandler = null;
+    this._popupCloseHandler = null;
     this._userRatingChangeHandler = null;
     this._addCommentHandler = null;
     this._deleteCommentHandler = null;
@@ -43,10 +43,10 @@ export default class FilmDetails extends AbstractSmartComponent {
   recoverListeners() {
     this._subscribeOnInternalEvents();
 
-    this._recoverCloseHandler();
+    this._recoverPopupCloseHandler();
     this._recoverAddToWatchedHandler();
     this._recoverAddtoWatchListHandler();
-    this._recoverCloseHandler();
+    this._recoverPopupCloseHandler();
     this._recoverUserRatingChangeHandler();
     this._recoverAddCommentHandler();
     this._recoverDeleteCommentHandler();
@@ -83,9 +83,9 @@ export default class FilmDetails extends AbstractSmartComponent {
    * Sets film details close handler
    * @param {Function} handler - close handler
    */
-  setCloseHandler(handler) {
-    this._closeHandler = handler;
-    this._recoverCloseHandler();
+  setPopupCloseHandler(handler) {
+    this._popupCloseHandler = handler;
+    this._recoverPopupCloseHandler();
   }
 
   /**
@@ -137,14 +137,14 @@ export default class FilmDetails extends AbstractSmartComponent {
       });
   }
 
-  onAddCommentError() {
+  handleAddCommentError() {
     this.getElement()
       .querySelector(`.film-details__comment-input`)
       .classList
       .add(`film-details__comment-input-error`);
   }
 
-  onChangeRatingError() {
+  handleChangeRatingError() {
     if (this._userRating === NO_USER_RATING) {
       return;
     }
@@ -155,7 +155,7 @@ export default class FilmDetails extends AbstractSmartComponent {
       .add(`film-details__user-rating-input-error`);
   }
 
-  onDeleteCommentError() {
+  handleDeleteCommentError() {
     this.getElement()
       .querySelector(`.film-details__comment-delete[data-comment-id="${this._deletingCommentId}"]`)
       .innerText = DELETE_COMMENT_TEXT;
@@ -203,11 +203,11 @@ export default class FilmDetails extends AbstractSmartComponent {
       });
   }
 
-  _recoverCloseHandler() {
+  _recoverPopupCloseHandler() {
     this
       .getElement()
       .querySelector(`.film-details__close-btn`)
-      .addEventListener(`click`, this._closeHandler);
+      .addEventListener(`click`, this._popupCloseHandler);
   }
 
   _recoverUserRatingChangeHandler() {

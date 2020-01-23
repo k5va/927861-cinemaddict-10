@@ -36,13 +36,13 @@ export default class PageController {
     this._mostCommentedFilmsComponent = new MostCommentedFilmsComponent();
     this._noFilmsComponent = null;
 
-    this._onDataChange = this._onDataChange.bind(this);
-    this._onSortTypeChange = this._onSortTypeChange.bind(this);
-    this._onViewChange = this._onViewChange.bind(this);
-    this._onFilterChange = this._onFilterChange.bind(this);
+    this._dataChangeHandler = this._dataChangeHandler.bind(this);
+    this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
+    this._viewChangeHandler = this._viewChangeHandler.bind(this);
+    this._filterChangeHandler = this._filterChangeHandler.bind(this);
 
-    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
-    this._filmsModel.setFilterChangeHandler(this._onFilterChange);
+    this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
+    this._filmsModel.setFilterChangeHandler(this._filterChangeHandler);
   }
 
   /**
@@ -153,7 +153,7 @@ export default class PageController {
    */
   _renderFilms(container, films) {
     return films.map((film) => {
-      const filmController = new FilmController(container, this._onDataChange, this._onViewChange);
+      const filmController = new FilmController(container, this._dataChangeHandler, this._viewChangeHandler);
       filmController.render(film);
 
       return filmController;
@@ -164,7 +164,7 @@ export default class PageController {
    * Sort type change handler
    * @param {String} sortType - sort type
    */
-  _onSortTypeChange(sortType) {
+  _sortTypeChangeHandler(sortType) {
     this._filmsModel.setSortType(sortType);
     this._updateFilmsList();
   }
@@ -172,26 +172,26 @@ export default class PageController {
   /**
    * Film change handler
    */
-  _onDataChange({action, controller, id, payload}) {
+  _dataChangeHandler({action, controller, id, payload}) {
     switch (action) {
       case FilmAction.ADD_COMMENT:
         this._api
           .createComment(id, payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch(() => controller.onError(action));
+          .catch(() => controller.handleError(action));
         return;
       case FilmAction.DELETE_COMMENT:
         this._api
           .deleteComment(payload)
           .then((commentId) => this._renderFilmControllers(this._filmsModel.deleteFilmComment(id, commentId)))
-          .catch(() => controller.onError(action));
+          .catch(() => controller.handleError(action));
         return;
       case FilmAction.UPDATE_FILM:
       case FilmAction.CHANGE_RATING:
         this._api
           .updateFilm(payload)
           .then((film) => this._renderFilmControllers(this._filmsModel.updateFilm(id, film)))
-          .catch(() => controller.onError(action));
+          .catch(() => controller.handleError(action));
         return;
       default:
         throw new Error(`Unsupported film action`);
@@ -212,7 +212,7 @@ export default class PageController {
    * Handles film controller's mode change
    * @param {FilmController} controller - film controller
    */
-  _onViewChange(controller) {
+  _viewChangeHandler(controller) {
     switch (controller.getMode()) {
       case FilmMode.DEFAULT:
       default:
@@ -231,7 +231,7 @@ export default class PageController {
   /**
    * Model's filter change handler
    */
-  _onFilterChange() {
+  _filterChangeHandler() {
     this.render();
   }
 
